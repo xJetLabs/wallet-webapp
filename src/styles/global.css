@@ -8,6 +8,8 @@
 
   --color_primary_color: #fff;
   --color_black_color: #161518;
+  --color_positive: rgba(111, 237, 109, 1);
+  --color_negative: rgba(237, 109, 109, 1);
 
   --accent: #d3f7a6;
 

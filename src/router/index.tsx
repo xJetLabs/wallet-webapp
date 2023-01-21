@@ -1,6 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import { HomePanel, LoadPanel, SettingsPanel } from "../panels";
+import {
+  HistoryPanel,
+  HomePanel,
+  LoadPanel,
+  SendSuccessPanel,
+  SettingsPanel,
+} from "../panels";
 
 export const router = createBrowserRouter([
   {
@@ -14,5 +20,13 @@ export const router = createBrowserRouter([
   {
     path: "/settings",
     element: <SettingsPanel />,
+  },
+  {
+    path: "/history",
+    element: <HistoryPanel />,
+  },
+  {
+    path: "/send/success",
+    element: <SendSuccessPanel />,
   },
 ]);
