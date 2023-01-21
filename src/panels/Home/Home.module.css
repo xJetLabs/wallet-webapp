@@ -1,0 +1,8 @@
+.__buttonGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.__group {
+  margin-top: 24px;
+}

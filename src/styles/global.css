@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+:root {
+  /* ? color variables */
+
+  --background_content: #161518;
+  --background_block: rgba(255, 255, 255, 0.05);
+
+  --color_primary_color: #fff;
+  --color_black_color: #161518;
+
+  --accent: #d3f7a6;
+
+  --error_popout_border_color: #ed6d6d;
+  --error_popout_background_color: rgba(237, 109, 109, 0.15);
+
+  /* ? animation color variables */
+
+  --button_hover_background: rgba(255, 255, 255, 0.04);
+  --button_active_background: rgba(255, 255, 255, 0.1);
+
+  /* ? sizes variables */
+
+  --panel_header_height: 72px;
+  --panel_header_button_width: 72px;
+
+  --buttons_border_radius: 18px;
+
+  --block_border_radius: 18px;
+
+  --avatar_border_radius: 50%;
+
+  /* ? font info */
+
+  --text_font: "Inter";
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: var(--background_content);
+  margin: 0;
+}
+
+span {
+  color: var(--color_primary_color);
+  font-family: var(--text_font);
+}

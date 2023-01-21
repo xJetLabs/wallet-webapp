@@ -1,0 +1,53 @@
+.__wrapper {
+  width: 100%;
+  height: fit-content;
+}
+
+.__wrapper > a {
+  text-decoration: none;
+}
+
+.__wrapper_in {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.__before {
+  display: flex;
+}
+
+.__content {
+  flex-grow: 1;
+}
+
+.__content_in {
+}
+
+.__content__description {
+}
+
+.__content_description .__content_text {
+  color: var(--accent);
+}
+
+.__after {
+  display: flex;
+}
+
+.__content_text {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+/* ? Mouse cases */
+
+.__with_cursor {
+  cursor: pointer;
+}
+
+/* ? Cell render cases */
+
+.__wrapper:not(.__with_description) .__content_text {
+}

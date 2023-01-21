@@ -1,0 +1,27 @@
+.__wrapper {
+  height: var(--panel_header_height);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.__wrapper_in {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.__content {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.__before,
+.__after {
+  width: var(--panel_header_button_width);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

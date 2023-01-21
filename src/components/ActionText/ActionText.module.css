@@ -1,0 +1,14 @@
+.__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.__with_padding {
+  padding: 24px 0;
+}
+
+.__wrapper > span {
+  text-align: center;
+}

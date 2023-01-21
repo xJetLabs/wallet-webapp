@@ -1,0 +1,5 @@
+.__wrapper {
+  background-color: var(--background_block);
+  border-radius: var(--block_border_radius);
+  overflow: hidden;
+}
