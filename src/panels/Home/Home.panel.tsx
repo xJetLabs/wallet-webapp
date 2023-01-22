@@ -1,5 +1,7 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { getMyBalance, getMyServerData } from "../../api";
 
 import {
   ActionText,
@@ -18,8 +20,44 @@ import { ReactComponent as History24OutlineIcon } from "../../icons/History24Out
 
 import styles from "./Home.module.css";
 
+// FIXME:
+import { userActions } from "../../store/reducers";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  myBalancesSelector,
+  myTonBalanceSelector,
+  totalUSDValueSelector,
+} from "../../store/reducers/user/user.selectors";
+import { formatNumber } from "../../utils";
+
 export const HomePanel: FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const myBalances = useSelector(myBalancesSelector);
+  const myTonBalance = useSelector(myTonBalanceSelector);
+  const totalUSDValue = useSelector(totalUSDValueSelector);
+
+  useEffect(() => {
+    const requestMyServerData = async () => {
+      const response = await getMyServerData();
+
+      dispatch(userActions.setServerData(response.data));
+
+      console.debug("myserverdata", response);
+    };
+
+    const requestMyBalance = async () => {
+      const response = await getMyBalance();
+
+      dispatch(userActions.setBalances(response.data.balances));
+
+      console.debug("mybalance", response);
+    };
+
+    requestMyServerData();
+    requestMyBalance();
+  }, [dispatch]);
 
   return (
     <Panel
@@ -29,8 +67,8 @@ export const HomePanel: FC = () => {
         <Group space={24}>
           <ActionText
             top="Current balance"
-            middle="3, 100.53 TON"
-            bottom="≈ 42, 255.84 $"
+            middle={`${formatNumber(myTonBalance?.amount || 0)} TON`}
+            bottom={`≈ ${formatNumber(totalUSDValue || 0)} $`}
           />
           <div className={styles.__buttonGroup}>
             <Button
@@ -38,7 +76,7 @@ export const HomePanel: FC = () => {
               before={<Send24OutlineIcon />}
               mode={"secondary_with_accent_text"}
               onClick={() => {
-                navigate("/send");
+                navigate("/send/select");
               }}
             >
               Send
@@ -53,13 +91,6 @@ export const HomePanel: FC = () => {
             >
               Receive
             </Button>
-            <Button
-              before={<History24OutlineIcon />}
-              mode={"secondary_with_accent_text"}
-              onClick={() => {
-                navigate("/history");
-              }}
-            />
             <Button
               before={<Settings24OutlineIcon />}
               mode={"secondary_with_accent_text"}
@@ -78,119 +109,48 @@ export const HomePanel: FC = () => {
           >
             JETTONS
           </Text>
-          <Cell
-            before={<Avatar fallbackName="j" size={42} src="" />}
-            after={
-              <>
-                <Text
-                  weight={"600"}
-                  size={14}
-                  lineHeight={"17px"}
-                  color={"var(--accent)"}
-                >
-                  325.5 AMBR
-                </Text>
-                <Text
-                  weight={"400"}
-                  size={14}
-                  lineHeight={"17px"}
-                  color={"var(--color_gray_color)"}
-                >
-                  ≈ $ 25.4
-                </Text>
-              </>
-            }
-            afterStyles={{
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
-          >
-            Ambra
-          </Cell>
-          <Cell
-            before={<Avatar fallbackName="j" size={42} src="" />}
-            after={
-              <>
-                <Text
-                  weight={"600"}
-                  size={14}
-                  lineHeight={"17px"}
-                  color={"var(--accent)"}
-                >
-                  21.52 TAKE
-                </Text>
-                <Text
-                  weight={"400"}
-                  size={14}
-                  lineHeight={"17px"}
-                  color={"var(--color_gray_color)"}
-                >
-                  ≈ $ 234.476
-                </Text>
-              </>
-            }
-            afterStyles={{
-              flexDirection: "column",
-              alignItems: "flex-end",
-            }}
-          >
-            TonTake
-          </Cell>
-          <Cell
-            before={<Avatar fallbackName="j" size={42} src="" />}
-            after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
+          {myBalances.map((v: any, i: any) => {
+            return (
+              <Cell
+                key={i}
+                before={
+                  <Avatar
+                    fallbackName={v.currency.slice(0, 1)}
+                    size={42}
+                    src=""
+                  />
+                }
+                after={
+                  <>
+                    <Text
+                      weight={"600"}
+                      size={14}
+                      lineHeight={"17px"}
+                      color={"var(--accent)"}
+                    >
+                      {v.amount} {v.currency.toUpperCase()}
+                    </Text>
+                    {v.price ? (
+                      <Text
+                        weight={"400"}
+                        size={14}
+                        lineHeight={"17px"}
+                        color={"var(--color_gray_color)"}
+                      >
+                        ≈ $ {v.price}
+                      </Text>
+                    ) : null}
+                  </>
+                }
+                afterStyles={{
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                }}
               >
-                325.521 AMBR
-              </Text>
-            }
-          >
-            Ambra
-          </Cell>
-          <Cell
-            before={<Avatar fallbackName="j" size={42} src="" />}
-            after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-              >
-                21.525 TAKE
-              </Text>
-            }
-          >
-            TonTake
-          </Cell>
-        </Group>
-        <Group space={12}>
-          <Text
-            weight={"600"}
-            size={14}
-            lineHeight={"17px"}
-            color={"var(--accent)"}
-          >
-            UNVERIFIED
-          </Text>
-          <Cell
-            before={<Avatar fallbackName="j" size={42} src="" />}
-            after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-              >
-                3,000,000.42 LAVE
-              </Text>
-            }
-          >
-            Lavandos
-          </Cell>
+                {v.currency}
+              </Cell>
+            );
+          })}
         </Group>
       </Group>
     </Panel>

@@ -10,6 +10,7 @@ export const Block: FC<BlockProps> = ({
   padding = 24,
   className = "",
   noBackground = false,
+  onClick = () => {},
 }) => {
   return (
     <div
@@ -18,6 +19,7 @@ export const Block: FC<BlockProps> = ({
         [className]: className,
       })}
       style={{ padding }}
+      onClick={onClick}
     >
       {children}
     </div>

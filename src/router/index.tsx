@@ -5,6 +5,7 @@ import {
   HomePanel,
   LoadPanel,
   ReceivePanel,
+  SelectTransferPanel,
   SendPanel,
   SendSuccessPanel,
   SettingsPanel,
@@ -34,6 +35,10 @@ export const router = createBrowserRouter([
   {
     path: "/send",
     element: <SendPanel />,
+  },
+  {
+    path: "/send/select",
+    element: <SelectTransferPanel />,
   },
   {
     path: "/send/success",

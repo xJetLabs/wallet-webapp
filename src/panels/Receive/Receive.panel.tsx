@@ -6,8 +6,16 @@ import { Group, Input, Panel, Text } from "../../components";
 import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.svg";
 
 import styles from "./Receive.module.css";
+import { useSelector } from "react-redux";
+import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 
 export const ReceivePanel: FC = () => {
+  const myTonAddress = useSelector(myTonAddressSelector);
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(myTonAddress);
+  };
+
   return (
     <Panel>
       <Group space={12}>
@@ -18,7 +26,7 @@ export const ReceivePanel: FC = () => {
           <QRCodeSVG
             width={144}
             height={144}
-            value="test"
+            value={`ton://transfer/${myTonAddress}`}
             fgColor="var(--color_qr)"
             bgColor="transparent"
           />
@@ -27,11 +35,12 @@ export const ReceivePanel: FC = () => {
           </Text>
         </Group>
         <Input
-          value="EQBbjda02da29dja2d9ja20d"
+          value={myTonAddress}
           after={
             <Copy20OutlineIcon
               style={{ cursor: "pointer" }}
               color={"var(--accent)"}
+              onClick={copyAddress}
             />
           }
         />

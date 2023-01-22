@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -14,13 +14,22 @@ import {
 
 import { ReactComponent as QRCopy17OutlineIcon } from "../../icons/QRCopy17Outline.svg";
 
-import ton from "../../images/ton.jpeg";
+// FIXME:
+import { useSelector } from "react-redux";
+import { currencyDataSelector } from "../../store/reducers/user/user.selectors";
+import { formatNumber } from "../../utils";
 
 export const SendPanel: FC = () => {
   const [formData, setFormData] = useState({
     receiverToken: "",
     amount: "",
   });
+
+  const { state: locationState }: { state: any } = useLocation();
+
+  const currencyData = useSelector((state) =>
+    currencyDataSelector(state, locationState.currency)
+  );
 
   const navigate = useNavigate();
 
@@ -30,10 +39,10 @@ export const SendPanel: FC = () => {
 
   useEffect(() => {
     const handlerQRText = ({ data }: { data: string }) => {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         receiverToken: data,
-      });
+      }));
 
       (window as any).Telegram.WebApp.closeScanQrPopup();
     };
@@ -44,6 +53,13 @@ export const SendPanel: FC = () => {
       (window as any).Telegram.WebApp.offEvent("qrTextReceived", handlerQRText);
     };
   }, []);
+
+  const selectMaxAmount = () => {
+    setFormData({
+      ...formData,
+      amount: formatNumber(currencyData?.amount || 0) || "",
+    });
+  };
 
   return (
     <Panel>
@@ -57,12 +73,18 @@ export const SendPanel: FC = () => {
                 lineHeight={"17px"}
                 color={"var(--accent)"}
               >
-                325.5 TON
+                {formatNumber(currencyData?.amount)}{" "}
+                {currencyData?.currency.toUpperCase()}
               </Text>
             }
-            before={<Avatar size={42} fallbackName="t" src={ton} />}
+            before={
+              <Avatar
+                size={42}
+                fallbackName={currencyData?.currency.slice(0, 1)}
+              />
+            }
           >
-            TON
+            {currencyData?.currency.toUpperCase()}
           </Cell>
         </Block>
         <Group space={12}>
@@ -88,15 +110,17 @@ export const SendPanel: FC = () => {
           <Input
             placeholder="Amount"
             after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-                style={{ cursor: "pointer" }}
-              >
-                Max
-              </Text>
+              <div onClick={selectMaxAmount}>
+                <Text
+                  weight={"600"}
+                  size={14}
+                  lineHeight={"17px"}
+                  color={"var(--accent)"}
+                  style={{ cursor: "pointer" }}
+                >
+                  Max
+                </Text>
+              </div>
             }
             value={formData.amount}
             onChange={(e) => {
