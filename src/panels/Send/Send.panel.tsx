@@ -17,7 +17,8 @@ import { ReactComponent as QRCopy17OutlineIcon } from "../../icons/QRCopy17Outli
 // FIXME:
 import { useSelector } from "react-redux";
 import { currencyDataSelector } from "../../store/reducers/user/user.selectors";
-import { formatNumber } from "../../utils";
+import { countCharts, formatNumber } from "../../utils";
+import { sendCoins } from "../../api";
 
 export const SendPanel: FC = () => {
   const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ export const SendPanel: FC = () => {
     const handlerQRText = ({ data }: { data: string }) => {
       setFormData((prev) => ({
         ...prev,
-        receiverToken: data,
+        receiverToken: data.split("ton://transfer/")[1],
       }));
 
       (window as any).Telegram.WebApp.closeScanQrPopup();
@@ -59,6 +60,24 @@ export const SendPanel: FC = () => {
       ...formData,
       amount: formatNumber(currencyData?.amount || 0) || "",
     });
+  };
+
+  const withdraw = async () => {
+    const payload = {
+      ton_address: formData.receiverToken,
+      amount: Number(formData.amount),
+      currency: locationState.currency,
+    };
+
+    const response: any = await sendCoins({
+      payload,
+    });
+
+    console.log("response", response);
+
+    if (response?.data && !response?.data.error) {
+      navigate("/send/success");
+    }
   };
 
   return (
@@ -84,7 +103,7 @@ export const SendPanel: FC = () => {
               />
             }
           >
-            {currencyData?.currency.toUpperCase()}
+            {currencyData?.name}
           </Cell>
         </Block>
         <Group space={12}>
@@ -124,22 +143,35 @@ export const SendPanel: FC = () => {
             }
             value={formData.amount}
             onChange={(e) => {
-              const newValue = e?.currentTarget.value;
+              let newValue = (e?.currentTarget.value || "").replace(
+                /[^\d.-]+/g,
+                ""
+              );
+
+              if (countCharts(newValue || "", ".") > 1) {
+                return;
+              }
+
+              if (countCharts(newValue || "", ".") === 1) {
+                const chartsAfterDot = newValue.split(".")[1];
+
+                if (chartsAfterDot.length > 3) {
+                  return;
+                }
+              }
+
+              if (Number(newValue) > currencyData?.amount) {
+                newValue = formatNumber(currencyData?.amount);
+              }
 
               setFormData({
                 ...formData,
-                amount: newValue || "",
+                amount: newValue,
               });
             }}
           />
         </Group>
-        <Button
-          size="m"
-          mode="primary"
-          onClick={() => {
-            navigate("/send/success");
-          }}
-        >
+        <Button size="m" mode="primary" onClick={withdraw}>
           Send
         </Button>
       </Group>

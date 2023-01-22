@@ -4,6 +4,7 @@ import { SLICE_NAMES } from "../../constants";
 const initialState: any = {
   serverData: null,
   balances: null,
+  allCurrencies: null,
 };
 
 const userSlice = createSlice({
@@ -18,7 +19,16 @@ const userSlice = createSlice({
         return;
       }
 
-      draft.balances = action.payload;
+      draft.balances = action.payload.sort((a: any, b: any) => {
+        return b?.amount - a?.amount;
+      });
+    },
+    setAllCurrencies(draft, action) {
+      if (!action.payload) {
+        return;
+      }
+
+      draft.allCurrencies = action.payload;
     },
   },
 });

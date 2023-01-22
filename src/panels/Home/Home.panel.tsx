@@ -38,6 +38,8 @@ export const HomePanel: FC = () => {
   const myTonBalance = useSelector(myTonBalanceSelector);
   const totalUSDValue = useSelector(totalUSDValueSelector);
 
+  console.log("myBalances", myBalances);
+
   useEffect(() => {
     const requestMyServerData = async () => {
       const response = await getMyServerData();
@@ -128,7 +130,7 @@ export const HomePanel: FC = () => {
                       lineHeight={"17px"}
                       color={"var(--accent)"}
                     >
-                      {v.amount} {v.currency.toUpperCase()}
+                      {formatNumber(v.amount || 0)} {v.currency.toUpperCase()}
                     </Text>
                     {v.price ? (
                       <Text
@@ -137,7 +139,7 @@ export const HomePanel: FC = () => {
                         lineHeight={"17px"}
                         color={"var(--color_gray_color)"}
                       >
-                        ≈ $ {v.price}
+                        ≈ $ {formatNumber(v.price || 0)}
                       </Text>
                     ) : null}
                   </>
@@ -147,7 +149,7 @@ export const HomePanel: FC = () => {
                   alignItems: "flex-end",
                 }}
               >
-                {v.currency}
+                {v.name}
               </Cell>
             );
           })}

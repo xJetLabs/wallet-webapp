@@ -1,14 +1,32 @@
 import { SLICE_NAMES } from "../../constants";
 
 export const myAllBalancesSelector = (state: any) => {
-  return state[SLICE_NAMES.USER].balances || [];
+  const balances = state[SLICE_NAMES.USER].balances || [];
+
+  return balances.map((v: any) => {
+    const currencyData = (state[SLICE_NAMES.USER].allCurrencies || []).find(
+      (x: any) => {
+        return x.symbol === v.currency;
+      }
+    );
+
+    return { ...v, ...(currencyData || {}) };
+  });
 };
 
 export const myBalancesSelector = (state: any) => {
-  console.log(state);
-  return (state[SLICE_NAMES.USER].balances || []).filter(
+  const balances = (state[SLICE_NAMES.USER].balances || []).filter(
     (v: any) => v?.currency !== "ton"
   );
+  return balances.map((v: any) => {
+    const currencyData = (state[SLICE_NAMES.USER].allCurrencies || []).find(
+      (x: any) => {
+        return x.symbol === v.currency;
+      }
+    );
+
+    return { ...v, ...(currencyData || {}) };
+  });
 };
 
 export const myTonBalanceSelector = (state: any) => {
@@ -28,7 +46,15 @@ export const myTonAddressSelector = (state: any) => {
 };
 
 export const currencyDataSelector = (state: any, currency: string) => {
-  return (state[SLICE_NAMES.USER].balances || []).find(
+  const currencyData = (state[SLICE_NAMES.USER].balances || []).find(
     (v: any) => v?.currency === currency
   );
+
+  const moreInfoAboutCurrency = (
+    state[SLICE_NAMES.USER].allCurrencies || []
+  ).find((x: any) => {
+    return x.symbol === currencyData?.currency;
+  });
+
+  return { ...currencyData, ...moreInfoAboutCurrency };
 };

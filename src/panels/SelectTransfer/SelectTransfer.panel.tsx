@@ -35,6 +35,8 @@ export const SelectTransferPanel: FC = () => {
     setFilterValue(newValue || "");
   };
 
+  console.log(filtredAllBalances, "filtredAllBalances");
+
   return (
     <Panel>
       <Group space={12}>
@@ -71,7 +73,7 @@ export const SelectTransferPanel: FC = () => {
                   </Text>
                 }
               >
-                {v.currency.toUpperCase()}
+                {v.name}
               </Cell>
             </Block>
           );
