@@ -10,11 +10,9 @@ export const myAllBalancesSelector = (state: any) => {
       }
     );
 
-    return {
-      ...v,
-      ...(currencyData || {}),
-      name: currencyData?.name || v?.currency.toUpperCase() || "",
-    };
+    if (currencyData) {
+      return { ...v, ...(currencyData || {}) };
+    }
   });
 };
 
@@ -29,11 +27,9 @@ export const myBalancesSelector = (state: any) => {
       }
     );
 
-    return {
-      ...v,
-      ...(currencyData || {}),
-      name: currencyData?.name || v?.currency.toUpperCase() || "",
-    };
+    if (currencyData) {
+      return { ...v, ...(currencyData || {}) };
+    }
   });
 };
 
@@ -64,10 +60,5 @@ export const currencyDataSelector = (state: any, currency: string) => {
     return x.symbol === currencyData?.currency;
   });
 
-  return {
-    ...currencyData,
-    ...moreInfoAboutCurrency,
-    name:
-      moreInfoAboutCurrency?.name || currencyData?.currency.toUpperCase() || "",
-  };
+  return { ...currencyData, ...moreInfoAboutCurrency };
 };
