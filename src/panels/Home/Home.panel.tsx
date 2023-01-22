@@ -3,22 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 import {
   ActionText,
-  AppTitle,
   Avatar,
   Button,
   Cell,
   Group,
   Panel,
-  PanelHeader,
   Text,
 } from "../../components";
 
-import { ReactComponent as LogoOutlineIcon } from "../../icons/LogoOutline.svg";
 import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24Outline.svg";
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
 import { ReactComponent as History24OutlineIcon } from "../../icons/History24Outline.svg";
-import { ReactComponent as Switching24OutlineIcon } from "../../icons/Switching24Outline.svg";
 
 import styles from "./Home.module.css";
 
@@ -27,31 +23,10 @@ export const HomePanel: FC = () => {
 
   return (
     <Panel
-      header={
-        <PanelHeader
-          before={
-            <Button
-              before={<LogoOutlineIcon />}
-              mode={"transparent_with_accent_text"}
-            />
-          }
-          after={
-            <Button
-              before={<Settings24OutlineIcon color={"var(--accent)"} />}
-              mode={"transparent_with_accent_text"}
-              onClick={() => {
-                navigate("/settings");
-              }}
-            />
-          }
-        >
-          <AppTitle screenName={"Wallet"} />
-        </PanelHeader>
-      }
-      // centerVertical
+    // centerVertical
     >
       <Group space={24}>
-        <div>
+        <Group space={24}>
           <ActionText
             top="Current balance"
             middle="3, 100.53 TON"
@@ -62,6 +37,9 @@ export const HomePanel: FC = () => {
               stretched
               before={<Send24OutlineIcon />}
               mode={"secondary_with_accent_text"}
+              onClick={() => {
+                navigate("/send");
+              }}
             >
               Send
             </Button>
@@ -69,19 +47,28 @@ export const HomePanel: FC = () => {
               stretched
               before={<Receive24OutlineIcon />}
               mode={"secondary_with_accent_text"}
+              onClick={() => {
+                navigate("/receive");
+              }}
             >
               Receive
             </Button>
             <Button
               before={<History24OutlineIcon />}
               mode={"secondary_with_accent_text"}
+              onClick={() => {
+                navigate("/history");
+              }}
             />
             <Button
-              before={<Switching24OutlineIcon />}
+              before={<Settings24OutlineIcon />}
               mode={"secondary_with_accent_text"}
+              onClick={() => {
+                navigate("/settings");
+              }}
             />
           </div>
-        </div>
+        </Group>
         <Group space={12}>
           <Text
             weight={"600"}
@@ -94,30 +81,58 @@ export const HomePanel: FC = () => {
           <Cell
             before={<Avatar fallbackName="j" size={42} src="" />}
             after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-              >
-                325.5 AMBR
-              </Text>
+              <>
+                <Text
+                  weight={"600"}
+                  size={14}
+                  lineHeight={"17px"}
+                  color={"var(--accent)"}
+                >
+                  325.5 AMBR
+                </Text>
+                <Text
+                  weight={"400"}
+                  size={14}
+                  lineHeight={"17px"}
+                  color={"var(--color_gray_color)"}
+                >
+                  ≈ $ 25.4
+                </Text>
+              </>
             }
+            afterStyles={{
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
           >
             Ambra
           </Cell>
           <Cell
             before={<Avatar fallbackName="j" size={42} src="" />}
             after={
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-              >
-                21.52 TAKE
-              </Text>
+              <>
+                <Text
+                  weight={"600"}
+                  size={14}
+                  lineHeight={"17px"}
+                  color={"var(--accent)"}
+                >
+                  21.52 TAKE
+                </Text>
+                <Text
+                  weight={"400"}
+                  size={14}
+                  lineHeight={"17px"}
+                  color={"var(--color_gray_color)"}
+                >
+                  ≈ $ 234.476
+                </Text>
+              </>
             }
+            afterStyles={{
+              flexDirection: "column",
+              alignItems: "flex-end",
+            }}
           >
             TonTake
           </Cell>

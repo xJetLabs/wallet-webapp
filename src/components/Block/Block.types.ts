@@ -4,4 +4,5 @@ export interface BlockProps {
   className?: string;
   padding?: number | string;
   children?: ReactNode;
+  noBackground?: boolean;
 }

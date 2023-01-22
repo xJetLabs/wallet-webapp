@@ -6,3 +6,10 @@
 .__group {
   margin-top: 24px;
 }
+
+.__logo_icon {
+  width: 24px;
+  overflow: visible;
+  position: relative;
+  left: -6px;
+}

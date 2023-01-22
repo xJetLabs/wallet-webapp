@@ -45,7 +45,7 @@ export const Avatar: FC<AvatarProps> = ({
 
       {isAvatarLoadError ? (
         <Text
-          color={"var(--color_black_color)"}
+          color={"var(--color_avatar_fallback)"}
           size={14}
           lineHeight={"14px"}
           weight={"600"}

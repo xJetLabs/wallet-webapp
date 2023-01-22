@@ -9,3 +9,6 @@ export * from "./Cell";
 export * from "./Avatar";
 export * from "./Link";
 export * from "./Block";
+export * from "./Input";
+export * from "./Switch";
+export * from "./Select";

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export interface CellProps {
   before?: ReactNode;
@@ -9,4 +9,5 @@ export interface CellProps {
   href?: string;
   target?: string;
   withCursor?: boolean;
+  afterStyles?: CSSProperties;
 }

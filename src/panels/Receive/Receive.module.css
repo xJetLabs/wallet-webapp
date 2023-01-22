@@ -1,0 +1,11 @@
+.__qr_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 52px 0;
+}
+
+.__qr_wrapper > span {
+  max-width: 191px;
+  text-align: center;
+}

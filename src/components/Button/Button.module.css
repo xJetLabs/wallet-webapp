@@ -33,12 +33,20 @@
 
 /* ? mouse events ui handler */
 
-.__wrapper:not(.__disabled):hover .__overlay {
+.__wrapper:not(.__disabled):not(.__mode_primary):hover .__overlay {
   background-color: var(--button_hover_background);
 }
 
-.__wrapper:not(.__disabled):active .__overlay {
+.__wrapper:not(.__disabled):not(.__mode_primary):active .__overlay {
   background-color: var(--button_active_background);
+}
+
+.__wrapper:not(.__disabled).__mode_primary:hover .__overlay {
+  background-color: var(--button_primary_hover_background);
+}
+
+.__wrapper:not(.__disabled).__mode_primary:active .__overlay {
+  background-color: var(--button_primary_active_background);
 }
 
 .__overlay {
@@ -63,6 +71,11 @@
 }
 
 /* ? sizes */
+
+.__size_content {
+  height: fit-content;
+  width: fit-content;
+}
 
 .__size_s {
   min-height: 48px;
@@ -92,12 +105,12 @@
 /* ? modes */
 
 .__mode_primary {
-  background-color: var(--accent);
+  background-color: var(--background_primary_button);
 }
 
 .__mode_primary .__wrapper_in,
 .__mode_primary .__content_in {
-  color: var(--color_black_color);
+  color: var(--color_button_primary);
 }
 
 .__mode_secondary {
@@ -112,9 +125,11 @@
   background-color: var(--background_block);
 }
 
+.__mode_transparent_with_accent_text .__wrapper_in,
+.__mode_transparent_with_accent_text .__content_in,
 .__mode_secondary_with_accent_text .__wrapper_in,
 .__mode_secondary_with_accent_text .__content_in {
-  color: var(--accent);
+  color: var(--color_button_accent);
 }
 
 .__mode_transparent {
@@ -123,9 +138,4 @@
 
 .__mode_transparent_with_accent_text {
   background-color: transparent;
-}
-
-.__mode_transparent_with_accent_text .__wrapper_in,
-.__mode_transparent_with_accent_text .__content_in {
-  color: var(--accent);
 }

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export interface ButtonProps {
-  size?: "s" | "m" | "l";
+  size?: "s" | "m" | "l" | "content";
   mode?:
     | "primary"
     | "secondary"

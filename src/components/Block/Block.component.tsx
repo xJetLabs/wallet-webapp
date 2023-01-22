@@ -9,10 +9,12 @@ export const Block: FC<BlockProps> = ({
   children,
   padding = 24,
   className = "",
+  noBackground = false,
 }) => {
   return (
     <div
       className={cx(styles.__wrapper, {
+        [styles.__with_background]: !noBackground,
         [className]: className,
       })}
       style={{ padding }}

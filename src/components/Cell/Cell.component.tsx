@@ -3,14 +3,16 @@ import cx from "classnames";
 
 import { CellProps } from "./Cell.types";
 
-import styles from "./Cell.module.css";
 import { Text } from "../Text";
+
+import styles from "./Cell.module.css";
 
 export const Cell: FC<CellProps> = ({
   before,
   after,
   children,
   description,
+  afterStyles = {},
   className = "",
   withCursor = false,
 }) => {
@@ -34,7 +36,11 @@ export const Cell: FC<CellProps> = ({
             </div>
           ) : null}
         </div>
-        {after ? <div className={styles.__after}>{after}</div> : null}
+        {after ? (
+          <div className={styles.__after} style={afterStyles}>
+            {after}
+          </div>
+        ) : null}
       </div>
     </div>
   );

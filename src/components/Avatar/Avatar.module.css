@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
 
-  background-color: var(--accent);
+  background-color: var(--background_avatar_fallback);
 }
 
 .__content {

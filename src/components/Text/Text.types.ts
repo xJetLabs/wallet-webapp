@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export interface TextProps {
   weight?: "100" | "200" | "300" | "400" | "500" | "600" | "700" | "800";
@@ -6,5 +6,6 @@ export interface TextProps {
   lineHeight?: number | string;
   color?: string;
   className?: string;
+  style?: CSSProperties;
   children: ReactNode;
 }

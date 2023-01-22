@@ -1,9 +1,7 @@
 import { FC } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   AppTitle,
-  Button,
   Cell,
   Group,
   Panel,
@@ -11,43 +9,14 @@ import {
   Text,
 } from "../../components";
 
-import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24Outline.svg";
-import { ReactComponent as Back24OutlineIcon } from "../../icons/Back24Outline.svg";
 import { ReactComponent as Fire18OutlineIcon } from "../../icons/Fire18Outline.svg";
 import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg";
 import { ReactComponent as Receive18OutlineIcon } from "../../icons/Receive18Outline.svg";
 import { ReactComponent as Send18OutlineIcon } from "../../icons/Send18Outline.svg";
 
 export const HistoryPanel: FC = () => {
-  const navigate = useNavigate();
-
   return (
-    <Panel
-      header={
-        <PanelHeader
-          before={
-            <Button
-              before={<Back24OutlineIcon />}
-              mode={"transparent_with_accent_text"}
-              onClick={() => {
-                navigate(-1);
-              }}
-            />
-          }
-          after={
-            <Button
-              before={<Settings24OutlineIcon />}
-              mode={"transparent_with_accent_text"}
-              onClick={() => {
-                navigate("/settings");
-              }}
-            />
-          }
-        >
-          <AppTitle screenName="History" />
-        </PanelHeader>
-      }
-    >
+    <Panel>
       <Group space={24}>
         <Cell
           before={<Fire18OutlineIcon />}

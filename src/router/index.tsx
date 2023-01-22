@@ -4,6 +4,8 @@ import {
   HistoryPanel,
   HomePanel,
   LoadPanel,
+  ReceivePanel,
+  SendPanel,
   SendSuccessPanel,
   SettingsPanel,
 } from "../panels";
@@ -26,7 +28,29 @@ export const router = createBrowserRouter([
     element: <HistoryPanel />,
   },
   {
+    path: "/receive",
+    element: <ReceivePanel />,
+  },
+  {
+    path: "/send",
+    element: <SendPanel />,
+  },
+  {
     path: "/send/success",
     element: <SendSuccessPanel />,
   },
 ]);
+
+router.subscribe((v) => {
+  const goBack = () => {
+    window.history.back();
+  };
+
+  if (!["/home", "/"].includes(v.location.pathname)) {
+    (window as any).Telegram.WebApp.BackButton.show();
+    (window as any).Telegram.WebApp.BackButton.onClick(goBack);
+  } else {
+    (window as any).Telegram.WebApp.BackButton.hide();
+    (window as any).Telegram.WebApp.BackButton.offClick(goBack);
+  }
+});

@@ -1,13 +1,82 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
 :root {
+  /* ? sizes variables */
+
+  --panel_header_height: 72px;
+  --panel_header_button_width: 72px;
+
+  --buttons_border_radius: 18px;
+
+  --block_border_radius: 18px;
+
+  --avatar_border_radius: 50%;
+
+  --input_padding: 18px;
+  --input_border_radius: 18px;
+
+  --select_option_list_border_radius: 0 0 12px 12px;
+
+  /* ? font info */
+
+  --text_font: "Inter";
+}
+
+body[theme="tg"] {
+  /* ? color variables */
+
+  --background_content: var(--tg-theme-bg-color);
+  --background_block: var(--tg-theme-secondary-bg-color);
+  --background_switch: var(--tg-theme-secondary-bg-color);
+  --background_primary_button: var(--tg-theme-button-color);
+  --background_avatar_fallback: var(--tg-theme-secondary-bg-color);
+
+  --panel_header_background: var(--tg-theme-bg-color);
+
+  --color_primary_color: var(--tg-theme-text-color);
+  --color_black_color: var(--tg-theme-bg-color);
+  --color_gray_color: var(--tg-theme-hint-color);
+  --color_avatar_fallback: var(--tg-theme-text-color);
+  --color_button_primary: var(--tg-theme-button-text-color);
+  --color_button_accent: var(--tg-theme-text-color);
+  --color_input_value: var(--tg-theme-text-color);
+  --color_qr: var(--tg-theme-text-color);
+  --color_positive: rgba(111, 237, 109, 1);
+  --color_negative: rgba(237, 109, 109, 1);
+
+  --accent: var(--tg-theme-link-color);
+
+  --error_popout_border_color: #ed6d6d;
+  --error_popout_background_color: rgba(237, 109, 109, 0.15);
+
+  /* ? animation color variables */
+
+  --button_hover_background: rgba(255, 255, 255, 0.01);
+  --button_active_background: rgba(255, 255, 255, 0.03);
+
+  --button_primary_hover_background: rgba(0, 0, 0, 0.1);
+  --button_primary_active_background: rgba(0, 0, 0, 0.2);
+}
+
+body[theme="static"] {
   /* ? color variables */
 
   --background_content: #161518;
   --background_block: rgba(255, 255, 255, 0.05);
+  --background_switch: rgba(255, 255, 255, 0.05);
+  --background_primary_button: #d3f7a6;
+  --background_avatar_fallback: #d3f7a6;
+
+  --panel_header_background: #161518;
 
   --color_primary_color: #fff;
   --color_black_color: #161518;
+  --color_gray_color: rgba(217, 217, 217, 0.25);
+  --color_avatar_fallback: #161518;
+  --color_button_primary: #161518;
+  --color_button_accent: #d3f7a6;
+  --color_input_value: #d3f7a6;
+  --color_qr: #d3f7a6;
   --color_positive: rgba(111, 237, 109, 1);
   --color_negative: rgba(237, 109, 109, 1);
 
@@ -21,20 +90,8 @@
   --button_hover_background: rgba(255, 255, 255, 0.04);
   --button_active_background: rgba(255, 255, 255, 0.1);
 
-  /* ? sizes variables */
-
-  --panel_header_height: 72px;
-  --panel_header_button_width: 72px;
-
-  --buttons_border_radius: 18px;
-
-  --block_border_radius: 18px;
-
-  --avatar_border_radius: 50%;
-
-  /* ? font info */
-
-  --text_font: "Inter";
+  --button_primary_hover_background: rgba(0, 0, 0, 0.1);
+  --button_primary_active_background: rgba(0, 0, 0, 0.2);
 }
 
 html,

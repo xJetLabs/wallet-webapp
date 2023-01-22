@@ -12,8 +12,10 @@ export const LoadPanel: FC = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      navigate("/home");
-    }, 5000);
+      navigate("/home", {
+        replace: true,
+      });
+    }, 1000);
 
     return () => {
       clearTimeout(timeout);
@@ -22,7 +24,7 @@ export const LoadPanel: FC = () => {
 
   return (
     <Panel centerVertical centerHorizontal>
-      <LogoIcon className={styles.logo_animation} />
+      <LogoIcon className={styles.logo_animation} color={"var(--accent)"} />
     </Panel>
   );
 };

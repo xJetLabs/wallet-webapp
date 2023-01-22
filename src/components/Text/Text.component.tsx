@@ -9,13 +9,20 @@ export const Text: FC<TextProps> = ({
   size,
   lineHeight,
   children,
+  style = {},
   className = "",
   color = "",
 }) => {
   return (
     <span
       className={cx({ [className]: className })}
-      style={{ fontWeight: weight, fontSize: size, lineHeight, color }}
+      style={{
+        fontWeight: weight,
+        fontSize: size,
+        lineHeight,
+        color,
+        ...style,
+      }}
     >
       {children}
     </span>

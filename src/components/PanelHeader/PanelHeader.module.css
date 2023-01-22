@@ -4,6 +4,8 @@
   top: 0;
   left: 0;
   width: 100%;
+
+  background-color: var(--panel_header_background);
 }
 
 .__wrapper_in {

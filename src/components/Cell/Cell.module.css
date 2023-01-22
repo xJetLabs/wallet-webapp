@@ -19,6 +19,7 @@
 
 .__content {
   flex-grow: 1;
+  overflow: hidden;
 }
 
 .__content_in {
@@ -33,12 +34,20 @@
 
 .__after {
   display: flex;
+  text-align: end;
+  gap: 6px;
+  align-items: center;
+  overflow: hidden;
 }
 
 .__content_text {
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
+
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 /* ? Mouse cases */
