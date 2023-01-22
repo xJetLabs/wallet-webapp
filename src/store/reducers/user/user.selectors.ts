@@ -6,7 +6,7 @@ export const myAllBalancesSelector = (state: any) => {
   return balances.map((v: any) => {
     const currencyData = (state[SLICE_NAMES.USER].allCurrencies || []).find(
       (x: any) => {
-        return x.symbol === v.currency;
+        return x.symbol === v?.currency;
       }
     );
 

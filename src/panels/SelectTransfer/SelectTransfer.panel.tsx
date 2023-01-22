@@ -46,6 +46,10 @@ export const SelectTransferPanel: FC = () => {
           onChange={onInputChange}
         />
         {filtredAllBalances.map((v: any, i: any) => {
+          if (!v) {
+            return null;
+          }
+
           return (
             <Block
               key={i}

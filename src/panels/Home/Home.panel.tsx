@@ -112,6 +112,10 @@ export const HomePanel: FC = () => {
             JETTONS
           </Text>
           {myBalances.map((v: any, i: any) => {
+            if (!v) {
+              return null;
+            }
+
             return (
               <Cell
                 key={i}
