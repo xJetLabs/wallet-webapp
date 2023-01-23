@@ -18,24 +18,30 @@ function toHexString(byteArray: any) {
     .join("");
 }
 
+function fromHexString(hexString: string) {
+  // @ts-ignore
+  return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+}
+
 export const sign_message = async (message: any, private_key: any) => {
   if (!private_key) {
     return;
   }
 
   if (!message.query_id) {
-    message.query_id = Math.trunc(Date.now() / 1000 + 60);
+    message.query_id = Math.trunc(Date.now() / 1000 + 60) * 65536;
   }
 
-  console.debug("private_key", strToBuffer(private_key), private_key);
-  console.debug("message", strToBuffer(JSON.stringify(message)), message);
+  let keyPair = nacl.sign.keyPair.fromSeed(fromHexString(private_key));
+  private_key = keyPair.secretKey;
 
-  message.signature = nacl.sign(
-    nacl.hash(decodeUTF8(JSON.stringify(message))),
-    strToBuffer(private_key)
+  let cleanMessage = JSON.stringify(message).replace(/\\n/g, "");
+
+  message.signature = nacl.sign.detached(
+    new TextEncoder().encode(cleanMessage),
+    private_key
   );
 
   message.signature = toHexString(message.signature);
-
   return message;
 };
