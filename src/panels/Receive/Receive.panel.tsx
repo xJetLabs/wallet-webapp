@@ -1,9 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 import { Button, Group, Input, Panel, Text } from "../../components";
 
 import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.svg";
+import { ReactComponent as CopySuccess24OutlineIcon } from "../../icons/CopySuccess24Outline.svg";
 
 import styles from "./Receive.module.css";
 import { useSelector } from "react-redux";
@@ -12,10 +13,32 @@ import { checkDeposit } from "../../api";
 
 export const ReceivePanel: FC = () => {
   const [buttonDisabled, setIsButtonDisabled] = useState<boolean>(false);
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
+
+  const copyTimeoutRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   const myTonAddress = useSelector(myTonAddressSelector);
 
+  useEffect(() => {
+    if (copySuccess) {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+
+      copyTimeoutRef.current = setTimeout(() => {
+        setCopySuccess(false);
+      }, 1000);
+    }
+
+    return () => {
+      clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = undefined;
+    };
+  }, [copySuccess]);
+
   const copyAddress = () => {
+    setCopySuccess(true);
+
     navigator.clipboard.writeText(myTonAddress);
   };
 
@@ -50,11 +73,18 @@ export const ReceivePanel: FC = () => {
         <Input
           value={myTonAddress}
           after={
-            <Copy20OutlineIcon
-              style={{ cursor: "pointer" }}
-              color={"var(--accent)"}
-              onClick={copyAddress}
-            />
+            copySuccess ? (
+              <CopySuccess24OutlineIcon
+                style={{ cursor: "pointer", marginRight: -2 }}
+                color={"var(--accent)"}
+              />
+            ) : (
+              <Copy20OutlineIcon
+                style={{ cursor: "pointer" }}
+                color={"var(--accent)"}
+                onClick={copyAddress}
+              />
+            )
           }
         />
         <Button
