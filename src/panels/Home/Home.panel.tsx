@@ -156,7 +156,7 @@ const renderJettonItem = (v: any, i: number) => {
               lineHeight={"17px"}
               color={"var(--accent)"}
             >
-              {formatNumber(v.amount || 0)} {v.currency.toUpperCase()}
+              {formatNumber(v?.amount || 0)} {v.currency.toUpperCase()}
             </Text>
             {USDPrice ? (
               <Text

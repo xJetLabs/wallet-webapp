@@ -1,6 +1,6 @@
 export const formatNumber = (number: number, config: object = {}) => {
   if (!number) {
-    return "";
+    number = 0;
   }
 
   const enFormat = new Intl.NumberFormat("en-US", {
