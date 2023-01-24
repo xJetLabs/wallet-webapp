@@ -1,9 +1,8 @@
 import axios from "axios";
 
-import { API_URL } from "../constants";
-import { userActions } from "../../store/reducers";
-import { store } from "../../store";
 import { sign_message } from "../utils";
+import { store } from "../../store";
+import { userActions } from "../../store/reducers";
 
 const RequestInProgress = new Set();
 
@@ -12,19 +11,33 @@ let config = {
   private_key: null,
 };
 
+let API_URL = "https://xjet.app/api/v1/";
+
 export let apiInited = false;
+export let mainnetInited = false;
+
+export const initMainnet = async () => {
+  const mainnetQuery = window.location.search
+    ? new URLSearchParams(window.location.search)
+    : null;
+
+  if (mainnetQuery) {
+    const isTest = mainnetQuery.get("test");
+
+    if (isTest === "true") {
+      API_URL = "https://testnet.xjet.app/api/v1/";
+    }
+  }
+
+  mainnetInited = true;
+};
 
 export const balanceCheckWatcher = async () => {
   if (apiInited) {
-    const responseDeposit = await checkDeposit();
     const responseBalance = await getMyBalance();
 
-    console.log("responseDeposit", responseDeposit);
-
     if (responseBalance?.data) {
-      store.dispatch(
-        userActions.setBalances(responseBalance?.data?.balanceCheckWatcher)
-      );
+      store.dispatch(userActions.setBalances(responseBalance?.data?.balances));
     }
   }
 };

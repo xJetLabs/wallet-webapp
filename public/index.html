@@ -15,18 +15,6 @@
     <script>
       if (window.Telegram) {
         window.Telegram.WebApp.expand();
-
-        window.Telegram.WebApp.enableClosingConfirmation();
-
-        window.Telegram.WebApp.onEvent("settingsButtonClicked", () => {
-          console.log("123");
-        });
-
-        window.showQRScanner = () => {
-          window.Telegram.WebApp.showScanQrPopup({
-            text: "Scan token",
-          });
-        };
       }
     </script>
     <div id="root"></div>

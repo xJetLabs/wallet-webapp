@@ -8,12 +8,18 @@ import styles from "./Link.module.css";
 export const Link: FC<LinkProps> = ({
   href,
   children,
+  withCursor = false,
   target = "_blank",
   className = "",
 }) => {
+  if (!href) {
+    return <>{children}</>;
+  }
+
   return (
     <a
       className={cx(styles.__wrapper, {
+        [styles.__with_cursor]: withCursor,
         [className]: className,
       })}
       href={href}

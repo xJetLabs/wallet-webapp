@@ -1,36 +1,45 @@
 import { SLICE_NAMES } from "../../constants";
 
 export const myAllBalancesSelector = (state: any) => {
-  const balances = state[SLICE_NAMES.USER].balances || [];
+  return [
+    ...(state[SLICE_NAMES.USER].verifiedBalances || []),
+    ...(state[SLICE_NAMES.USER].unverifiedBalances || []),
+  ];
+};
 
-  return balances.map((v: any) => {
-    const currencyData = (state[SLICE_NAMES.USER].allCurrencies || []).find(
-      (x: any) => {
-        return x.symbol === v?.currency;
+export const aviableTransferBalancesSelector = (state: any) => {
+  return [
+    ...(state[SLICE_NAMES.USER].verifiedBalances || []),
+    ...(state[SLICE_NAMES.USER].unverifiedBalances || []),
+  ]
+    .filter((v: any) => {
+      return v?.currency !== "ton" ? v?.amount && v?.amount > 0 : true;
+    })
+    .sort((a: any, b: any) => {
+      if (b.currency === "ton") {
+        return 1;
       }
-    );
 
-    if (currencyData) {
-      return { ...v, ...(currencyData || {}) };
-    }
+      return Number(b?.amount || 0) - Number(a?.amount || 0);
+    });
+};
+
+export const myVerifiedBalancesSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].verifiedBalances || []).filter((v: any) => {
+    return v.currency !== "ton" && v.amount > 0;
+  });
+};
+
+export const myUnverifiedBalancesSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].unverifiedBalances || []).filter((v: any) => {
+    return v.currency !== "ton" && v.amount > 0;
   });
 };
 
 export const myBalancesSelector = (state: any) => {
-  const balances = (state[SLICE_NAMES.USER].balances || []).filter(
+  return (state[SLICE_NAMES.USER].balances || []).filter(
     (v: any) => v?.currency !== "ton"
   );
-  return balances.map((v: any) => {
-    const currencyData = (state[SLICE_NAMES.USER].allCurrencies || []).find(
-      (x: any) => {
-        return x.symbol === v.currency;
-      }
-    );
-
-    if (currencyData) {
-      return { ...v, ...(currencyData || {}) };
-    }
-  });
 };
 
 export const myTonBalanceSelector = (state: any) => {
@@ -41,7 +50,17 @@ export const myTonBalanceSelector = (state: any) => {
 
 export const totalUSDValueSelector = (state: any) => {
   return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
-    return a + b?.price;
+    return a + Number(b?.values?.usd || 0);
+  }, 0);
+};
+
+export const totalTONValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "ton") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
   }, 0);
 };
 
@@ -50,15 +69,7 @@ export const myTonAddressSelector = (state: any) => {
 };
 
 export const currencyDataSelector = (state: any, currency: string) => {
-  const currencyData = (state[SLICE_NAMES.USER].balances || []).find(
+  return (state[SLICE_NAMES.USER].balances || []).find(
     (v: any) => v?.currency === currency
   );
-
-  const moreInfoAboutCurrency = (
-    state[SLICE_NAMES.USER].allCurrencies || []
-  ).find((x: any) => {
-    return x.symbol === currencyData?.currency;
-  });
-
-  return { ...currencyData, ...moreInfoAboutCurrency };
 };

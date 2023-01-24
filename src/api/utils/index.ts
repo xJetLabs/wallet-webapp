@@ -1,14 +1,4 @@
 import nacl from "tweetnacl";
-import { decodeUTF8 } from "tweetnacl-util";
-
-function strToBuffer(string: string) {
-  let arrayBuffer = new ArrayBuffer(string.length * 1);
-  let newUint = new Uint8Array(arrayBuffer);
-  newUint.forEach((_, i) => {
-    newUint[i] = string.charCodeAt(i);
-  });
-  return newUint;
-}
 
 function toHexString(byteArray: any) {
   return Array.prototype.map
@@ -19,8 +9,10 @@ function toHexString(byteArray: any) {
 }
 
 function fromHexString(hexString: string) {
-  // @ts-ignore
-  return Uint8Array.from(hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+  return Uint8Array.from(
+    // @ts-ignore
+    hexString.match(/.{1,2}/g).map((byte) => parseInt(byte, 16))
+  );
 }
 
 export const sign_message = async (message: any, private_key: any) => {

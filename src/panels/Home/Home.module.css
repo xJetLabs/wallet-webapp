@@ -13,3 +13,9 @@
   position: relative;
   left: -6px;
 }
+
+.__jetton_with_url_title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

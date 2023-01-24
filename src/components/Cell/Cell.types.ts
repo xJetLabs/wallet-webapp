@@ -2,7 +2,7 @@ import { CSSProperties, ReactNode } from "react";
 
 export interface CellProps {
   before?: ReactNode;
-  children?: string;
+  children?: ReactNode;
   description?: string;
   after?: ReactNode;
   className?: string;

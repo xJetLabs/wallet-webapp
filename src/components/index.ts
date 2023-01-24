@@ -12,3 +12,4 @@ export * from "./Block";
 export * from "./Input";
 export * from "./Switch";
 export * from "./Select";
+export * from "./ErrorBlock";

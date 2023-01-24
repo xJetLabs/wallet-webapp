@@ -7,6 +7,7 @@ import styles from "./Block.module.css";
 
 export const Block: FC<BlockProps> = ({
   children,
+  style = {},
   padding = 24,
   className = "",
   noBackground = false,
@@ -18,7 +19,7 @@ export const Block: FC<BlockProps> = ({
         [styles.__with_background]: !noBackground,
         [className]: className,
       })}
-      style={{ padding }}
+      style={{ padding, ...style }}
       onClick={onClick}
     >
       {children}

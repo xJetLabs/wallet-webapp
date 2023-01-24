@@ -1,15 +1,24 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-import { apiInit, getAllCurrencies, setApiConfig } from "../../api";
+import {
+  apiInit,
+  getAllCurrencies,
+  getMyBalance,
+  getMyServerData,
+  initMainnet,
+  mainnetInited,
+  setApiConfig,
+} from "../../api";
+
+import { userActions } from "../../store/reducers";
 
 import { Panel } from "../../components";
 
 import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
 
 import styles from "./Load.module.css";
-import { useDispatch } from "react-redux";
-import { userActions } from "../../store/reducers";
 
 export const LoadPanel: FC = () => {
   const navigate = useNavigate();
@@ -27,15 +36,9 @@ export const LoadPanel: FC = () => {
         return;
       }
 
-      console.log("response", response);
-
       if (response && response.data) {
         await setApiConfig({
           newConfigValue: response.data,
-        });
-
-        navigate("/home", {
-          replace: true,
         });
       }
     };
@@ -47,17 +50,38 @@ export const LoadPanel: FC = () => {
         return;
       }
 
-      console.log("response.data|||||response.data", response.data);
-
       if (response && response.data) {
         dispatch(userActions.setAllCurrencies(response.data?.currencies));
       }
     };
 
-    console.log("test");
+    const requestMyServerData = async () => {
+      const response = await getMyServerData();
 
-    requestAllCurrencies();
-    requestTokenData();
+      dispatch(userActions.setServerData(response.data));
+    };
+
+    const requestMyBalance = async () => {
+      const response = await getMyBalance();
+
+      dispatch(userActions.setBalances(response.data?.balances));
+
+      navigate("/home", {
+        replace: true,
+      });
+    };
+
+    if (mainnetInited) {
+      return;
+    }
+
+    initMainnet().then(() => {
+      requestAllCurrencies();
+      requestTokenData().then(() => {
+        requestMyServerData();
+        requestMyBalance();
+      });
+    });
   }, [navigate, dispatch]);
 
   return (

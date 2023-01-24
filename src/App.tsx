@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useRef } from "react";
 import { RouterProvider } from "react-router-dom";
 
 import { router } from "./router";
@@ -6,6 +6,8 @@ import { router } from "./router";
 import { apiInited, balanceCheckWatcher } from "./api";
 
 export const App: FC = () => {
+  const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
+
   if (window.location.pathname !== "/" && !apiInited) {
     router.navigate("/", {
       replace: true,
@@ -13,12 +15,17 @@ export const App: FC = () => {
   }
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      balanceCheckWatcher();
-    }, 30000);
+    if (intervalIdRef.current) {
+      clearInterval(intervalIdRef.current);
+    }
+
+    intervalIdRef.current = setInterval(async () => {
+      await balanceCheckWatcher();
+    }, 10000);
 
     return () => {
-      clearInterval(intervalId);
+      clearInterval(intervalIdRef.current);
+      intervalIdRef.current = undefined;
     };
   }, []);
 

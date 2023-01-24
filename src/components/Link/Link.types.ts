@@ -4,5 +4,6 @@ export interface LinkProps {
   className?: string;
   target?: HTMLAttributeAnchorTarget;
   children?: ReactNode;
-  href: string;
+  href?: string;
+  withCursor?: boolean;
 }

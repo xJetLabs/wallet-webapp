@@ -1,5 +1,8 @@
-import { ChangeEvent, FC, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { formatNumber } from "../../utils";
 
 import {
   Avatar,
@@ -11,17 +14,18 @@ import {
   Text,
 } from "../../components";
 
+import { aviableTransferBalancesSelector } from "../../store/reducers/user/user.selectors";
+
 import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.svg";
-import { useSelector } from "react-redux";
-import { myAllBalancesSelector } from "../../store/reducers/user/user.selectors";
-import { formatNumber } from "../../utils";
+
+import ton from "../../images/ton.jpeg";
 
 export const SelectTransferPanel: FC = () => {
   const [filterValue, setFilterValue] = useState("");
 
   const navigate = useNavigate();
 
-  const allBalances = useSelector(myAllBalancesSelector);
+  const allBalances = useSelector(aviableTransferBalancesSelector);
 
   const filtredAllBalances = useMemo(() => {
     return allBalances.filter((v: any) =>
@@ -35,8 +39,6 @@ export const SelectTransferPanel: FC = () => {
     setFilterValue(newValue || "");
   };
 
-  console.log(filtredAllBalances, "filtredAllBalances");
-
   return (
     <Panel>
       <Group space={12}>
@@ -49,6 +51,8 @@ export const SelectTransferPanel: FC = () => {
           if (!v) {
             return null;
           }
+
+          const imageURL = v.currency === "ton" ? ton : v.image;
 
           return (
             <Block
@@ -64,7 +68,11 @@ export const SelectTransferPanel: FC = () => {
             >
               <Cell
                 before={
-                  <Avatar fallbackName={v.currency.slice(0, 1)} size={42} />
+                  <Avatar
+                    fallbackName={v.currency.slice(0, 1)}
+                    size={42}
+                    src={imageURL}
+                  />
                 }
                 after={
                   <Text
