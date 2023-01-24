@@ -122,7 +122,10 @@ export const HomePanel: FC = () => {
               }}
             >
               <div className={styles.__jetton_with_url_title}>
-                TON {myTonBalance?.url ? <Chains20OutlineIcon /> : null}
+                TON{" "}
+                {myTonBalance?.url ? (
+                  <Chains20OutlineIcon color="var(--accent)" />
+                ) : null}
               </div>
             </Cell>
           </Link>
@@ -182,7 +185,10 @@ export const HomePanel: FC = () => {
                     }}
                   >
                     <div className={styles.__jetton_with_url_title}>
-                      {v.name} {v?.url ? <Chains20OutlineIcon /> : null}
+                      {v.name}{" "}
+                      {v?.url ? (
+                        <Chains20OutlineIcon color="var(--accent)" />
+                      ) : null}
                     </div>
                   </Cell>
                 </Link>
@@ -245,7 +251,10 @@ export const HomePanel: FC = () => {
                     }}
                   >
                     <div className={styles.__jetton_with_url_title}>
-                      {v.name} {v?.url ? <Chains20OutlineIcon /> : null}
+                      {v.name}{" "}
+                      {v?.url ? (
+                        <Chains20OutlineIcon color="var(--accent)" />
+                      ) : null}
                     </div>
                   </Cell>
                 </Link>
