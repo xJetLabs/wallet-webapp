@@ -1,6 +1,8 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import { ROUTE_NAMES } from "../../router/constants";
 
 import { balanceCheckWatcher, sendCoins } from "../../api";
 
@@ -29,13 +31,16 @@ import { ReactComponent as Date24OutlineIcon } from "../../icons/Date24Outline.s
 import ton from "../../images/ton.jpeg";
 
 export const SendPanel: FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    receiverToken: string;
+    amount: string;
+  }>({
     receiverToken: "",
     amount: "",
   });
 
   const [isAwaitResponse, setIsAwaitResponse] = useState<boolean>(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | string>(null);
 
   const errorBlockTimeoutRef = useRef<NodeJS.Timer | undefined>(undefined);
 
@@ -46,7 +51,13 @@ export const SendPanel: FC = () => {
     Number(formData.amount) <= 0 ||
     isAwaitResponse;
 
-  const { state: locationState }: { state: any } = useLocation();
+  const {
+    state: locationState,
+  }: {
+    state: {
+      currency: string;
+    };
+  } = useLocation();
 
   const currencyData = useSelector((state) =>
     currencyDataSelector(state, locationState.currency)
@@ -58,12 +69,6 @@ export const SendPanel: FC = () => {
     currencyData?.currency === "ton" || currencyData?.verified ? 0.05 : 0.1;
 
   const navigate = useNavigate();
-
-  const openQRScanner = () => {
-    (window as any).Telegram.WebApp.showScanQrPopup({
-      text: "Scan token",
-    });
-  };
 
   useEffect(() => {
     const handlerQRText = ({ data }: { data: string }) => {
@@ -101,15 +106,21 @@ export const SendPanel: FC = () => {
     };
   }, [error]);
 
+  const openQRScanner = () => {
+    (window as any).Telegram.WebApp.showScanQrPopup({
+      text: "Scan token",
+    });
+  };
+
   const selectMaxAmount = () => {
     let newAmount = "";
 
-    if (currencyData.currency === "ton") {
-      if (currencyData?.amount <= 0.05) {
+    if (currencyData?.currency === "ton") {
+      if (currencyData?.amount <= 0.06) {
         newAmount = "0";
       } else {
         newAmount =
-          String(+(Number(currencyData?.amount) - 0.05).toFixed(3)) || "";
+          String(+(Number(currencyData?.amount) - 0.06).toFixed(3)) || "";
       }
     } else {
       newAmount = String(+Number(currencyData?.amount).toFixed(3)) || "";
@@ -151,17 +162,11 @@ export const SendPanel: FC = () => {
     ) {
       await balanceCheckWatcher();
 
-      navigate("/send/success", {
-        state: {
-          receiverToken: formData.receiverToken,
-          currency: locationState.currency,
-          amount: Number(formData.amount),
-        },
+      navigate(ROUTE_NAMES.SEND_SUCCESS, {
+        state: payload,
       });
-    } else if (response?.response?.data?.error) {
-      setError(response?.response?.data?.error);
-    } else if (response?.data?.error) {
-      setError(response?.data?.error);
+    } else if (response?.response?.data?.error || response?.data?.error) {
+      setError(response?.response?.data?.error || response?.data?.error);
     }
   };
 
@@ -205,12 +210,12 @@ export const SendPanel: FC = () => {
               />
             }
             value={formData.receiverToken}
-            onChange={(e) => {
-              const newValue = e?.currentTarget.value;
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              const newValue = e?.currentTarget.value || "";
 
               setFormData({
                 ...formData,
-                receiverToken: newValue || "",
+                receiverToken: newValue,
               });
             }}
             disabled={isAwaitResponse}
@@ -231,7 +236,7 @@ export const SendPanel: FC = () => {
               </div>
             }
             value={formData.amount}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               let newValue = (e?.currentTarget.value || "").replace(
                 /[^\d.-]+/g,
                 ""

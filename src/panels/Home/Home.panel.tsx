@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 
 import { formatNumber } from "../../utils";
 
+import { ROUTE_NAMES } from "../../router/constants";
+
 import {
   myTonBalanceSelector,
   myUnverifiedBalancesSelector,
@@ -41,6 +43,24 @@ export const HomePanel: FC = () => {
   const totalTONValue = useSelector(totalTONValueSelector);
   const totalUSDValue = useSelector(totalUSDValueSelector);
 
+  const navigateToSend = () => {
+    if ((myTonBalance?.amount || 0) < 0.05) {
+      (window as any).Telegram.WebApp.showAlert("You don't have enough TON");
+
+      return;
+    }
+
+    navigate(ROUTE_NAMES.SEND_SELECT);
+  };
+
+  const navigateToReceive = () => {
+    navigate(ROUTE_NAMES.RECEIVE);
+  };
+
+  const navigateToSettings = () => {
+    navigate(ROUTE_NAMES.SETTINGS);
+  };
+
   return (
     <Panel>
       <Group space={24}>
@@ -57,17 +77,7 @@ export const HomePanel: FC = () => {
               stretched
               before={<Send24OutlineIcon />}
               mode={"secondary_with_accent_text"}
-              onClick={() => {
-                if ((myTonBalance?.amount || 0) < 0.05) {
-                  (window as any).Telegram.WebApp.showAlert(
-                    "You don't have enough TON"
-                  );
-
-                  return;
-                }
-
-                navigate("/send/select");
-              }}
+              onClick={navigateToSend}
             >
               Send
             </Button>
@@ -75,61 +85,18 @@ export const HomePanel: FC = () => {
               stretched
               before={<Receive24OutlineIcon />}
               mode={"secondary_with_accent_text"}
-              onClick={() => {
-                navigate("/receive");
-              }}
+              onClick={navigateToReceive}
             >
               Receive
             </Button>
             <Button
               before={<Settings24OutlineIcon />}
               mode={"secondary_with_accent_text"}
-              onClick={() => {
-                navigate("/settings");
-              }}
+              onClick={navigateToSettings}
             />
           </div>
         </Group>
-        {myTonBalance ? (
-          <Link href={myTonBalance?.url} target={"_self"} withCursor>
-            <Cell
-              before={<Avatar fallbackName={"T"} size={42} src={ton} />}
-              after={
-                <>
-                  <Text
-                    weight={"600"}
-                    size={14}
-                    lineHeight={"17px"}
-                    color={"var(--accent)"}
-                  >
-                    {formatNumber(myTonBalance.amount || 0)} TON
-                  </Text>
-                  {myTonBalance?.values?.usd ? (
-                    <Text
-                      weight={"400"}
-                      size={14}
-                      lineHeight={"17px"}
-                      color={"var(--color_gray_color)"}
-                    >
-                      ≈ $ {formatNumber(myTonBalance?.values?.usd || 0)}
-                    </Text>
-                  ) : null}
-                </>
-              }
-              afterStyles={{
-                flexDirection: "column",
-                alignItems: "flex-end",
-              }}
-            >
-              <div className={styles.__jetton_with_url_title}>
-                TON{" "}
-                {myTonBalance?.url ? (
-                  <Chains20OutlineIcon color="var(--accent)" />
-                ) : null}
-              </div>
-            </Cell>
-          </Link>
-        ) : null}
+        {myTonBalance ? renderJettonItem(myTonBalance, -1) : null}
         {myVerifiedBalances.length > 0 ? (
           <Group space={12}>
             <Text
@@ -140,59 +107,8 @@ export const HomePanel: FC = () => {
             >
               JETTONS
             </Text>
-            {myVerifiedBalances.map((v: any, i: any) => {
-              if (!v) {
-                return null;
-              }
-
-              return (
-                <Link href={v?.url} target={"_self"} withCursor>
-                  <Cell
-                    key={i}
-                    before={
-                      <Avatar
-                        fallbackName={v.currency.slice(0, 1)}
-                        size={42}
-                        src={v?.image}
-                      />
-                    }
-                    after={
-                      <>
-                        <Text
-                          weight={"600"}
-                          size={14}
-                          lineHeight={"17px"}
-                          color={"var(--accent)"}
-                        >
-                          {formatNumber(v.amount || 0)}{" "}
-                          {v.currency.toUpperCase()}
-                        </Text>
-                        {v?.values?.usd ? (
-                          <Text
-                            weight={"400"}
-                            size={14}
-                            lineHeight={"17px"}
-                            color={"var(--color_gray_color)"}
-                          >
-                            ≈ $ {formatNumber(v?.values?.usd || 0)}
-                          </Text>
-                        ) : null}
-                      </>
-                    }
-                    afterStyles={{
-                      flexDirection: "column",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <div className={styles.__jetton_with_url_title}>
-                      {v.name}{" "}
-                      {v?.url ? (
-                        <Chains20OutlineIcon color="var(--accent)" />
-                      ) : null}
-                    </div>
-                  </Cell>
-                </Link>
-              );
+            {myVerifiedBalances.map((v: any, i: number) => {
+              return renderJettonItem(v, i);
             })}
           </Group>
         ) : null}
@@ -206,63 +122,64 @@ export const HomePanel: FC = () => {
             >
               UNVERIFIED
             </Text>
-            {myUnverifiedBalances.map((v: any, i: any) => {
-              if (!v) {
-                return null;
-              }
-
-              return (
-                <Link href={v?.url} target={"_self"} withCursor>
-                  <Cell
-                    key={i}
-                    before={
-                      <Avatar
-                        fallbackName={v.currency.slice(0, 1)}
-                        size={42}
-                        src={v?.image}
-                      />
-                    }
-                    after={
-                      <>
-                        <Text
-                          weight={"600"}
-                          size={14}
-                          lineHeight={"17px"}
-                          color={"var(--accent)"}
-                        >
-                          {formatNumber(v.amount || 0)}{" "}
-                          {v.currency.toUpperCase()}
-                        </Text>
-                        {v?.values?.usd ? (
-                          <Text
-                            weight={"400"}
-                            size={14}
-                            lineHeight={"17px"}
-                            color={"var(--color_gray_color)"}
-                          >
-                            ≈ $ {formatNumber(v?.values?.usd || 0)}
-                          </Text>
-                        ) : null}
-                      </>
-                    }
-                    afterStyles={{
-                      flexDirection: "column",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <div className={styles.__jetton_with_url_title}>
-                      {v.name}{" "}
-                      {v?.url ? (
-                        <Chains20OutlineIcon color="var(--accent)" />
-                      ) : null}
-                    </div>
-                  </Cell>
-                </Link>
-              );
+            {myUnverifiedBalances.map((v: any, i: number) => {
+              return renderJettonItem(v, i);
             })}
           </Group>
         ) : null}
       </Group>
     </Panel>
+  );
+};
+
+const renderJettonItem = (v: any, i: number) => {
+  if (!v) {
+    return null;
+  }
+
+  const image = v.currency === "ton" ? ton : v.image;
+  const USDPrice = v?.values?.usd;
+  const ProjectURL = v?.url;
+
+  return (
+    <Link href={ProjectURL} target={"_self"} withCursor>
+      <Cell
+        key={i}
+        before={
+          <Avatar fallbackName={v.currency.slice(0, 1)} size={42} src={image} />
+        }
+        after={
+          <>
+            <Text
+              weight={"600"}
+              size={14}
+              lineHeight={"17px"}
+              color={"var(--accent)"}
+            >
+              {formatNumber(v.amount || 0)} {v.currency.toUpperCase()}
+            </Text>
+            {USDPrice ? (
+              <Text
+                weight={"400"}
+                size={14}
+                lineHeight={"17px"}
+                color={"var(--color_gray_color)"}
+              >
+                ≈ $ {formatNumber(USDPrice)}
+              </Text>
+            ) : null}
+          </>
+        }
+        afterStyles={{
+          flexDirection: "column",
+          alignItems: "flex-end",
+        }}
+      >
+        <div className={styles.__jetton_with_url_title}>
+          {v.name}{" "}
+          {ProjectURL ? <Chains20OutlineIcon color="var(--accent)" /> : null}
+        </div>
+      </Cell>
+    </Link>
   );
 };

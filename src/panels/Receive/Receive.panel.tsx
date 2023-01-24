@@ -1,5 +1,10 @@
 import { FC, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { QRCodeSVG } from "qrcode.react";
+
+import { checkDeposit } from "../../api";
+
+import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 
 import { Button, Group, Input, Panel, Text } from "../../components";
 
@@ -7,9 +12,6 @@ import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.s
 import { ReactComponent as CopySuccess24OutlineIcon } from "../../icons/CopySuccess24Outline.svg";
 
 import styles from "./Receive.module.css";
-import { useSelector } from "react-redux";
-import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
-import { checkDeposit } from "../../api";
 
 export const ReceivePanel: FC = () => {
   const [buttonDisabled, setIsButtonDisabled] = useState<boolean>(false);
@@ -39,7 +41,11 @@ export const ReceivePanel: FC = () => {
   const copyAddress = () => {
     setCopySuccess(true);
 
-    navigator.clipboard.writeText(myTonAddress);
+    try {
+      navigator.clipboard.writeText(myTonAddress);
+    } catch (e: any) {
+      throw new Error("Navigator.clipboard can't be used: ", e);
+    }
   };
 
   const check = async () => {

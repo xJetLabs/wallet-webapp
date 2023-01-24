@@ -1,4 +1,8 @@
 export const formatNumber = (number: number, config: object = {}) => {
+  if (!number) {
+    return "";
+  }
+
   const enFormat = new Intl.NumberFormat("en-US", {
     ...{ maximumFractionDigits: 3, minimumFractionDigits: 0 },
     ...config,

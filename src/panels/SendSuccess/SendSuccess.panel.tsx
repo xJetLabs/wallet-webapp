@@ -34,7 +34,7 @@ export const SendSuccessPanel: FC = () => {
           middle={`${formatNumber(
             state?.amount || 0
           )} ${state?.currency?.toUpperCase()}`}
-          bottom={formatToken(state?.receiverToken || "")}
+          bottom={formatToken(state?.ton_address || "")}
         />
         <Button
           size={"m"}

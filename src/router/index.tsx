@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import { ROUTE_NAMES } from "./constants";
+
 import {
   HistoryPanel,
   HomePanel,
@@ -13,35 +15,35 @@ import {
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: ROUTE_NAMES.LOAD,
     element: <LoadPanel />,
   },
   {
-    path: "/home",
+    path: ROUTE_NAMES.HOME,
     element: <HomePanel />,
   },
   {
-    path: "/settings",
+    path: ROUTE_NAMES.SETTINGS,
     element: <SettingsPanel />,
   },
   {
-    path: "/history",
+    path: ROUTE_NAMES.HISTORY,
     element: <HistoryPanel />,
   },
   {
-    path: "/receive",
+    path: ROUTE_NAMES.RECEIVE,
     element: <ReceivePanel />,
   },
   {
-    path: "/send",
+    path: ROUTE_NAMES.SEND,
     element: <SendPanel />,
   },
   {
-    path: "/send/select",
+    path: ROUTE_NAMES.SEND_SELECT,
     element: <SelectTransferPanel />,
   },
   {
-    path: "/send/success",
+    path: ROUTE_NAMES.SEND_SUCCESS,
     element: <SendSuccessPanel />,
   },
 ]);
@@ -51,7 +53,7 @@ router.subscribe((v) => {
     window.history.back();
   };
 
-  if (!["/home", "/"].includes(v.location.pathname)) {
+  if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
     (window as any).Telegram.WebApp.BackButton.show();
     (window as any).Telegram.WebApp.BackButton.onClick(goBack);
   } else {

@@ -10,5 +10,5 @@ export interface InputProps {
   readonly?: boolean;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
-  onChange?: (e?: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }

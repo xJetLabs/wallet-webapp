@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { ChangeEvent, FC, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -21,7 +21,7 @@ import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.s
 import ton from "../../images/ton.jpeg";
 
 export const SelectTransferPanel: FC = () => {
-  const [filterValue, setFilterValue] = useState("");
+  const [filterValue, setFilterValue] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -33,10 +33,10 @@ export const SelectTransferPanel: FC = () => {
     );
   }, [filterValue, allBalances]);
 
-  const onInputChange = (e: any) => {
-    const newValue = e.currentTarget.value;
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.currentTarget.value || "";
 
-    setFilterValue(newValue || "");
+    setFilterValue(newValue);
   };
 
   return (

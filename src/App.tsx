@@ -8,11 +8,13 @@ import { apiInited, balanceCheckWatcher } from "./api";
 export const App: FC = () => {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
-  if (window.location.pathname !== "/" && !apiInited) {
-    router.navigate("/", {
-      replace: true,
-    });
-  }
+  useEffect(() => {
+    if (window.location.pathname !== "/" && !apiInited) {
+      router.navigate("/", {
+        replace: true,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (intervalIdRef.current) {
