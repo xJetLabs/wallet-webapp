@@ -6,7 +6,7 @@ import { ROUTE_NAMES } from "../../router/constants";
 
 import { balanceCheckWatcher, sendCoins } from "../../api";
 
-import { countCharts, formatNumber } from "../../utils";
+import { countCharts, errorMapping, formatNumber } from "../../utils";
 
 import {
   currencyDataSelector,
@@ -72,6 +72,12 @@ export const SendPanel: FC = () => {
 
   useEffect(() => {
     const handlerQRText = ({ data }: { data: string }) => {
+      try {
+        window.navigator.vibrate(70);
+      } catch (e) {
+        (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+      }
+
       setFormData((prev) => ({
         ...prev,
         receiverToken: data.split("ton://transfer/")[1],
@@ -126,6 +132,12 @@ export const SendPanel: FC = () => {
       newAmount = String(+Number(currencyData?.amount).toFixed(3)) || "";
     }
 
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
     setFormData({
       ...formData,
       amount: newAmount,
@@ -166,6 +178,12 @@ export const SendPanel: FC = () => {
         state: payload,
       });
     } else if (response?.response?.data?.error || response?.data?.error) {
+      try {
+        window.navigator.vibrate(200);
+      } catch (e) {
+        (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
+      }
+
       setError(response?.response?.data?.error || response?.data?.error);
     }
   };
@@ -238,7 +256,7 @@ export const SendPanel: FC = () => {
             value={formData.amount}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               let newValue = (e?.currentTarget.value || "").replace(
-                /[^\d.-]+/g,
+                /[^\d.]+/g,
                 ""
               );
 
@@ -254,7 +272,7 @@ export const SendPanel: FC = () => {
                 }
               }
 
-              if (Number(newValue) > currencyData?.amount) {
+              if (Number(newValue) > currencyData?.amount - comission) {
                 newValue = formatNumber(currencyData?.amount);
               }
 
@@ -281,7 +299,7 @@ export const SendPanel: FC = () => {
         >
           {isAwaitResponse ? "Sending..." : "Send"}
         </Button>
-        {error ? <ErrorBlock text={error} /> : null}
+        {error ? <ErrorBlock text={errorMapping(error)} /> : null}
       </Group>
     </Panel>
   );

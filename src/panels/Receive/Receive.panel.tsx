@@ -42,6 +42,12 @@ export const ReceivePanel: FC = () => {
     setCopySuccess(true);
 
     try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    try {
       navigator.clipboard.writeText(myTonAddress);
     } catch (e: any) {
       throw new Error("Navigator.clipboard can't be used: ", e);
@@ -50,6 +56,12 @@ export const ReceivePanel: FC = () => {
 
   const check = async () => {
     setIsButtonDisabled(true);
+
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
 
     await checkDeposit().finally(() => {
       setTimeout(() => {
@@ -78,6 +90,8 @@ export const ReceivePanel: FC = () => {
         </Group>
         <Input
           value={myTonAddress}
+          readonly
+          selectAll
           after={
             copySuccess ? (
               <CopySuccess24OutlineIcon

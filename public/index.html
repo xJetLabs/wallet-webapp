@@ -15,6 +15,12 @@
     <script>
       if (window.Telegram) {
         window.Telegram.WebApp.expand();
+
+        const goBack = () => {
+          window.history.back();
+        };
+
+        window.Telegram.WebApp.BackButton.onClick(goBack);
       }
     </script>
     <div id="root"></div>

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -10,6 +10,7 @@ import {
   myTonBalanceSelector,
   myUnverifiedBalancesSelector,
   myVerifiedBalancesSelector,
+  totalAmountsSelector,
   totalTONValueSelector,
   totalUSDValueSelector,
 } from "../../store/reducers/user/user.selectors";
@@ -35,6 +36,8 @@ import ton from "../../images/ton.jpeg";
 import styles from "./Home.module.css";
 
 export const HomePanel: FC = () => {
+  const [cachedTotalAmounts, setCachedTotalAmounts] = useState(null);
+
   const navigate = useNavigate();
 
   const myVerifiedBalances = useSelector(myVerifiedBalancesSelector);
@@ -42,22 +45,67 @@ export const HomePanel: FC = () => {
   const myTonBalance = useSelector(myTonBalanceSelector);
   const totalTONValue = useSelector(totalTONValueSelector);
   const totalUSDValue = useSelector(totalUSDValueSelector);
+  const totalAmounts = useSelector(totalAmountsSelector);
 
-  const navigateToSend = () => {
-    if ((myTonBalance?.amount || 0) < 0.05) {
-      (window as any).Telegram.WebApp.showAlert("You don't have enough TON");
+  useEffect(() => {
+    console.debug("totalAmounts", totalAmounts, cachedTotalAmounts);
+
+    if (cachedTotalAmounts === null) {
+      setCachedTotalAmounts(totalAmounts);
 
       return;
+    }
+
+    if (Number(totalAmounts) > Number(cachedTotalAmounts)) {
+      try {
+        window.navigator.vibrate([70, 150, 70, 150, 70]);
+      } catch (e) {
+        (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+        setTimeout(() => {
+          (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+            "light"
+          );
+          setTimeout(() => {
+            (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+              "light"
+            );
+          }, 200);
+        }, 200);
+      }
+
+      setCachedTotalAmounts(totalAmounts);
+    } else {
+      setCachedTotalAmounts(totalAmounts);
+    }
+  }, [totalAmounts, cachedTotalAmounts]);
+
+  const navigateToSend = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     }
 
     navigate(ROUTE_NAMES.SEND_SELECT);
   };
 
   const navigateToReceive = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
     navigate(ROUTE_NAMES.RECEIVE);
   };
 
   const navigateToSettings = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
     navigate(ROUTE_NAMES.SETTINGS);
   };
 
@@ -140,11 +188,14 @@ const renderJettonItem = (v: any, i: number) => {
   const image = v.currency === "ton" ? ton : v.image;
   const USDPrice = v?.values?.usd;
   const ProjectURL = v?.url;
+  const urlTarget = ProjectURL?.startsWith("https://t.me/")
+    ? "_self"
+    : "_blank";
 
   return (
-    <Link href={ProjectURL} target={"_self"} withCursor>
+    <Link href={ProjectURL} target={urlTarget} withCursor>
       <Cell
-        key={i}
+        key={`Jetton_${i}`}
         before={
           <Avatar fallbackName={v.currency.slice(0, 1)} size={42} src={image} />
         }

@@ -17,3 +17,16 @@ export const countCharts = function (string: string, c: string) {
   for (i; i < string.length; i++) if (string[i] === c) result++;
   return result;
 };
+
+export const errorMapping = (serverError: string) => {
+  console.error(serverError);
+
+  switch (serverError) {
+    case "error_insufficientFunds":
+      return "You don't have enough TON";
+    case "Invalid ton_address":
+      return "Receiver address is invalid";
+    default:
+      return "An error occured";
+  }
+};

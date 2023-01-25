@@ -49,15 +49,9 @@ export const router = createBrowserRouter([
 ]);
 
 router.subscribe((v) => {
-  const goBack = () => {
-    window.history.back();
-  };
-
   if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
     (window as any).Telegram.WebApp.BackButton.show();
-    (window as any).Telegram.WebApp.BackButton.onClick(goBack);
   } else {
     (window as any).Telegram.WebApp.BackButton.hide();
-    (window as any).Telegram.WebApp.BackButton.offClick(goBack);
   }
 });

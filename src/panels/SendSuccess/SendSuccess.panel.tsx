@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { ActionText, Button, Group, Panel } from "../../components";
@@ -8,6 +8,14 @@ export const SendSuccessPanel: FC = () => {
   const navigate = useNavigate();
 
   const { state } = useLocation();
+
+  useEffect(() => {
+    try {
+      window.navigator.vibrate(200);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
+    }
+  }, []);
 
   const formatToken = (token: string) => {
     if (!token) {
@@ -40,6 +48,14 @@ export const SendSuccessPanel: FC = () => {
           size={"m"}
           mode={"secondary"}
           onClick={() => {
+            try {
+              window.navigator.vibrate(70);
+            } catch (e) {
+              (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+                "light"
+              );
+            }
+
             navigate(-3);
           }}
         >

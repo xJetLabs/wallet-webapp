@@ -59,6 +59,14 @@ export const SelectTransferPanel: FC = () => {
               key={i}
               padding={12}
               onClick={() => {
+                try {
+                  window.navigator.vibrate(70);
+                } catch (e) {
+                  (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+                    "light"
+                  );
+                }
+
                 navigate("/send", {
                   state: {
                     currency: v.currency,

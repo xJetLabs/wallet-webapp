@@ -64,6 +64,12 @@ export const totalTONValueSelector = (state: any) => {
   }, 0);
 };
 
+export const totalAmountsSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    return a + Number(isNaN(b.amount) ? 0 : b.amount);
+  }, 0);
+};
+
 export const myTonAddressSelector = (state: any) => {
   return state[SLICE_NAMES.USER].serverData?.service_wallet || "";
 };

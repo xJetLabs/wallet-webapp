@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import {
@@ -19,6 +19,7 @@ import { Panel } from "../../components";
 import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
 
 import styles from "./Load.module.css";
+import { ROUTE_NAMES } from "../../router/constants";
 
 export const LoadPanel: FC = () => {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ export const LoadPanel: FC = () => {
 
       dispatch(userActions.setBalances(response.data?.balances));
 
-      navigate("/home", {
+      navigate(ROUTE_NAMES.HOME, {
         replace: true,
       });
     };

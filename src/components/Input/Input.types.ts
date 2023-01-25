@@ -10,5 +10,6 @@ export interface InputProps {
   readonly?: boolean;
   placeholder?: string;
   type?: HTMLInputTypeAttribute;
+  selectAll?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
