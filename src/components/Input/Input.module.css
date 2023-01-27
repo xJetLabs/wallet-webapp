@@ -26,6 +26,7 @@
   overflow: hidden;
 
   padding: var(--input_padding) 0;
+  margin: 0;
 }
 
 .__after {

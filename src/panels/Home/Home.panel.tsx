@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -21,6 +21,7 @@ import {
   Button,
   Cell,
   Group,
+  Input,
   Link,
   Panel,
   Text,
@@ -38,6 +39,7 @@ import styles from "./Home.module.css";
 
 export const HomePanel: FC = () => {
   const [cachedTotalAmounts, setCachedTotalAmounts] = useState(null);
+  const [searchValue, setSearchValue] = useState<null | string>(null);
 
   const navigate = useNavigate();
 
@@ -118,6 +120,36 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.SETTINGS);
   };
 
+  const onSearchInputChage = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.currentTarget.value.toLowerCase());
+  };
+
+  const verifiedBalances = useMemo(() => {
+    if (!searchValue) {
+      return myVerifiedBalances;
+    }
+
+    return myVerifiedBalances.filter((v: any) => {
+      return (
+        v?.currency.toLowerCase().startsWith(searchValue) ||
+        v?.name.toLowerCase().startsWith(searchValue)
+      );
+    });
+  }, [myVerifiedBalances, searchValue]);
+
+  const unverifiedBalances = useMemo(() => {
+    if (!searchValue) {
+      return myUnverifiedBalances;
+    }
+
+    return myUnverifiedBalances.filter((v: any) => {
+      return (
+        v?.currency.toLowerCase().startsWith(searchValue) ||
+        v?.name.toLowerCase().startsWith(searchValue)
+      );
+    });
+  }, [myUnverifiedBalances, searchValue]);
+
   return (
     <Panel>
       <Group space={24}>
@@ -129,37 +161,40 @@ export const HomePanel: FC = () => {
               minimumFractionDigits: 3,
             })} $`}
           />
-          <div className={styles.__buttonGroup}>
-            <Button
-              stretched
-              before={<Send24OutlineIcon />}
-              mode={"secondary_with_accent_text"}
-              onClick={navigateToSend}
-            >
-              Send
-            </Button>
-            <Button
-              stretched
-              before={<Receive24OutlineIcon />}
-              mode={"secondary_with_accent_text"}
-              onClick={navigateToReceive}
-            >
-              Receive
-            </Button>
-            <Button
-              before={<History24OutlineIcon />}
-              mode={"secondary_with_accent_text"}
-              onClick={navigateToHistory}
-            />
-            <Button
-              before={<Settings24OutlineIcon />}
-              mode={"secondary_with_accent_text"}
-              onClick={navigateToSettings}
-            />
-          </div>
+          <Group space={12}>
+            <div className={styles.__buttonGroup}>
+              <Button
+                stretched
+                before={<Send24OutlineIcon />}
+                mode={"secondary_with_accent_text"}
+                onClick={navigateToSend}
+              >
+                Send
+              </Button>
+              <Button
+                stretched
+                before={<Receive24OutlineIcon />}
+                mode={"secondary_with_accent_text"}
+                onClick={navigateToReceive}
+              >
+                Receive
+              </Button>
+              <Button
+                before={<History24OutlineIcon />}
+                mode={"secondary_with_accent_text"}
+                onClick={navigateToHistory}
+              />
+              <Button
+                before={<Settings24OutlineIcon />}
+                mode={"secondary_with_accent_text"}
+                onClick={navigateToSettings}
+              />
+            </div>
+            <Input placeholder="Search..." onChange={onSearchInputChage} />
+          </Group>
         </Group>
         {myTonBalance ? renderJettonItem(myTonBalance, -1) : null}
-        {myVerifiedBalances.length > 0 ? (
+        {verifiedBalances.length > 0 ? (
           <Group space={12}>
             <Text
               weight={"600"}
@@ -169,12 +204,12 @@ export const HomePanel: FC = () => {
             >
               JETTONS
             </Text>
-            {myVerifiedBalances.map((v: any, i: number) => {
+            {verifiedBalances.map((v: any, i: number) => {
               return renderJettonItem(v, i);
             })}
           </Group>
         ) : null}
-        {myUnverifiedBalances.length > 0 ? (
+        {unverifiedBalances.length > 0 ? (
           <Group space={12}>
             <Text
               weight={"600"}
@@ -184,7 +219,7 @@ export const HomePanel: FC = () => {
             >
               UNVERIFIED
             </Text>
-            {myUnverifiedBalances.map((v: any, i: number) => {
+            {unverifiedBalances.map((v: any, i: number) => {
               return renderJettonItem(v, i);
             })}
           </Group>
