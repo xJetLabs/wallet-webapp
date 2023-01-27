@@ -32,6 +32,7 @@ import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24O
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
 import { ReactComponent as Chains20OutlineIcon } from "../../icons/Chains20Outline.svg";
+import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.svg";
 
 import ton from "../../images/ton.jpeg";
 
@@ -190,7 +191,11 @@ export const HomePanel: FC = () => {
                 onClick={navigateToSettings}
               />
             </div>
-            <Input placeholder="Search..." onChange={onSearchInputChage} />
+            <Input
+              placeholder="Search..."
+              onChange={onSearchInputChage}
+              after={<Search17Outline color="var(--color_button_primary)" />}
+            />
           </Group>
         </Group>
         {myTonBalance ? renderJettonItem(myTonBalance, -1) : null}

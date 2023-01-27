@@ -108,9 +108,14 @@ body,
   height: 100%;
 }
 
+html {
+  overflow: hidden;
+}
+
 body {
   background-color: var(--background_content);
   margin: 0;
+  overflow: auto;
 }
 
 span {
