@@ -19,8 +19,6 @@ export const countCharts = function (string: string, c: string) {
 };
 
 export const errorMapping = (serverError: string) => {
-  console.error(serverError);
-
   switch (serverError) {
     case "error_insufficientFunds":
       return "You don't have enough TON";
@@ -29,4 +27,38 @@ export const errorMapping = (serverError: string) => {
     default:
       return "An error occured";
   }
+};
+
+export const formatToken = (token: string) => {
+  if (!token) {
+    return "";
+  }
+
+  if (token.length < 16) {
+    return token;
+  }
+
+  const [beforeCopy, afterCopy] = [token.slice(), token.slice()];
+
+  const before = beforeCopy.slice(0, 6);
+  const after = afterCopy.slice(-7);
+
+  return `${before}...${after}`;
+};
+
+export const formatDate = (date: Date) => {
+  const dateStr =
+    ("00" + date.getDate()).slice(-2) +
+    "." +
+    ("00" + (date.getMonth() + 1)).slice(-2) +
+    "." +
+    date.getFullYear() +
+    " " +
+    ("00" + date.getHours()).slice(-2) +
+    ":" +
+    ("00" + date.getMinutes()).slice(-2) +
+    ":" +
+    ("00" + date.getSeconds()).slice(-2);
+
+  return dateStr;
 };

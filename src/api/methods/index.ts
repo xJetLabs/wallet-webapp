@@ -186,3 +186,30 @@ export const getAllCurrencies = async () => {
 
   return response;
 };
+
+export const getHistory = async (limit = 20, offset = 0) => {
+  if (RequestInProgress.has("operations")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("operations");
+
+  const response = await axios
+    .post(
+      API_URL + "account.operations",
+      {
+        limit,
+        offset,
+      },
+      {
+        headers: {
+          "X-API-Key": config.api_key,
+        },
+      }
+    )
+    .finally(() => {
+      RequestInProgress.delete("operations");
+    });
+
+  return response;
+};

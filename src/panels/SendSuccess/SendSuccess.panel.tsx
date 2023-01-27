@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { ActionText, Button, Group, Panel } from "../../components";
-import { formatNumber } from "../../utils";
+import { formatNumber, formatToken } from "../../utils";
 
 export const SendSuccessPanel: FC = () => {
   const navigate = useNavigate();
@@ -16,23 +16,6 @@ export const SendSuccessPanel: FC = () => {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
     }
   }, []);
-
-  const formatToken = (token: string) => {
-    if (!token) {
-      return "";
-    }
-
-    if (token.length < 16) {
-      return token;
-    }
-
-    const [beforeCopy, afterCopy] = [token.slice(), token.slice()];
-
-    const before = beforeCopy.slice(0, 6);
-    const after = afterCopy.slice(-7);
-
-    return `${before}...${after}`;
-  };
 
   return (
     <Panel centerVertical>

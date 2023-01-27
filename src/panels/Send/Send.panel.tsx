@@ -165,8 +165,6 @@ export const SendPanel: FC = () => {
       setIsAwaitResponse(false);
     });
 
-    console.debug("response", response, response.data);
-
     if (
       response?.data &&
       !response?.response?.data.error &&
@@ -272,8 +270,14 @@ export const SendPanel: FC = () => {
                 }
               }
 
-              if (Number(newValue) > currencyData?.amount - comission) {
-                newValue = formatNumber(currencyData?.amount);
+              if (
+                (currencyData?.currency === "TON" &&
+                  Number(newValue) > currencyData?.amount - comission) ||
+                Number(newValue) > currencyData?.amount
+              ) {
+                selectMaxAmount();
+
+                return;
               }
 
               setFormData({

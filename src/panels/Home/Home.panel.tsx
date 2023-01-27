@@ -26,6 +26,7 @@ import {
   Text,
 } from "../../components";
 
+import { ReactComponent as History24OutlineIcon } from "../../icons/History24Outline.svg";
 import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24Outline.svg";
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
@@ -48,8 +49,6 @@ export const HomePanel: FC = () => {
   const totalAmounts = useSelector(totalAmountsSelector);
 
   useEffect(() => {
-    console.debug("totalAmounts", totalAmounts, cachedTotalAmounts);
-
     if (cachedTotalAmounts === null) {
       setCachedTotalAmounts(totalAmounts);
 
@@ -99,6 +98,16 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.RECEIVE);
   };
 
+  const navigateToHistory = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.HISTORY);
+  };
+
   const navigateToSettings = () => {
     try {
       window.navigator.vibrate(70);
@@ -137,6 +146,11 @@ export const HomePanel: FC = () => {
             >
               Receive
             </Button>
+            <Button
+              before={<History24OutlineIcon />}
+              mode={"secondary_with_accent_text"}
+              onClick={navigateToHistory}
+            />
             <Button
               before={<Settings24OutlineIcon />}
               mode={"secondary_with_accent_text"}

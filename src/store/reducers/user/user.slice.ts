@@ -8,6 +8,7 @@ const initialState: any = {
   verifiedBalances: null,
   unverifiedBalances: null,
   allCurrencies: null,
+  history: [],
 };
 
 const userSlice = createSlice({

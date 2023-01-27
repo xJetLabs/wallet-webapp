@@ -16,8 +16,12 @@ export const aviableTransferBalancesSelector = (state: any) => {
       return v?.currency !== "ton" ? v?.amount && v?.amount > 0 : true;
     })
     .sort((a: any, b: any) => {
-      if (b.currency === "ton") {
+      if (b?.currency === "ton") {
         return 1;
+      }
+
+      if (a?.currency === "ton") {
+        return -1;
       }
 
       return Number(b?.amount || 0) - Number(a?.amount || 0);

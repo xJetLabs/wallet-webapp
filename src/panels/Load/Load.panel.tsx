@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   apiInit,
   getAllCurrencies,
+  getHistory,
   getMyBalance,
   getMyServerData,
   initMainnet,
@@ -79,8 +80,7 @@ export const LoadPanel: FC = () => {
     initMainnet().then(() => {
       requestAllCurrencies();
       requestTokenData().then(() => {
-        requestMyServerData();
-        requestMyBalance();
+        Promise.all([requestMyServerData(), requestMyBalance()]);
       });
     });
   }, [navigate, dispatch]);

@@ -1,184 +1,162 @@
-import { FC } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  AppTitle,
-  Cell,
-  Group,
-  Panel,
-  PanelHeader,
-  Text,
-} from "../../components";
+import { Cell, Group, Panel, Text } from "../../components";
 
 import { ReactComponent as Fire18OutlineIcon } from "../../icons/Fire18Outline.svg";
 import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg";
 import { ReactComponent as Receive18OutlineIcon } from "../../icons/Receive18Outline.svg";
 import { ReactComponent as Send18OutlineIcon } from "../../icons/Send18Outline.svg";
+import { formatDate } from "../../utils";
+import { getHistory } from "../../api";
+
+const historyTypeMap = (serverType: string) => {
+  switch (serverType) {
+    case "outgoing_send":
+      return "Sent to User";
+    case "incoming_send":
+      return "Received from User";
+    case "incoming_activateCheque":
+      return "Cheque activation";
+    case "outgoing_createCheque":
+      return "Cheque created";
+    case "incoming_fire":
+    case "outgoing_fire":
+      return "Fire jetton in chat";
+    default:
+      return serverType;
+  }
+};
+
+const historyAmountMap = (serverAmount: number, serverType: string) => {
+  if (serverType.startsWith("incoming_")) {
+    return {
+      amount: serverAmount,
+      sign: "+",
+      color: "--color_positive",
+    };
+  } else {
+    return {
+      amount: serverAmount,
+      sign: "-",
+      color: "--color_negative",
+    };
+  }
+};
+
+const historyIconMap = (serverType: string) => {
+  if (
+    serverType === "incoming_activateCheque" ||
+    serverType === "outgoing_createCheque"
+  ) {
+    return <Fire18OutlineIcon />;
+  }
+
+  if (serverType === "incoming_send") {
+    return <Get18OutlineIcon />;
+  }
+
+  if (serverType === "outgoing_send") {
+    return <Send18OutlineIcon />;
+  }
+
+  if (serverType === "incoming_fire" || serverType === "outgoing_fire") {
+    return <Receive18OutlineIcon />;
+  }
+
+  return null;
+};
 
 export const HistoryPanel: FC = () => {
+  const pageScrollRef = useRef<boolean>(false);
+  const [history, setHistory] = useState<any>([]);
+  const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
+
+  const isPanelCenter = history.length === 0 && isLoadingFirstBatch;
+
+  const requestHistory = useCallback(async () => {
+    pageScrollRef.current = true;
+
+    const historyResponse = await getHistory(20, history.length || 0);
+    const operations = historyResponse?.data?.operations;
+
+    if (operations) {
+      setHistory((prev: any) => {
+        return [...prev, ...operations];
+      });
+    }
+
+    pageScrollRef.current = false;
+  }, [history.length]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (document.scrollingElement) {
+        const { scrollTop, scrollHeight, clientHeight } =
+          document.scrollingElement;
+        if (scrollTop + clientHeight === scrollHeight) {
+          if (pageScrollRef.current) {
+            return;
+          }
+
+          requestHistory();
+        }
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, false);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll, false);
+    };
+  }, [requestHistory]);
+
+  useEffect(() => {
+    if (history.length === 0) {
+      requestHistory().then(() => {
+        setIsLoadingFirstBatch(false);
+      });
+    }
+  }, [history.length, requestHistory]);
+
   return (
-    <Panel>
-      <Group space={24}>
-        <Cell
-          before={<Fire18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              + 1 323 AMBR
-            </Text>
-          }
-        >
-          Cheque activation
-        </Cell>
-        <Cell
-          before={<Send18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_negative)"
-            >
-              - 103 AMBR
-            </Text>
-          }
-        >
-          Sent to User
-        </Cell>
-        <Cell
-          before={<Get18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              + 1 323 AMBR
-            </Text>
-          }
-        >
-          Received from User
-        </Cell>
-        <Cell
-          before={<Receive18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              - 4 132 323 AMBR
-            </Text>
-          }
-        >
-          Fire jetton in chat
-        </Cell>
-        <Cell
-          before={<Fire18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              + 1 323 AMBR
-            </Text>
-          }
-        >
-          Cheque activation
-        </Cell>
-        <Cell
-          before={<Send18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_negative)"
-            >
-              - 103 AMBR
-            </Text>
-          }
-        >
-          Sent to User
-        </Cell>
-        <Cell
-          before={<Get18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              + 1 323 AMBR
-            </Text>
-          }
-        >
-          Received from User
-        </Cell>
-        <Cell
-          before={<Receive18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              - 4 132 323 AMBR
-            </Text>
-          }
-        >
-          Fire jetton in chat
-        </Cell>
-        <Cell
-          before={<Fire18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_positive)"
-            >
-              + 1 323 AMBR
-            </Text>
-          }
-        >
-          Cheque activation
-        </Cell>
-        <Cell
-          before={<Send18OutlineIcon />}
-          description="EQ...GR9E"
-          after={
-            <Text
-              weight="600"
-              size={14}
-              lineHeight={"17px"}
-              color="var(--color_negative)"
-            >
-              - 103 AMBR
-            </Text>
-          }
-        >
-          Sent to User
-        </Cell>
-      </Group>
+    <Panel centerVertical={isPanelCenter} centerHorizontal={isPanelCenter}>
+      {history.length > 0 ? (
+        <Group space={24}>
+          {history.map((value: any, index: number) => {
+            const title = historyTypeMap(value?.type);
+            const { amount, sign, color } = historyAmountMap(
+              value?.amount,
+              value?.type
+            );
+            const Icon = historyIconMap(value?.type);
+            const date = new Date(value?.timestamp);
+
+            return (
+              <Cell
+                key={index}
+                before={Icon}
+                description={formatDate(date)}
+                after={
+                  <Text
+                    weight="600"
+                    size={14}
+                    lineHeight={"17px"}
+                    color={`var(${color})`}
+                  >
+                    {sign} {amount} {value?.currency?.toUpperCase()}
+                  </Text>
+                }
+              >
+                {title}
+              </Cell>
+            );
+          })}
+        </Group>
+      ) : (
+        <Text size={14} weight="600" lineHeight={"17px"}>
+          Loading...
+        </Text>
+      )}
     </Panel>
   );
 };
