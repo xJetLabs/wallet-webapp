@@ -1,6 +1,9 @@
 import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import cx from "classnames";
+
+import { isMobile } from "../../constants";
 
 import { formatNumber } from "../../utils";
 
@@ -128,7 +131,7 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.SETTINGS);
   };
 
-  const onSearchInputChage = (e: ChangeEvent<HTMLInputElement>) => {
+  const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.currentTarget.value.toLowerCase());
   };
 
@@ -159,17 +162,22 @@ export const HomePanel: FC = () => {
   }, [myUnverifiedBalances, searchValue]);
 
   return (
-    <Panel>
+    <Panel
+      className={cx({
+        [styles.__panel_mobile]: isMobile,
+      })}
+    >
       <Group space={24}>
-        <Group space={24}>
+        <Group space={24} className={styles.__balance_group}>
           <ActionText
             top="Total balance"
             middle={`${formatNumber(totalTONValue || 0)} TON`}
             bottom={`≈ ${formatNumber(totalUSDValue || 0, {
               minimumFractionDigits: 3,
             })} $`}
+            className={styles.__action_text}
           />
-          <Group space={12}>
+          <Group space={12} className={styles.__button_group}>
             <div className={styles.__buttonGroup}>
               <Button
                 stretched
@@ -200,8 +208,9 @@ export const HomePanel: FC = () => {
             </div>
             <Input
               placeholder="Search..."
-              onChange={onSearchInputChage}
+              onChange={onSearchInputChange}
               after={<Search17Outline color="var(--color_button_primary)" />}
+              className={styles.__search_input}
             />
           </Group>
         </Group>

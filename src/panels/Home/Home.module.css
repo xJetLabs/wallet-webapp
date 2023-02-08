@@ -19,3 +19,13 @@
   align-items: center;
   gap: 10px;
 }
+
+.__panel_mobile .__balance_group:focus-within .__buttonGroup,
+.__panel_mobile .__balance_group:focus-within .__action_text {
+  display: none;
+}
+
+.__panel_mobile .__balance_group:focus-within,
+.__panel_mobile .__balance_group:focus-within .__button_group {
+  row-gap: 0 !important;
+}
