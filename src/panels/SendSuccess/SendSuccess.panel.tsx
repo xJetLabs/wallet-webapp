@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { ActionText, Button, Group, Panel } from "../../components";
+
 import { formatNumber, formatToken } from "../../utils";
 
 export const SendSuccessPanel: FC = () => {

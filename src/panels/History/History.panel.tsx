@@ -6,11 +6,18 @@ import { ReactComponent as Fire18OutlineIcon } from "../../icons/Fire18Outline.s
 import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg";
 import { ReactComponent as Receive18OutlineIcon } from "../../icons/Receive18Outline.svg";
 import { ReactComponent as Send18OutlineIcon } from "../../icons/Send18Outline.svg";
+import { ReactComponent as BoxSend18OutlineIcon } from "../../icons/BoxSend18Outline.svg";
+import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
+
 import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
 
+import styles from "./History.module.css";
+
 const historyTypeMap = (serverType: string) => {
   switch (serverType) {
+    case "withdrawal_onchain":
+      return "Transfer to wallet";
     case "outgoing_send":
       return "Sent to User";
     case "incoming_send":
@@ -63,6 +70,10 @@ const historyIconMap = (serverType: string) => {
     return <Receive18OutlineIcon />;
   }
 
+  if (serverType === "withdrawal_onchain") {
+    return <BoxSend18OutlineIcon />;
+  }
+
   return null;
 };
 
@@ -81,7 +92,19 @@ export const HistoryPanel: FC = () => {
 
     if (operations) {
       setHistory((prev: any) => {
-        return [...prev, ...operations];
+        return [...prev, ...operations].reduce((prev, curr) => {
+          if (!curr._id) {
+            return prev;
+          }
+
+          const transferExist = prev.find((v: any) => v._id === curr._id);
+
+          if (!transferExist) {
+            prev.push(curr);
+          }
+
+          return prev;
+        }, []);
       });
     }
 
@@ -103,10 +126,10 @@ export const HistoryPanel: FC = () => {
       }
     };
 
-    window.addEventListener("scroll", onScroll, false);
+    document.body.addEventListener("scroll", onScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll, false);
+      document.body.removeEventListener("scroll", onScroll);
     };
   }, [requestHistory]);
 
@@ -151,11 +174,19 @@ export const HistoryPanel: FC = () => {
               </Cell>
             );
           })}
+          {pageScrollRef.current ? (
+            <Text
+              size={14}
+              weight="600"
+              lineHeight={"17px"}
+              style={{ textAlign: "center" }}
+            >
+              Loading...
+            </Text>
+          ) : null}
         </Group>
       ) : (
-        <Text size={14} weight="600" lineHeight={"17px"}>
-          Loading...
-        </Text>
+        <LogoIcon className={styles.logo_animation} color={"var(--accent)"} />
       )}
     </Panel>
   );

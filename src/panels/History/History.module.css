@@ -1,0 +1,17 @@
+.logo_animation {
+  overflow: visible;
+
+  animation: logoLoading ease-in-out infinite 1s;
+}
+
+@keyframes logoLoading {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

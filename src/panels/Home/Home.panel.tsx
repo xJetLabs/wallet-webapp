@@ -52,6 +52,13 @@ export const HomePanel: FC = () => {
   const totalAmounts = useSelector(totalAmountsSelector);
 
   useEffect(() => {
+    document.body.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  useEffect(() => {
     if (cachedTotalAmounts === null) {
       setCachedTotalAmounts(totalAmounts);
 

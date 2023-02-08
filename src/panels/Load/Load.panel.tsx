@@ -1,11 +1,10 @@
 import { FC, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import {
   apiInit,
   getAllCurrencies,
-  getHistory,
   getMyBalance,
   getMyServerData,
   initMainnet,
@@ -15,12 +14,13 @@ import {
 
 import { userActions } from "../../store/reducers";
 
+import { ROUTE_NAMES } from "../../router/constants";
+
 import { Panel } from "../../components";
 
 import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
 
 import styles from "./Load.module.css";
-import { ROUTE_NAMES } from "../../router/constants";
 
 export const LoadPanel: FC = () => {
   const navigate = useNavigate();
