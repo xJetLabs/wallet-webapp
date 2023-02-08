@@ -17,6 +17,8 @@ export const Input: FC<InputProps> = ({
   type = "text",
   className = "",
   onChange = () => {},
+  onFocus = () => {},
+  onBlur = () => {},
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -48,6 +50,8 @@ export const Input: FC<InputProps> = ({
           spellCheck={false}
           type={type}
           onClick={onInputValueClick}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
         {indicator ? (
           <div className={styles.__indicator}>{indicator}</div>

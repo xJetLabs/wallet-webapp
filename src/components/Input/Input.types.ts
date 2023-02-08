@@ -12,4 +12,6 @@ export interface InputProps {
   type?: HTMLInputTypeAttribute;
   selectAll?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }

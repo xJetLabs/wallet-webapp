@@ -44,6 +44,7 @@ import styles from "./Home.module.css";
 export const HomePanel: FC = () => {
   const [cachedTotalAmounts, setCachedTotalAmounts] = useState(null);
   const [searchValue, setSearchValue] = useState<null | string>(null);
+  const [searchInputFocused, setSearchInputFocused] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -168,7 +169,12 @@ export const HomePanel: FC = () => {
       })}
     >
       <Group space={24}>
-        <Group space={24} className={styles.__balance_group}>
+        <Group
+          space={24}
+          className={cx(styles.__balance_group, {
+            [styles.__balance_group_focused]: searchInputFocused,
+          })}
+        >
           <ActionText
             top="Total balance"
             middle={`${formatNumber(totalTONValue || 0)} TON`}
@@ -211,6 +217,8 @@ export const HomePanel: FC = () => {
               onChange={onSearchInputChange}
               after={<Search17Outline color="var(--color_button_primary)" />}
               className={styles.__search_input}
+              onFocus={() => setSearchInputFocused(true)}
+              onBlur={() => setSearchInputFocused(false)}
             />
           </Group>
         </Group>
