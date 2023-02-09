@@ -16,6 +16,10 @@ import styles from "./History.module.css";
 
 const historyTypeMap = (serverType: string) => {
   switch (serverType) {
+    case "outgoing_apiDeposit":
+      return "Sent to api";
+    case "deposit_onchain":
+      return "Recieved";
     case "withdrawal_onchain":
       return "Transfer to wallet";
     case "outgoing_send":
@@ -58,7 +62,7 @@ const historyIconMap = (serverType: string) => {
     return <Fire18OutlineIcon />;
   }
 
-  if (serverType === "incoming_send") {
+  if (serverType === "incoming_send" || serverType === "deposit_onchain") {
     return <Get18OutlineIcon />;
   }
 
@@ -70,7 +74,10 @@ const historyIconMap = (serverType: string) => {
     return <Receive18OutlineIcon />;
   }
 
-  if (serverType === "withdrawal_onchain") {
+  if (
+    serverType === "withdrawal_onchain" ||
+    serverType === "outgoing_apiDeposit"
+  ) {
     return <BoxSend18OutlineIcon />;
   }
 
