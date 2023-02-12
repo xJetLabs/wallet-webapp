@@ -1,6 +1,39 @@
 .__buttonGroup {
   display: flex;
+}
+
+.__buttonGroup > button {
+  min-height: 53px;
+}
+
+.__action_text {
+  padding: 48px 24px;
+}
+
+.__buttonGroup > button:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  border-width: 0 1px;
+  border-color: var(--space_border_color);
+  border-style: solid;
+}
+
+.__buttonGroup > button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.__buttonGroup > button:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.__buttonGroup_main {
+  display: flex;
   gap: 10px;
+}
+
+.__buttonGroup_main > button > div {
+  flex-direction: column;
 }
 
 .__group {

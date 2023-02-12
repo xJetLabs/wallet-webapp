@@ -1,0 +1,14 @@
+.__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.__wrapper .__block {
+  flex: 1 0 calc(50% - 6px);
+  max-width: calc(50% - 6px);
+}
+
+.__wrapper .__block > div {
+  border-radius: 18px;
+}

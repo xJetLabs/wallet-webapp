@@ -11,6 +11,7 @@ export const Button: FC<ButtonProps> = ({
   children,
   stretched,
   disabled,
+  hasHover = true,
   size = "s",
   mode = "primary",
   className = "",
@@ -21,6 +22,7 @@ export const Button: FC<ButtonProps> = ({
       className={cx(styles.__wrapper, {
         [styles.__disabled]: disabled,
         [styles.__stretched]: stretched,
+        [styles.__with_hover]: hasHover,
         [styles[`__size_${size}`]]: size,
         [styles[`__mode_${mode}`]]: mode,
         [className]: className,
@@ -29,7 +31,7 @@ export const Button: FC<ButtonProps> = ({
       onClick={onClick}
     >
       <div className={styles.__wrapper_in}>
-        {before ? before : null}
+        {before ? <div className={styles.__before}>{before}</div> : null}
         {children ? (
           <div className={styles.__content}>
             <Text className={styles.__content_in}>{children}</Text>

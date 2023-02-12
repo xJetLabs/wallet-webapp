@@ -9,9 +9,12 @@
   border-radius: var(--buttons_border_radius);
 
   overflow: hidden;
+
+  height: fit-content;
+  margin: 0;
 }
 
-.__wrapper:not(.__disabled) {
+.__wrapper:not(.__disabled).__with_hover {
   cursor: pointer;
 }
 
@@ -23,9 +26,11 @@
 }
 
 .__before {
+  display: flex;
 }
 
 .__content {
+  display: flex;
 }
 
 .__content_in {
@@ -33,19 +38,20 @@
 
 /* ? mouse events ui handler */
 
-.__wrapper:not(.__disabled):not(.__mode_primary):hover .__overlay {
+.__wrapper:not(.__disabled):not(.__mode_primary).__with_hover:hover .__overlay {
   background-color: var(--button_hover_background);
 }
 
-.__wrapper:not(.__disabled):not(.__mode_primary):active .__overlay {
+.__wrapper:not(.__disabled):not(.__mode_primary).__with_hover:active
+  .__overlay {
   background-color: var(--button_active_background);
 }
 
-.__wrapper:not(.__disabled).__mode_primary:hover .__overlay {
+.__wrapper:not(.__disabled).__mode_primary.__with_hover:hover .__overlay {
   background-color: var(--button_primary_hover_background);
 }
 
-.__wrapper:not(.__disabled).__mode_primary:active .__overlay {
+.__wrapper:not(.__disabled).__mode_primary.__with_hover:active .__overlay {
   background-color: var(--button_primary_active_background);
 }
 
@@ -79,7 +85,6 @@
 
 .__size_s {
   min-height: 48px;
-  height: 48px;
 }
 
 .__size_s .__content_in {
@@ -90,7 +95,6 @@
 
 .__size_m {
   min-height: 53px;
-  height: 53px;
 }
 
 .__size_m .__content_in {
@@ -129,7 +133,7 @@
 .__mode_transparent_with_accent_text .__content_in,
 .__mode_secondary_with_accent_text .__wrapper_in,
 .__mode_secondary_with_accent_text .__content_in {
-  color: var(--color_button_accent);
+  color: var(--accent);
 }
 
 .__mode_transparent {

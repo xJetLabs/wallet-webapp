@@ -7,4 +7,8 @@ export const ROUTE_NAMES = {
   SEND: "/send",
   SEND_SELECT: "/send/select",
   SEND_SUCCESS: "/send/success",
+  MENU: "/menu",
+  MENU_EXPANDED: "/menuexpanded",
+  NFT: "/nft",
+  SWAP: "/swap",
 };

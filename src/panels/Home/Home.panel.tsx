@@ -35,7 +35,8 @@ import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24O
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
 import { ReactComponent as Chains20OutlineIcon } from "../../icons/Chains20Outline.svg";
-import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.svg";
+import { ReactComponent as Search17OutlineIcon } from "../../icons/Search17Outline.svg";
+import { ReactComponent as Menu24OutlineIcon } from "../../icons/Menu24Outline.svg";
 
 import ton from "../../images/ton.jpeg";
 
@@ -132,6 +133,16 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.SETTINGS);
   };
 
+  const navigateToMenu = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.MENU);
+  };
+
   const onSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.currentTarget.value.toLowerCase());
   };
@@ -183,39 +194,57 @@ export const HomePanel: FC = () => {
             })} $`}
             className={styles.__action_text}
           />
-          <Group space={12} className={styles.__button_group}>
-            <div className={styles.__buttonGroup}>
-              <Button
-                stretched
-                before={<Send24OutlineIcon />}
-                mode={"secondary_with_accent_text"}
-                onClick={navigateToSend}
-              >
-                Send
-              </Button>
-              <Button
-                stretched
-                before={<Receive24OutlineIcon />}
-                mode={"secondary_with_accent_text"}
-                onClick={navigateToReceive}
-              >
-                Receive
-              </Button>
-              <Button
-                before={<History24OutlineIcon />}
-                mode={"secondary_with_accent_text"}
-                onClick={navigateToHistory}
-              />
-              <Button
-                before={<Settings24OutlineIcon />}
-                mode={"secondary_with_accent_text"}
-                onClick={navigateToSettings}
-              />
-            </div>
+          <Group space={24} className={styles.__button_group}>
+            <Group space={12}>
+              <div className={styles.__buttonGroup_main}>
+                <Button
+                  stretched
+                  before={<Send24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToSend}
+                >
+                  Send
+                </Button>
+                <Button
+                  stretched
+                  before={<Receive24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToReceive}
+                >
+                  Receive
+                </Button>
+              </div>
+              <div className={styles.__buttonGroup}>
+                <Button
+                  stretched
+                  before={<Menu24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToMenu}
+                >
+                  More
+                </Button>
+                <Button
+                  stretched
+                  before={<History24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToHistory}
+                >
+                  Histroy
+                </Button>
+                <Button
+                  stretched
+                  before={<Settings24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToSettings}
+                >
+                  Settings
+                </Button>
+              </div>
+            </Group>
             <Input
               placeholder="Search..."
               onChange={onSearchInputChange}
-              after={<Search17Outline color="var(--color_button_primary)" />}
+              after={<Search17OutlineIcon color="var(--accent)" />}
               className={styles.__search_input}
               onFocus={() => setSearchInputFocused(true)}
               onBlur={() => setSearchInputFocused(false)}

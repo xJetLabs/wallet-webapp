@@ -6,11 +6,15 @@ import {
   HistoryPanel,
   HomePanel,
   LoadPanel,
+  MenuExpandedPanel,
+  MenuPanel,
+  NftPanel,
   ReceivePanel,
   SelectTransferPanel,
   SendPanel,
   SendSuccessPanel,
   SettingsPanel,
+  SwapPanel,
 } from "../panels";
 
 export const router = createBrowserRouter([
@@ -45,6 +49,22 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SEND_SUCCESS,
     element: <SendSuccessPanel />,
+  },
+  {
+    path: ROUTE_NAMES.MENU,
+    element: <MenuPanel />,
+  },
+  {
+    path: ROUTE_NAMES.MENU_EXPANDED,
+    element: <MenuExpandedPanel />,
+  },
+  {
+    path: ROUTE_NAMES.NFT,
+    element: <NftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SWAP,
+    element: <SwapPanel />,
   },
 ]);
 

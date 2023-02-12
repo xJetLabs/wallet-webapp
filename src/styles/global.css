@@ -10,7 +10,8 @@
 
   --block_border_radius: 18px;
 
-  --avatar_border_radius: 50%;
+  --avatar_circle_border_radius: 50%;
+  --avatar_square_border_radius: 9px;
 
   --input_padding: 18px;
   --input_border_radius: 18px;
@@ -29,7 +30,7 @@ body[theme="tg"] {
   --background_block: var(--tg-theme-secondary-bg-color);
   --background_switch: var(--tg-theme-secondary-bg-color);
   --background_primary_button: var(--tg-theme-button-color);
-  --background_avatar_fallback: var(--tg-theme-secondary-bg-color);
+  --background_avatar_fallback: rgba(255, 255, 255, 0.025);
 
   --panel_header_background: var(--tg-theme-bg-color);
 
@@ -49,6 +50,8 @@ body[theme="tg"] {
 
   --error_popout_border_color: #ed6d6d;
   --error_popout_background_color: rgba(237, 109, 109, 0.15);
+
+  --space_border_color: rgba(255, 255, 255, 0.025);
 
   /* ? animation color variables */
 
@@ -86,6 +89,8 @@ body[theme="static"] {
 
   --error_popout_border_color: #ed6d6d;
   --error_popout_background_color: rgba(237, 109, 109, 0.15);
+
+  --space_border_color: rgba(255, 255, 255, 0.025);
 
   /* ? animation color variables */
 

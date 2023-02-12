@@ -22,7 +22,7 @@ export const SendSuccessPanel: FC = () => {
     <Panel centerVertical>
       <Group space={24}>
         <ActionText
-          top="Successfully sent"
+          top={`Successfully ${state?.type || "sent"}`}
           middle={`${formatNumber(
             state?.amount || 0
           )} ${state?.currency?.toUpperCase()}`}

@@ -1,6 +1,10 @@
 .__wrapper {
   width: 100%;
   height: fit-content;
+  background: var(--background_block);
+
+  border-radius: 18px;
+  overflow: hidden;
 }
 
 .__wrapper > a {
@@ -9,8 +13,9 @@
 
 .__wrapper_in {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
 }
 
 .__before {
@@ -24,6 +29,8 @@
   justify-content: flex-start;
   display: flex;
   flex-direction: column;
+
+  gap: 6px;
 }
 
 .__content_in {
@@ -33,7 +40,19 @@
 }
 
 .__content_description .__content_text {
+  color: var(--color_gray_color);
+
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.__content_in .__content_text {
   color: var(--accent);
+
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
 }
 
 .__after {
@@ -45,10 +64,6 @@
 }
 
 .__content_text {
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 17px;
-
   display: block;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -58,6 +73,15 @@
 
 .__with_cursor {
   cursor: pointer;
+  transition: all 0.1s linear;
+}
+
+.__with_cursor:hover {
+  background-color: var(--button_primary_active_background);
+}
+
+.__with_cursor:active {
+  background-color: var(--button_primary_hover_background);
 }
 
 /* ? Cell render cases */

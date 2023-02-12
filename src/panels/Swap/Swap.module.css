@@ -1,0 +1,35 @@
+.__button_group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.__switch_button {
+  flex: 0 0 48px;
+}
+
+.__dex_info {
+  background: none;
+  border-radius: 0;
+}
+
+.__dex_info > div {
+  padding: 0;
+}
+
+.__dex_info > div > div:last-child {
+  flex: 1 0 35px;
+}
+
+.__dex_info > div > div:first-child > div:first-child span {
+  font-weight: 600 !important;
+}
+
+.__dex_info > div > div:first-child > div:last-child span {
+  font-weight: 400 !important;
+}
+
+.__dex_info span {
+  font-size: 14px !important;
+  line-height: 17px !important;
+}

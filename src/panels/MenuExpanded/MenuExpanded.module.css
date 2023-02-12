@@ -1,0 +1,16 @@
+.block_content {
+}
+
+.block_cell:first-of-type:not(:last-of-type) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.block_cell:not(:first-of-type):not(:last-of-type) {
+  border-radius: 0;
+}
+
+.block_cell:last-of-type:not(:first-of-type) {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

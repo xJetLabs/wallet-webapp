@@ -13,3 +13,6 @@ export * from "./Input";
 export * from "./Switch";
 export * from "./Select";
 export * from "./ErrorBlock";
+export * from "./BlockHeader";
+export * from "./RichCell";
+export * from "./Separator";
