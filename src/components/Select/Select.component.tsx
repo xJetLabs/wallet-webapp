@@ -32,9 +32,11 @@ export const Select: FC<SelectProps> = ({
           >
             {value}
           </Text>
-          <div className={styles.__content_icon}>
-            <ArrowDown15OutlineIcon color="var(--accent)" />
-          </div>
+          {!disabled ? (
+            <div className={styles.__content_icon}>
+              <ArrowDown15OutlineIcon color="var(--accent)" />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

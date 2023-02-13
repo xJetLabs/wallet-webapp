@@ -105,7 +105,12 @@ export const SwapPanel: FC = () => {
             after={
               <Select
                 value={selectedTokens.first}
+                disabled={selectedTokens.first === "TON"}
                 onClick={() => {
+                  if (selectedTokens.first === "TON") {
+                    return;
+                  }
+
                   navigateToSelect("first");
                 }}
               />
@@ -158,7 +163,12 @@ export const SwapPanel: FC = () => {
             after={
               <Select
                 value={selectedTokens.second}
+                disabled={selectedTokens.second === "TON"}
                 onClick={() => {
+                  if (selectedTokens.second === "TON") {
+                    return;
+                  }
+
                   navigateToSelect("second");
                 }}
               />
