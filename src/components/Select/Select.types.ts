@@ -1,13 +1,6 @@
-interface selectOption {
-  id: number;
-  title: string;
-  listKey: string | number;
-}
-
 export interface SelectProps {
-  defaultValue?: selectOption;
+  value?: string | null;
   className?: string;
   disabled?: boolean;
-  options?: Array<selectOption>;
-  onChange?: (newSelectedOption: selectOption) => void;
+  onClick?: () => void;
 }

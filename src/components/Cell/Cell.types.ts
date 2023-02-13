@@ -10,4 +10,5 @@ export interface CellProps {
   target?: string;
   withCursor?: boolean;
   afterStyles?: CSSProperties;
+  onClick?: () => void;
 }

@@ -15,6 +15,7 @@ export const Cell: FC<CellProps> = ({
   afterStyles = {},
   className = "",
   withCursor = false,
+  onClick = () => {},
 }) => {
   return (
     <div
@@ -23,6 +24,7 @@ export const Cell: FC<CellProps> = ({
         [styles.__with_cursor]: withCursor,
         [className]: className,
       })}
+      onClick={onClick}
     >
       <div className={styles.__wrapper_in}>
         {before ? <div className={styles.__before}>{before}</div> : null}

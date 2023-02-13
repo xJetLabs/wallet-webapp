@@ -5,6 +5,8 @@ import { router } from "./router";
 
 import { apiInited, balanceCheckWatcher } from "./api";
 
+import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
+
 export const App: FC = () => {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
@@ -31,5 +33,9 @@ export const App: FC = () => {
     };
   }, []);
 
-  return <RouterProvider router={router} />;
+  return (
+    <SwapDataContextProvider>
+      <RouterProvider router={router} />
+    </SwapDataContextProvider>
+  );
 };

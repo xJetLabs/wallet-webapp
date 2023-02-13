@@ -1,7 +1,11 @@
-import { FC } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ROUTE_NAMES } from "../../router/constants";
+
+import { getDedustTokens } from "../../api";
+
+import { SwapDataContext } from "../../providers/SwapDataContextProvider";
 
 import {
   BlockHeader,
@@ -10,6 +14,7 @@ import {
   Input,
   Panel,
   RichCell,
+  Select,
   Switch,
   Text,
 } from "../../components";
@@ -17,9 +22,12 @@ import {
 import { ReactComponent as Switch15OutlineIcon } from "../../icons/Switch15Outline.svg";
 
 import styles from "./Swap.module.css";
+import { formatNumber } from "../../utils";
 
 export const SwapPanel: FC = () => {
   const navigate = useNavigate();
+  const { setData, ...data }: any = useContext(SwapDataContext);
+  const { selectedTokens } = data;
 
   const exchange = () => {
     navigate(ROUTE_NAMES.SEND_SUCCESS, {
@@ -31,6 +39,51 @@ export const SwapPanel: FC = () => {
       },
     });
   };
+
+  const navigateToSelect = (position: string) => {
+    navigate(ROUTE_NAMES.SWAP_SELECT, {
+      state: {
+        position,
+      },
+    });
+  };
+
+  const switchTokens = () => {
+    setData((prev: any) => ({
+      ...prev,
+      selectedTokens: {
+        ...prev.selectedTokens,
+        first: prev.selectedTokens.second,
+        second: prev.selectedTokens.first,
+      },
+    }));
+  };
+
+  useEffect(() => {
+    const getDedustTokensRequest = async () => {
+      const response = await getDedustTokens();
+
+      console.debug("response.data", response);
+
+      const allPossibleTokensArray: any = Object.values(response.data) || [];
+
+      setData((prev: any) => ({
+        ...prev,
+        selectedTokens: {
+          ...prev.selectedTokens,
+          second:
+            prev.selectedTokens.second ||
+            allPossibleTokensArray[0]?.base_symbol,
+          priceInTon:
+            prev.selectedTokens.priceInTon ||
+            Number(allPossibleTokensArray[0]?.last_price),
+        },
+        allTokens: allPossibleTokensArray,
+      }));
+    };
+
+    getDedustTokensRequest();
+  }, [setData]);
 
   return (
     <Panel>
@@ -48,6 +101,14 @@ export const SwapPanel: FC = () => {
               >
                 Max
               </Text>
+            }
+            after={
+              <Select
+                value={selectedTokens.first}
+                onClick={() => {
+                  navigateToSelect("first");
+                }}
+              />
             }
           />
           <div className={styles.__button_group}>
@@ -89,12 +150,32 @@ export const SwapPanel: FC = () => {
               mode="secondary"
               before={<Switch15OutlineIcon />}
               className={styles.__switch_button}
+              onClick={switchTokens}
             />
           </div>
-          <Input placeholder="To" />
+          <Input
+            placeholder="To"
+            after={
+              <Select
+                value={selectedTokens.second}
+                onClick={() => {
+                  navigateToSelect("second");
+                }}
+              />
+            }
+          />
         </Group>
         <Group space={12}>
-          <BlockHeader after={`1 TON ~ 10 AMBR`}>Price</BlockHeader>
+          <BlockHeader
+            after={`1 TON ~ ${formatNumber(1 / selectedTokens.priceInTon)} ${
+              selectedTokens.second === "TON"
+                ? selectedTokens.first
+                : selectedTokens.second
+            }`}
+            className={styles.__price_block_header}
+          >
+            Price
+          </BlockHeader>
           <Button size="m" onClick={exchange}>
             Exchange
           </Button>

@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ROUTE_NAMES } from "../../router/constants";
@@ -24,9 +24,14 @@ import { ReactComponent as File24OutlineIcon } from "../../icons/File24Outline.s
 import { ReactComponent as Program24OutlineIcon } from "../../icons/Program24Outline.svg";
 
 import styles from "./Menu.module.css";
+import {
+  SWAP_DATA_DEFAULT_STATE,
+  SwapDataContext,
+} from "../../providers/SwapDataContextProvider";
 
 export const MenuPanel: FC = () => {
   const navigate = useNavigate();
+  const { setData }: any = useContext(SwapDataContext);
 
   const navigateToHistory = () => {
     try {
@@ -77,7 +82,9 @@ export const MenuPanel: FC = () => {
       top: 0,
       behavior: "smooth",
     });
-  }, []);
+
+    setData(SWAP_DATA_DEFAULT_STATE);
+  }, [setData]);
 
   return (
     <Panel>

@@ -11,4 +11,5 @@ export const ROUTE_NAMES = {
   MENU_EXPANDED: "/menuexpanded",
   NFT: "/nft",
   SWAP: "/swap",
+  SWAP_SELECT: "/swap/select",
 };

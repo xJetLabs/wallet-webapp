@@ -15,6 +15,7 @@ import {
   SendSuccessPanel,
   SettingsPanel,
   SwapPanel,
+  SwapSelect,
 } from "../panels";
 
 export const router = createBrowserRouter([
@@ -66,9 +67,15 @@ export const router = createBrowserRouter([
     path: ROUTE_NAMES.SWAP,
     element: <SwapPanel />,
   },
+  {
+    path: ROUTE_NAMES.SWAP_SELECT,
+    element: <SwapSelect />,
+  },
 ]);
 
 router.subscribe((v) => {
+  console.debug("v", v);
+
   if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
     (window as any).Telegram.WebApp.BackButton.show();
   } else {

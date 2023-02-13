@@ -33,3 +33,7 @@
   font-size: 14px !important;
   line-height: 17px !important;
 }
+
+.__price_block_header > span:last-of-type {
+  flex: 2;
+}

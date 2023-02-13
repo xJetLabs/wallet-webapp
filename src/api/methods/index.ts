@@ -213,3 +213,19 @@ export const getHistory = async (limit = 20, offset = 0) => {
 
   return response;
 };
+
+export const getDedustTokens = async () => {
+  if (RequestInProgress.has("dedust")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("dedust");
+
+  const response = await axios
+    .get("https://api.dedust.io/cmc/dex")
+    .finally(() => {
+      RequestInProgress.delete("dedust");
+    });
+
+  return response;
+};

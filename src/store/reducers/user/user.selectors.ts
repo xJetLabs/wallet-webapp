@@ -83,3 +83,7 @@ export const currencyDataSelector = (state: any, currency: string) => {
     (v: any) => v?.currency === currency
   );
 };
+
+export const allCurrenciesSelector = (state: any) => {
+  return state[SLICE_NAMES.USER].allCurrencies || [];
+};
