@@ -9,6 +9,6 @@
   max-width: calc(50% - 6px);
 }
 
-.__wrapper .__block > div {
+.__wrapper .__block > div:first-child {
   border-radius: 18px;
 }

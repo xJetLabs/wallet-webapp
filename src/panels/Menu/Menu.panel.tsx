@@ -197,6 +197,16 @@ export const MenuPanel: FC = () => {
     navigate(ROUTE_NAMES.SWAP);
   };
 
+  const navigateToNFT = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.NFT);
+  };
+
   useEffect(() => {
     document.body.scrollTo({
       top: 0,
@@ -273,7 +283,7 @@ export const MenuPanel: FC = () => {
               stretched
               mode={"secondary_with_accent_text"}
               before={<Picture24OutlineIcon />}
-              disabled
+              onClick={navigateToNFT}
             >
               NFT
             </Button>
