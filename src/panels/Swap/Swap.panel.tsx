@@ -146,6 +146,7 @@ export const SwapPanel: FC = () => {
         <Group space={12}>
           <Input
             placeholder="From"
+            disabled={!selectedTokens.second}
             indicator={
               <Text
                 weight={"600"}
@@ -160,7 +161,9 @@ export const SwapPanel: FC = () => {
             after={
               <Select
                 value={selectedTokens.first}
-                disabled={selectedTokens.first === "TON"}
+                disabled={
+                  selectedTokens.first === "TON" || !selectedTokens.second
+                }
                 onClick={() => {
                   if (selectedTokens.first === "TON") {
                     return;
@@ -211,17 +214,21 @@ export const SwapPanel: FC = () => {
               before={<Switch15OutlineIcon />}
               className={styles.__switch_button}
               onClick={switchTokens}
+              disabled={!selectedTokens.second}
             />
           </div>
           <Input
             placeholder="To"
+            disabled={!selectedTokens.second}
             after={
               !selectedTokens.second ? (
                 <SwapSecondTokenLoader />
               ) : (
                 <Select
                   value={selectedTokens.second}
-                  disabled={selectedTokens.second === "TON"}
+                  disabled={
+                    selectedTokens.second === "TON" || !selectedTokens.second
+                  }
                   onClick={() => {
                     if (selectedTokens.second === "TON") {
                       return;
@@ -251,7 +258,7 @@ export const SwapPanel: FC = () => {
           >
             Price
           </BlockHeader>
-          <Button size="m" onClick={exchange}>
+          <Button size="m" onClick={exchange} disabled={!selectedTokens.second}>
             Exchange
           </Button>
         </Group>
