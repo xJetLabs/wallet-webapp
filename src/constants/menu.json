@@ -2,7 +2,7 @@
     "content": [
         {
             "id": "xApps",
-            "title": "xApps (Optional)",
+            "title": "xApps Updates",
             "cells": [
                 {
                     "title": "How to make cheques",
@@ -34,6 +34,41 @@
                 }
             ],
             "showedOnMainScreen": 3
+        },
+        {
+            "id": "xApps2",
+            "title": "xApps2",
+            "cells": [
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "file"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "file"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "file"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "file"
+                }
+            ],
+            "showedOnMainScreen": 2
         }
     ]
 }
