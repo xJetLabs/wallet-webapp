@@ -7,28 +7,28 @@
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "text"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "file"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "program"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "text"
                 }
@@ -42,28 +42,28 @@
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "file"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "file"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "file"
                 },
                 {
                     "title": "How to make cheques",
                     "subtitle": "Some subtitle",
-                    "imageUrl": "url",
+                    "imageUrl": null,
                     "action": "url",
                     "type": "file"
                 }

@@ -92,21 +92,19 @@ export const SwapPanel: FC = () => {
 
       const allPossibleTokensArray: any = Object.values(response.data) || [];
 
-      setTimeout(() => {
-        setData((prev: any) => ({
-          ...prev,
-          selectedTokens: {
-            ...prev.selectedTokens,
-            second:
-              prev.selectedTokens.second ||
-              allPossibleTokensArray[0]?.base_symbol,
-            priceInTon:
-              prev.selectedTokens.priceInTon ||
-              Number(allPossibleTokensArray[0]?.last_price),
-          },
-          allTokens: allPossibleTokensArray,
-        }));
-      }, 3000);
+      setData((prev: any) => ({
+        ...prev,
+        selectedTokens: {
+          ...prev.selectedTokens,
+          second:
+            prev.selectedTokens.second ||
+            allPossibleTokensArray[0]?.base_symbol,
+          priceInTon:
+            prev.selectedTokens.priceInTon ||
+            Number(allPossibleTokensArray[0]?.last_price),
+        },
+        allTokens: allPossibleTokensArray,
+      }));
     };
 
     getDedustTokensRequest();
