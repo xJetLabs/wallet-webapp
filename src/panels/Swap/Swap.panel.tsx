@@ -190,13 +190,13 @@ export const SwapPanel: FC = () => {
             Exchange
           </Button>
         </Group>
-        <RichCell
+        {/* <RichCell
           after={<Switch />}
           description="We will help you choose the most profitable exchange option"
           className={styles.__dex_info}
         >
           Automatic DEX
-        </RichCell>
+        </RichCell> */}
       </Group>
     </Panel>
   );
