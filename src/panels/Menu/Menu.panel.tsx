@@ -1,13 +1,16 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ContentLoader from "react-content-loader";
 
 import { ROUTE_NAMES } from "../../router/constants";
 
 import {
   Avatar,
+  Block,
   BlockHeader,
   Button,
   Group,
+  Link,
   Panel,
   RichCell,
   Separator,
@@ -29,9 +32,136 @@ import {
   SwapDataContext,
 } from "../../providers/SwapDataContextProvider";
 
+import menuData from "../../constants/menu.json";
+
+interface CellData {
+  id: string;
+  title: string;
+  cells: object[];
+}
+
+const MenuLoader: FC = () => {
+  return (
+    <>
+      <Group space={12}>
+        <ContentLoader
+          speed={2}
+          width="100%"
+          height={17}
+          backgroundColor="var(--background_block)"
+          foregroundColor="var(--background_content)"
+        >
+          <rect x="12" y="0" rx="6" ry="6" width="100" height="17" />
+        </ContentLoader>
+        <div className={styles.block_content}>
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+          <Separator />
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+          <Separator />
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+        </div>
+      </Group>
+      <Group space={12}>
+        <ContentLoader
+          speed={2}
+          width="100%"
+          height={17}
+          backgroundColor="var(--background_block)"
+          foregroundColor="var(--background_content)"
+        >
+          <rect x="12" y="0" rx="6" ry="6" width="100" height="17" />
+        </ContentLoader>
+        <div className={styles.block_content}>
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+          <Separator />
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+          <Separator />
+          <Block padding={12} className={styles.block_cell}>
+            <ContentLoader
+              speed={2}
+              width="100%"
+              height={50}
+              backgroundColor="var(--background_content)"
+              foregroundColor="var(--background_block)"
+            >
+              <rect x="0" y="0" rx="6" ry="6" width="50" height="50" />
+              <rect x="62" y="0" rx="6" ry="6" width="160" height="15" />
+              <rect x="62" y="21" rx="6" ry="6" width="200" height="15" />
+            </ContentLoader>
+          </Block>
+        </div>
+      </Group>
+    </>
+  );
+};
+
 export const MenuPanel: FC = () => {
   const navigate = useNavigate();
   const { setData }: any = useContext(SwapDataContext);
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [filtredData, setFiltredData] = useState<CellData[]>([]);
+  const timerRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   const navigateToHistory = () => {
     try {
@@ -85,6 +215,48 @@ export const MenuPanel: FC = () => {
 
     setData(SWAP_DATA_DEFAULT_STATE);
   }, [setData]);
+
+  useEffect(() => {
+    const filtred = menuData.content.reduce((result: any, current: any) => {
+      const cellsFiltred = current.cells.slice(0, current.showedOnMainScreen);
+
+      result.push({
+        id: current.id,
+        title: current.title,
+        cells: cellsFiltred || [],
+      });
+
+      return result;
+    }, []);
+
+    setFiltredData(filtred);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      setIsLoaded(true);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const getCellAvatar = (type: string) => {
+    if (type === "text") {
+      return <Text24OutlineIcon />;
+    }
+
+    if (type === "file") {
+      return <File24OutlineIcon />;
+    }
+
+    if (type === "program") {
+      return <Program24OutlineIcon />;
+    }
+  };
 
   return (
     <Panel>
@@ -143,174 +315,71 @@ export const MenuPanel: FC = () => {
             </Button>
           </div>
         </Group>
-        <Group space={12}>
-          <BlockHeader
-            after={
-              <span
-                className={styles.block_header_button}
-                onClick={() => navigateToExpandedMenu("tutorials")}
-              >
-                View All
-              </span>
-            }
-            className={styles.__block_header}
-          >
-            TUTORIALS
-          </BlockHeader>
-          <div className={styles.block_content}>
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<Text24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              How to make Cheques
-            </RichCell>
-            <Separator />
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<Text24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              How to make Invoices
-            </RichCell>
-          </div>
-        </Group>
-        <Group space={12}>
-          <BlockHeader
-            after={
-              <span
-                className={styles.block_header_button}
-                onClick={() => navigateToExpandedMenu("news")}
-              >
-                View All
-              </span>
-            }
-            className={styles.__block_header}
-          >
-            NEWS
-          </BlockHeader>
-          <div className={styles.block_content}>
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<File24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              DAY 32. BUY TONCOIN IN APP
-            </RichCell>
-            <Separator />
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<File24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              DAY 29. EXCHANGE JETTONS
-            </RichCell>
-            <Separator />
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<File24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              DAY 21. VISUAL UPDATE
-            </RichCell>
-          </div>
-        </Group>
-        <Group space={12}>
-          <BlockHeader
-            after={
-              <span
-                className={styles.block_header_button}
-                onClick={() => navigateToExpandedMenu("apps")}
-              >
-                View All
-              </span>
-            }
-            className={styles.__block_header}
-          >
-            APPS
-          </BlockHeader>
-          <div className={styles.block_content}>
-            <RichCell
-              before={
-                <Avatar
-                  src="https://www.flippies.art/penguins/Flipper1.png"
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              DEVDAO WALLET
-            </RichCell>
-            <Separator />
-            <RichCell
-              before={
-                <Avatar
-                  src="https://www.flippies.art/penguins/Flipper1.png"
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              TONCAP
-            </RichCell>
-            <Separator />
-            <RichCell
-              before={
-                <Avatar
-                  fallbackName={<Program24OutlineIcon />}
-                  size={50}
-                  type="square"
-                />
-              }
-              description="Voting wallet for real DAO, based on xJetConnect"
-              className={styles.block_cell}
-              withCursor
-            >
-              PAYC
-            </RichCell>
-          </div>
-        </Group>
+        {!isLoaded ? (
+          <MenuLoader />
+        ) : (
+          filtredData.map((tabData: CellData, index: number) => {
+            return (
+              <Group space={12} key={index}>
+                <BlockHeader
+                  after={
+                    <span
+                      className={styles.block_header_button}
+                      onClick={() => navigateToExpandedMenu(tabData.id)}
+                    >
+                      Show all
+                    </span>
+                  }
+                  className={styles.__block_header}
+                >
+                  {tabData.title.toUpperCase()}
+                </BlockHeader>
+                <div className={styles.block_content}>
+                  {tabData.cells.map((cellData: any, index: number) => {
+                    const CellAvatar = getCellAvatar(cellData.type);
+                    const urlTarget = cellData.action?.startsWith(
+                      "https://t.me/"
+                    )
+                      ? "_self"
+                      : "_blank";
+
+                    return (
+                      <Link
+                        href={cellData.action}
+                        target={urlTarget}
+                        className={styles.block_cell}
+                      >
+                        <RichCell
+                          before={
+                            <Avatar
+                              fallbackName={CellAvatar}
+                              size={50}
+                              type="square"
+                              src={cellData.imageUrl}
+                            />
+                          }
+                          description={
+                            <span className={styles.block_cell_description}>
+                              {cellData.subtitle}
+                            </span>
+                          }
+                          withCursor
+                        >
+                          <span className={styles.block_cell_title}>
+                            {cellData.title}
+                          </span>
+                        </RichCell>
+                        {index < tabData.cells.length - 1 ? (
+                          <Separator />
+                        ) : null}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </Group>
+            );
+          })
+        )}
       </Group>
     </Panel>
   );

@@ -74,8 +74,6 @@ export const router = createBrowserRouter([
 ]);
 
 router.subscribe((v) => {
-  console.debug("v", v);
-
   if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
     (window as any).Telegram.WebApp.BackButton.show();
   } else {

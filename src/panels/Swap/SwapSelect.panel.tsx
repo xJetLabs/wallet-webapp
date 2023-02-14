@@ -37,14 +37,10 @@ export const SwapSelect: FC = () => {
 
   const tokensToRender = allTokens.reduce(
     (result: object[], current: any, index: number) => {
-      console.debug("allJetTokens", allJetTokens);
-
       const jetToken = allJetTokens.find(
         (v: any) =>
           v.symbol?.toLowerCase() === current.base_symbol?.toLowerCase()
       );
-
-      console.debug("selectedTokens[position]", selectedTokens[position]);
 
       if (
         index === 0 &&
@@ -65,7 +61,6 @@ export const SwapSelect: FC = () => {
         selectedTokens[position] !== jetToken.symbol?.toUpperCase() &&
         current?.quote_symbol === "JTON"
       ) {
-        console.debug("current", current, jetToken);
         result.push({ ...jetToken, ...current });
       }
 
@@ -86,8 +81,6 @@ export const SwapSelect: FC = () => {
 
     navigate(-1);
   };
-
-  console.debug("tokensToRender", tokensToRender);
 
   return (
     <Panel>

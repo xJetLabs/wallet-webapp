@@ -1,5 +1,6 @@
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ContentLoader from "react-content-loader";
 
 import { ROUTE_NAMES } from "../../router/constants";
 
@@ -13,9 +14,7 @@ import {
   Group,
   Input,
   Panel,
-  RichCell,
   Select,
-  Switch,
   Text,
 } from "../../components";
 
@@ -23,6 +22,34 @@ import { ReactComponent as Switch15OutlineIcon } from "../../icons/Switch15Outli
 
 import styles from "./Swap.module.css";
 import { formatNumber } from "../../utils";
+
+const SwapSecondTokenLoader: FC = () => {
+  return (
+    <ContentLoader
+      speed={2}
+      width={67}
+      height={17}
+      backgroundColor="var(--background_content)"
+      foregroundColor="var(--background_block)"
+    >
+      <rect x="0" y="0" rx="6" ry="6" width="67" height="17" />
+    </ContentLoader>
+  );
+};
+
+const SwapPriceTokenLoader: FC = () => {
+  return (
+    <ContentLoader
+      speed={2}
+      width={118}
+      height={17}
+      backgroundColor="var(--background_block)"
+      foregroundColor="var(--background_content)"
+    >
+      <rect x="0" y="0" rx="6" ry="6" width="118" height="17" />
+    </ContentLoader>
+  );
+};
 
 export const SwapPanel: FC = () => {
   const navigate = useNavigate();
@@ -63,23 +90,23 @@ export const SwapPanel: FC = () => {
     const getDedustTokensRequest = async () => {
       const response = await getDedustTokens();
 
-      console.debug("response.data", response);
-
       const allPossibleTokensArray: any = Object.values(response.data) || [];
 
-      setData((prev: any) => ({
-        ...prev,
-        selectedTokens: {
-          ...prev.selectedTokens,
-          second:
-            prev.selectedTokens.second ||
-            allPossibleTokensArray[0]?.base_symbol,
-          priceInTon:
-            prev.selectedTokens.priceInTon ||
-            Number(allPossibleTokensArray[0]?.last_price),
-        },
-        allTokens: allPossibleTokensArray,
-      }));
+      setTimeout(() => {
+        setData((prev: any) => ({
+          ...prev,
+          selectedTokens: {
+            ...prev.selectedTokens,
+            second:
+              prev.selectedTokens.second ||
+              allPossibleTokensArray[0]?.base_symbol,
+            priceInTon:
+              prev.selectedTokens.priceInTon ||
+              Number(allPossibleTokensArray[0]?.last_price),
+          },
+          allTokens: allPossibleTokensArray,
+        }));
+      }, 3000);
     };
 
     getDedustTokensRequest();
@@ -161,27 +188,37 @@ export const SwapPanel: FC = () => {
           <Input
             placeholder="To"
             after={
-              <Select
-                value={selectedTokens.second}
-                disabled={selectedTokens.second === "TON"}
-                onClick={() => {
-                  if (selectedTokens.second === "TON") {
-                    return;
-                  }
+              !selectedTokens.second ? (
+                <SwapSecondTokenLoader />
+              ) : (
+                <Select
+                  value={selectedTokens.second}
+                  disabled={selectedTokens.second === "TON"}
+                  onClick={() => {
+                    if (selectedTokens.second === "TON") {
+                      return;
+                    }
 
-                  navigateToSelect("second");
-                }}
-              />
+                    navigateToSelect("second");
+                  }}
+                />
+              )
             }
           />
         </Group>
         <Group space={12}>
           <BlockHeader
-            after={`1 TON ~ ${formatNumber(1 / selectedTokens.priceInTon)} ${
-              selectedTokens.second === "TON"
-                ? selectedTokens.first
-                : selectedTokens.second
-            }`}
+            after={
+              selectedTokens.priceInTon ? (
+                `1 TON ~ ${formatNumber(1 / selectedTokens.priceInTon)} ${
+                  selectedTokens.second === "TON"
+                    ? selectedTokens.first
+                    : selectedTokens.second
+                }`
+              ) : (
+                <SwapPriceTokenLoader />
+              )
+            }
             className={styles.__price_block_header}
           >
             Price
@@ -190,13 +227,6 @@ export const SwapPanel: FC = () => {
             Exchange
           </Button>
         </Group>
-        {/* <RichCell
-          after={<Switch />}
-          description="We will help you choose the most profitable exchange option"
-          className={styles.__dex_info}
-        >
-          Automatic DEX
-        </RichCell> */}
       </Group>
     </Panel>
   );

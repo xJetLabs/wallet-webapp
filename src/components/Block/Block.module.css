@@ -1,5 +1,6 @@
 .__wrapper {
   overflow: hidden;
+  display: flex;
 }
 
 .__with_background {

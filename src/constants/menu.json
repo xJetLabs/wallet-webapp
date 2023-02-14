@@ -1,0 +1,39 @@
+{
+    "content": [
+        {
+            "id": "xApps",
+            "title": "xApps (Optional)",
+            "cells": [
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "text"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "file"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "program"
+                },
+                {
+                    "title": "How to make cheques",
+                    "subtitle": "Some subtitle",
+                    "imageUrl": "url",
+                    "action": "url",
+                    "type": "text"
+                }
+            ],
+            "showedOnMainScreen": 3
+        }
+    ]
+}
