@@ -134,7 +134,7 @@ export const SwapPanel: FC = () => {
           },
           allTokens: allPossibleTokensArray,
         }));
-      }, 3000);
+      }, 1000);
     };
 
     getDedustTokensRequest();
