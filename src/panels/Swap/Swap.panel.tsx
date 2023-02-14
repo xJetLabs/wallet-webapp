@@ -37,6 +37,34 @@ const SwapSecondTokenLoader: FC = () => {
   );
 };
 
+const SwapImpactLoader: FC = () => {
+  return (
+    <ContentLoader
+      speed={2}
+      width={26}
+      height={17}
+      backgroundColor="var(--background_content)"
+      foregroundColor="var(--background_block)"
+    >
+      <rect x="0" y="0" rx="6" ry="6" width="26" height="17" />
+    </ContentLoader>
+  );
+};
+
+const SwapFeeLoader: FC = () => {
+  return (
+    <ContentLoader
+      speed={2}
+      width={47}
+      height={17}
+      backgroundColor="var(--background_content)"
+      foregroundColor="var(--background_block)"
+    >
+      <rect x="0" y="0" rx="6" ry="6" width="47" height="17" />
+    </ContentLoader>
+  );
+};
+
 const SwapPriceTokenLoader: FC = () => {
   return (
     <ContentLoader
@@ -92,19 +120,21 @@ export const SwapPanel: FC = () => {
 
       const allPossibleTokensArray: any = Object.values(response.data) || [];
 
-      setData((prev: any) => ({
-        ...prev,
-        selectedTokens: {
-          ...prev.selectedTokens,
-          second:
-            prev.selectedTokens.second ||
-            allPossibleTokensArray[0]?.base_symbol,
-          priceInTon:
-            prev.selectedTokens.priceInTon ||
-            Number(allPossibleTokensArray[0]?.last_price),
-        },
-        allTokens: allPossibleTokensArray,
-      }));
+      setTimeout(() => {
+        setData((prev: any) => ({
+          ...prev,
+          selectedTokens: {
+            ...prev.selectedTokens,
+            second:
+              prev.selectedTokens.second ||
+              allPossibleTokensArray[0]?.base_symbol,
+            priceInTon:
+              prev.selectedTokens.priceInTon ||
+              Number(allPossibleTokensArray[0]?.last_price),
+          },
+          allTokens: allPossibleTokensArray,
+        }));
+      }, 3000);
     };
 
     getDedustTokensRequest();
@@ -157,7 +187,7 @@ export const SwapPanel: FC = () => {
               stretched
               hasHover={false}
             >
-              1.7%
+              {selectedTokens.second ? "1.7%" : <SwapImpactLoader />}
             </Button>
             <Button
               before={
@@ -174,7 +204,7 @@ export const SwapPanel: FC = () => {
               stretched
               hasHover={false}
             >
-              0.7 TON
+              {selectedTokens.second ? "0.7 TON" : <SwapFeeLoader />}
             </Button>
             <Button
               mode="secondary"
