@@ -5,70 +5,14 @@
             "title": "xApps Updates",
             "cells": [
                 {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "text"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "file"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "program"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
+                    "title": "Buying TON with a bank card is already available!",
+                    "subtitle": "TLDR; first post",
+                    "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ton_symbol.png?raw=true",
+                    "action": "https://t.me/xJetNews/43",
                     "type": "text"
                 }
             ],
             "showedOnMainScreen": 3
-        },
-        {
-            "id": "xApps2",
-            "title": "xApps2",
-            "cells": [
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "file"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "file"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitleSome subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "file"
-                },
-                {
-                    "title": "How to make cheques",
-                    "subtitle": "Some subtitle",
-                    "imageUrl": null,
-                    "action": "url",
-                    "type": "file"
-                }
-            ],
-            "showedOnMainScreen": 2
         }
     ]
 }

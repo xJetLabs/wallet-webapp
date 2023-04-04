@@ -127,3 +127,15 @@ span {
   color: var(--color_primary_color);
   font-family: var(--text_font);
 }
+
+.darktheme {
+  color: white;
+}
+
+.darktheme .ant-timeline-item-tail {
+  border-inline-start: 2px solid rgba(255, 255, 255, 0.06);
+}
+
+.ant-timeline-pending .ant-timeline-item-content {
+  font-size: 16px !important;
+}

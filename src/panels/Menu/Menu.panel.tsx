@@ -173,6 +173,16 @@ export const MenuPanel: FC = () => {
     navigate(ROUTE_NAMES.HISTORY);
   };
 
+  const navigateToPurchaseTon = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.BUY_TON);
+  };
+
   const navigateToExpandedMenu = (type: string) => {
     try {
       window.navigator.vibrate(70);
@@ -289,7 +299,7 @@ export const MenuPanel: FC = () => {
               stretched
               mode={"secondary_with_accent_text"}
               before={<Burn24OutlineIcon />}
-              disabled
+              onClick={navigateToPurchaseTon}
             >
               Buy
             </Button>

@@ -214,6 +214,53 @@ export const getHistory = async (limit = 20, offset = 0) => {
   return response;
 };
 
+export const getFiatRates = async () => {
+  if (RequestInProgress.has("fiatRates")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("fiatRates");
+
+  const response = await axios
+    .get(
+      API_URL + "system.fiatRates"
+    )
+    .finally(() => {
+      RequestInProgress.delete("fiatRates");
+    });
+
+  return response;
+};
+
+export const initFiatPayment = async (currency: string, amount: number, minAmount: number = 0) => {
+  if (RequestInProgress.has("initFiatPayment")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("initFiatPayment");
+
+  const response = await axios
+    .post(
+      API_URL + "paytool.create",
+      {
+        currency: currency,
+        amount: amount,
+        minAmount: minAmount
+      },
+      {
+        headers: {
+          "X-API-Key": config.api_key,
+        },
+      }
+    )
+    .finally(() => {
+      RequestInProgress.delete("initFiatPayment");
+    });
+
+  return response;
+};
+
+
 export const getDedustTokens = async () => {
   if (RequestInProgress.has("dedust")) {
     throw new Error("busy");

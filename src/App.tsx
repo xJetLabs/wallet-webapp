@@ -6,16 +6,20 @@ import { router } from "./router";
 import { apiInited, balanceCheckWatcher } from "./api";
 
 import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
+import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
 
 export const App: FC = () => {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   useEffect(() => {
-    if (window.location.pathname !== "/" && !apiInited) {
-      router.navigate("/", {
-        replace: true,
-      });
-    }
+    router.navigate("/", {replace: true});
+    // if (window.location.pathname !== "/" && !apiInited) {
+    //   // router.navigate("/", {
+    //   //   replace: true,
+    //   // }); TODO
+
+    //     router.navigate("/purchaseTon", {replace: true});
+    // }
   }, []);
 
   useEffect(() => {

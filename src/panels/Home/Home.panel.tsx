@@ -229,7 +229,7 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToHistory}
                 >
-                  Histroy
+                  History
                 </Button>
                 <Button
                   stretched

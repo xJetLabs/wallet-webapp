@@ -10,3 +10,4 @@ export * from "./Menu";
 export * from "./MenuExpanded";
 export * from "./Nft";
 export * from "./Swap";
+export * from "./PurchaseTonPage";

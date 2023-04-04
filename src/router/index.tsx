@@ -16,6 +16,9 @@ import {
   SettingsPanel,
   SwapPanel,
   SwapSelect,
+  PurchaseTonPage,
+  PurchaseFiatSelect,
+  PurchaseTonFirstStep,
 } from "../panels";
 
 export const router = createBrowserRouter([
@@ -58,6 +61,18 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.MENU_EXPANDED,
     element: <MenuExpandedPanel />,
+  },
+  {
+    path: ROUTE_NAMES.BUY_TON,
+    element: <PurchaseTonPage />,
+  },
+  {
+    path: ROUTE_NAMES.FIAT_SELECT,
+    element: <PurchaseFiatSelect />,
+  },
+  {
+    path: ROUTE_NAMES.BUY_TON_STEP1,
+    element: <PurchaseTonFirstStep />,
   },
   {
     path: ROUTE_NAMES.NFT,
