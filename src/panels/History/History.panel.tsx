@@ -33,6 +33,10 @@ const historyTypeMap = (serverType: string) => {
     case "incoming_fire":
     case "outgoing_fire":
       return "Fire jetton in chat";
+    case "outgoing_invoicePayment":
+      return "Payment for invoice";
+    case "incoming_invoicePayment":
+      return "Invoice payment";
     default:
       return serverType;
   }
@@ -100,16 +104,15 @@ export const HistoryPanel: FC = () => {
     if (operations) {
       setHistory((prev: any) => {
         return [...prev, ...operations].reduce((prev, curr) => {
-          if (!curr._id) {
+          if (!curr.id) {
             return prev;
           }
 
-          const transferExist = prev.find((v: any) => v._id === curr._id);
+          const transferExist = prev.find((v: any) => v.id === curr.id);
 
           if (!transferExist) {
             prev.push(curr);
           }
-
           return prev;
         }, []);
       });
@@ -134,19 +137,16 @@ export const HistoryPanel: FC = () => {
     };
 
     document.body.addEventListener("scroll", onScroll);
-
-    return () => {
-      document.body.removeEventListener("scroll", onScroll);
-    };
-  }, [requestHistory]);
-
-  useEffect(() => {
     if (history.length === 0) {
       requestHistory().then(() => {
         setIsLoadingFirstBatch(false);
       });
     }
-  }, [history.length, requestHistory]);
+
+    return () => {
+      document.body.removeEventListener("scroll", onScroll);
+    };
+  }, [requestHistory]);
 
   return (
     <Panel centerVertical={isPanelCenter} centerHorizontal={isPanelCenter}>

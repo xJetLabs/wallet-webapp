@@ -48,40 +48,54 @@ export const PurchaseTonPage: FC = () => {
   };
 
   const calculateOutput = (e: any) => {
-	inAmount = e.target.value;
+	let value = document.getElementsByTagName('input')[0].value;
+	inAmount = value; // e.target.value;
+
 	for (let i = 0; i < availableFiats.length; i++) {
 		if (availableFiats[i].base_symbol.toLowerCase() == selectedTokens.first.toLowerCase()) {
-			outAmount = (Number(e.target.value.replace(",", ".")) / availableFiats[i].price).toFixed(2).toString();
+			outAmount = (Number(value.replace(",", ".")) / availableFiats[i].price).toFixed(2).toString();
 		} else {
 			outAmount = "0";
 		}
 	}
-	document.getElementsByTagName("input")[1].setAttribute("value", outAmount);
+	document.getElementsByTagName("input")[1].value = outAmount;
+	let inAmountNum: number;
+	try {
+		inAmountNum = parseInt(inAmount);
+	} catch {
+		inAmountNum = 0;
+	}
+	if (inAmountNum < availableFiats[0].minAmount) {
+		return;
+	}
+
+	setData({
+		...data,
+		selectedTokens: {
+			...selectedTokens,
+			priceInTon: parseInt(outAmount) > 0 ? inAmountNum : 0,
+		}
+	});
   };
 
   const purchaseDisabled = () => {
-	if (inAmount == "" || inAmount == "0")
+	inAmount = data.selectedTokens.priceInTon;
+	if (inAmount.toString() === "0" || inAmount.toString() === "")
 		return true;
 
-	try {
-		if (parseInt(outAmount) <= 0) {
-			return true;
-		}
-	} catch { return true; }
-
-	// for (let i = 0; i < availableFiats.length; i++) {
-	// 	if (availableFiats[i].base_symbol.toLowerCase() == selectedTokens.first.toLowerCase()) {
-	// 		if (availableFiats[i].minAmount > parseInt(inAmount)) {
-	// 			return true;
-	// 		}
+	// try {
+	// 	if (parseInt(outAmount) <= 0) {
+	// 		return true;
 	// 	}
-	// }
+	// } catch { return true; }
 
 	if (availableFiats[0].minAmount > parseInt(inAmount)) {
 		return true;
 	}
 
-	return false;
+	try {
+		return !document.getElementsByTagName('input')[2].checked;
+	} catch { return true; }
   };
 
   const purchase = () => {
@@ -89,7 +103,7 @@ export const PurchaseTonPage: FC = () => {
       state: {
 		currency: selectedTokens.first,
 		inAmount: parseFloat(inAmount),
-        outAmount: parseFloat(outAmount),
+		outAmount: outAmount ? parseFloat(outAmount) : 0,
       },
     });
   };
@@ -111,10 +125,9 @@ export const PurchaseTonPage: FC = () => {
   useEffect(() => {
     const getDedustTokensRequest = async () => {
 	  	const fiatRates = await getFiatRates();
-
 		if (!("rub" in fiatRates)) throw new Error("No RUB rate");
 		const newAvailableFiats = [
-			{ base_symbol: "RUB", last_price: 10000, price: fiatRates.rub, minAmount: 500 }
+			{ base_symbol: "RUB", last_price: 10000, price: fiatRates.rub, minAmount: 5 }
 		];
 		dispatch(userActions.setAvailableFiats(newAvailableFiats));
 		
@@ -174,9 +187,9 @@ export const PurchaseTonPage: FC = () => {
 				margin: "auto",
 			 }}
 		  >
-			<Text>Amount of cryptocurrency to receive is calculated only after the payment is processed. Minimum amount for deposit is 500 RUB.</Text>
+			<Text>Amount of cryptocurrency to receive is calculated only after the payment is processed. Minimum amount for deposit is 5 RUB.</Text>
 			<br /><br /><br />
-			<Checkbox style={{ fontSize: "16px" }}>I agree to <a href="https://xjet.app/terms" target={"_blank"}>terms of use</a></Checkbox>
+			<Checkbox style={{ fontSize: "16px" }} onChange={calculateOutput}>I agree to <a href="https://xjet.app/terms" target={"_blank"}>terms of use</a></Checkbox>
 		  </div>
 		<Group space={12}>
 		  <Button

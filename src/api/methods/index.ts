@@ -223,16 +223,16 @@ export const getFiatRates = async () => {
 
   const response = await axios
     .get(
-      API_URL + "system.fiatRates"
+      API_URL + "fiatExchange.rates"
     )
     .finally(() => {
       RequestInProgress.delete("fiatRates");
     });
 
-  return response;
+  return response.data;
 };
 
-export const initFiatPayment = async (currency: string, amount: number, minAmount: number = 0) => {
+export const initFiatPayment = async (amount: number) => {
   if (RequestInProgress.has("initFiatPayment")) {
     throw new Error("busy");
   }
@@ -241,11 +241,10 @@ export const initFiatPayment = async (currency: string, amount: number, minAmoun
 
   const response = await axios
     .post(
-      API_URL + "paytool.create",
+      API_URL + "fiatExchange.init",
       {
-        currency: currency,
+        paySource: 1,
         amount: amount,
-        minAmount: minAmount
       },
       {
         headers: {

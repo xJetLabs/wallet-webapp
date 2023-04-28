@@ -13,13 +13,6 @@ export const App: FC = () => {
 
   useEffect(() => {
     router.navigate("/", {replace: true});
-    // if (window.location.pathname !== "/" && !apiInited) {
-    //   // router.navigate("/", {
-    //   //   replace: true,
-    //   // }); TODO
-
-    //     router.navigate("/purchaseTon", {replace: true});
-    // }
   }, []);
 
   useEffect(() => {
