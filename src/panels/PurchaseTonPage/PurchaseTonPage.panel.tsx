@@ -79,7 +79,10 @@ export const PurchaseTonPage: FC = () => {
   };
 
   const purchaseDisabled = () => {
-	inAmount = data.selectedTokens.priceInTon;
+	try {
+		inAmount = document.getElementsByTagName('input')[0].value;
+	} catch { return true; }
+
 	if (inAmount.toString() === "0" || inAmount.toString() === "")
 		return true;
 

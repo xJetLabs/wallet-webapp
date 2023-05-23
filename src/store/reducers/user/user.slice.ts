@@ -10,7 +10,7 @@ const initialState: any = {
   allCurrencies: null,
   history: [],
   availableFiats: [
-    { base_symbol: "RUB", last_price: 10000, price: 10000, minAmount: 500 }
+    { base_symbol: "RUB", last_price: 10000, price: 10000, minAmount: 5 }
   ],
 };
 
