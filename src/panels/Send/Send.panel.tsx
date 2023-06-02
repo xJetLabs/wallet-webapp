@@ -51,6 +51,7 @@ export const SendPanel: FC = () => {
     Number(formData.amount) <= 0 ||
     isAwaitResponse;
 
+  const locationn = useLocation();
   const {
     state: locationState,
   }: {
@@ -58,6 +59,8 @@ export const SendPanel: FC = () => {
       currency: string;
     };
   } = useLocation();
+
+  console.log(locationState, locationn);
 
   const currencyData = useSelector((state) =>
     currencyDataSelector(state, locationState.currency)

@@ -1,6 +1,7 @@
 .__wrapper {
   overflow: hidden;
   max-width: 100%;
+  aspect-ratio: 1 / 1;
 }
 
 .__wrapper:not(.__load_error) {
@@ -23,6 +24,7 @@
   width: 100%;
   height: 100%;
 
+  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 

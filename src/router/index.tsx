@@ -19,7 +19,10 @@ import {
   PurchaseTonPage,
   PurchaseFiatSelect,
   PurchaseTonFirstStep,
+  NftDetailPanel,
 } from "../panels";
+import { SendNftPanel } from "../panels/SendNft";
+import { SendNftSuccessPanel } from "../panels/SendNftSuccessPanel";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +58,14 @@ export const router = createBrowserRouter([
     element: <SendSuccessPanel />,
   },
   {
+    path: ROUTE_NAMES.SEND_NFT,
+    element: <SendNftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SEND_NFT_SUCCESS,
+    element: <SendNftSuccessPanel />,
+  },
+  {
     path: ROUTE_NAMES.MENU,
     element: <MenuPanel />,
   },
@@ -77,6 +88,10 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.NFT,
     element: <NftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.NFT_DETAIL,
+    element: <NftDetailPanel />,
   },
   {
     path: ROUTE_NAMES.SWAP,

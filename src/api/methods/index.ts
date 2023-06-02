@@ -3,6 +3,7 @@ import axios from "axios";
 import { sign_message } from "../utils";
 import { store } from "../../store";
 import { userActions } from "../../store/reducers";
+import { NFT } from "../../types";
 
 const RequestInProgress = new Set();
 
@@ -151,6 +152,47 @@ export const sendCoins = async ({
   }
 };
 
+export const sendNft = async ({
+  payload,
+}: {
+  payload: {
+    nft_address: string;
+    to_address: string;
+  };
+}) => {
+  if (RequestInProgress.has("nft.transfer")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("nft.transfer");
+
+  try {
+    const signedMessage = await sign_message(payload, config.private_key);
+
+    const response = await axios
+      .post(
+        API_URL + "nft.transfer",
+        {
+          ...signedMessage,
+        },
+        {
+          headers: {
+            "X-API-Key": config.api_key,
+          },
+        }
+      )
+      .finally(() => {
+        RequestInProgress.delete("nft.transfer");
+      });
+
+    return response;
+  } catch (e) {
+    RequestInProgress.delete("nft.transfer");
+
+    return e;
+  }
+};
+
 export const checkDeposit = async () => {
   if (RequestInProgress.has("submitDeposit")) {
     throw new Error("busy");
@@ -222,9 +264,7 @@ export const getFiatRates = async () => {
   RequestInProgress.add("fiatRates");
 
   const response = await axios
-    .get(
-      API_URL + "fiatExchange.rates"
-    )
+    .get(API_URL + "fiatExchange.rates")
     .finally(() => {
       RequestInProgress.delete("fiatRates");
     });
@@ -259,7 +299,6 @@ export const initFiatPayment = async (amount: number) => {
   return response;
 };
 
-
 export const getDedustTokens = async () => {
   if (RequestInProgress.has("dedust")) {
     throw new Error("busy");
@@ -275,3 +314,21 @@ export const getDedustTokens = async () => {
 
   return response;
 };
+
+export async function getUserNFT(myToken: string): Promise<NFT[]> {
+  if (RequestInProgress.has("userNFT")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("userNFT");
+
+  const response = await axios
+    .get(
+      `https://tonapi.io/v2/accounts/${myToken}/nfts?limit=1000&offset=0&indirect_ownership=false`
+    )
+    .finally(() => {
+      RequestInProgress.delete("userNFT");
+    });
+
+  return response.data.nft_items as NFT[];
+}

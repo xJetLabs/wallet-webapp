@@ -14,5 +14,6 @@ export interface ButtonProps {
   className?: string;
   disabled?: boolean;
   hasHover?: boolean;
+  color?: string;
   onClick?: () => void;
 }

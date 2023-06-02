@@ -173,6 +173,16 @@ export const MenuPanel: FC = () => {
     navigate(ROUTE_NAMES.HISTORY);
   };
 
+  const navigateToNFT = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.NFT);
+  };
+
   const navigateToPurchaseTon = () => {
     try {
       window.navigator.vibrate(70);
@@ -273,7 +283,8 @@ export const MenuPanel: FC = () => {
               stretched
               mode={"secondary_with_accent_text"}
               before={<Picture24OutlineIcon />}
-              disabled
+              onClick={navigateToNFT}
+              // disabled
             >
               NFT
             </Button>
@@ -335,6 +346,7 @@ export const MenuPanel: FC = () => {
 
                     return (
                       <Link
+                        key={index}
                         href={cellData.action}
                         target={urlTarget}
                         className={styles.block_cell}

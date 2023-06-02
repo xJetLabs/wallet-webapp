@@ -9,9 +9,11 @@ export const Group: FC<GroupProps> = ({
   space = 0,
   children,
   className = "",
+  onClick,
 }) => {
   return (
     <div
+      onClick={onClick}
       className={cx(styles.__wrapper, {
         [className]: className,
       })}

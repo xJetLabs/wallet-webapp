@@ -11,6 +11,7 @@ export const Button: FC<ButtonProps> = ({
   children,
   stretched,
   disabled,
+  color,
   hasHover = true,
   size = "s",
   mode = "primary",
@@ -34,7 +35,9 @@ export const Button: FC<ButtonProps> = ({
         {before ? <div className={styles.__before}>{before}</div> : null}
         {children ? (
           <div className={styles.__content}>
-            <Text className={styles.__content_in}>{children}</Text>
+            <Text color={color} className={styles.__content_in}>
+              {children}
+            </Text>
           </div>
         ) : null}
       </div>
