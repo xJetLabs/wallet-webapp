@@ -23,10 +23,12 @@ import { NFT } from "../../types";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
+import { useTranslation } from "react-i18next";
 
 export const SendNftPanel: FC = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const { t } = useTranslation();
 
   const [formData, setFormData] = useState<{
     nft_address: string;
@@ -46,7 +48,7 @@ export const SendNftPanel: FC = () => {
   function openQRScanner() {
     try {
       (window as any).Telegram.WebApp.showScanQrPopup({
-        text: "Scan token",
+        text: t("Scan token"),
       });
     } catch (error) {
       console.error("[WebApp] Can't open Camera!");
@@ -148,7 +150,7 @@ export const SendNftPanel: FC = () => {
                 size={42}
                 // fallbackName={currencyData?.currency.slice(0, 1)}
                 src={
-                  ""
+                  currentNft?.metadata.image
                   // currencyData.currency === "ton" ? ton : currencyData?.image
                 }
               />
@@ -162,22 +164,14 @@ export const SendNftPanel: FC = () => {
                 color={"var(--color_primary_color)"}
                 style={{ textTransform: "uppercase" }}
               >
-                Kirill Kirilenko
-              </Text>
-              <Text
-                weight={"600"}
-                size={14}
-                lineHeight={"17px"}
-                color={"var(--accent)"}
-              >
-                325.5 TON
+                {currentNft?.metadata.name}
               </Text>
             </div>
           </Cell>
         </Block>
         <Group space={12}>
           <Input
-            placeholder="Enter receiver address"
+            placeholder={t("Enter receiver address") as string}
             after={
               <QRCopy17OutlineIcon
                 style={{ cursor: "pointer" }}
@@ -196,7 +190,7 @@ export const SendNftPanel: FC = () => {
           />
         </Group>
         <ErrorBlock
-          text={`Comission — 0.05 TON`}
+          text={`${t("Comission")} — 0.05 TON`}
           iconColor="var(--color_primary_color)"
           color="var(--background_block)"
           backgroundColor="transparent"
@@ -208,7 +202,7 @@ export const SendNftPanel: FC = () => {
           onClick={nftTransfer}
           before={isAwaitResponse ? <Date24OutlineIcon /> : null}
         >
-          {isAwaitResponse ? "Sending..." : "Send"}
+          {isAwaitResponse ? `${t("Sending")}...` : t("Send")}
         </Button>
         {error ? <ErrorBlock text={errorMapping(error)} /> : null}
       </Group>

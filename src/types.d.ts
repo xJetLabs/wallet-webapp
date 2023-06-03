@@ -7,7 +7,7 @@ export interface NFT {
     is_scam: boolean;
     icon: string;
   };
-  collection: {
+  collection?: {
     address: string;
     name: string;
   };

@@ -6,7 +6,9 @@ import { Avatar, Group, Panel, Text } from "../../components";
 import { getUserNFT } from "../../api";
 import styles from "./Nft.module.css";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
+import { NFT } from "../../types";
 
 function NftPanelLoader() {
   return (
@@ -51,9 +53,10 @@ function NftPanelLoader() {
 export function NftPanel() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
-  const [nfts, setNfts] = useState<any[]>([]);
+  const [nfts, setNfts] = useState<NFT[]>([]);
   const navigate = useNavigate();
   const myTonAddress = useSelector(myTonAddressSelector);
+  const { t } = useTranslation();
 
   function navigateToDetail(to: string) {
     try {
@@ -82,7 +85,7 @@ export function NftPanel() {
   useEffect(() => {
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
-      console.log(data);
+      // console.log(data);
     });
   }, [myTonAddress]);
 
@@ -107,7 +110,7 @@ export function NftPanel() {
                 color="var(--accent)"
                 style={{ margin: "0 auto" }}
               >
-                У вас нет NFT!
+                {t("You don't have NFTs!")}
               </Text>
             ) : (
               nfts.map((nft, index) => (

@@ -3,4 +3,5 @@ export interface SelectProps {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
+  style?: any;
 }

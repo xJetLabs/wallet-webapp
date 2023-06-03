@@ -7,6 +7,7 @@ import { getUserNFT } from "../../api";
 import { NFT } from "../../types";
 import { useSelector } from "react-redux";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
+import { useTranslation } from "react-i18next";
 
 export function NftDetailPanel() {
   const params = useParams();
@@ -14,6 +15,7 @@ export function NftDetailPanel() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [currentNft, setCurrentNtf] = useState<NFT>();
   const myTonAddress = useSelector(myTonAddressSelector);
+  const { t } = useTranslation();
 
   const navigateToSendNtf = () => {
     try {
@@ -63,21 +65,29 @@ export function NftDetailPanel() {
         size={14}
         lineHeight={"17px"}
         color="var(--color_gray_color)"
+        style={{ width: "100%" }}
       >
         {currentNft?.metadata.description}
       </Text>
 
-      <Text
-        style={{ width: "100%" }}
-        size={14}
-        weight="400"
-        color="var(--color_primary_color)"
-      >
-        Collection{" "}
-        <Text weight="600" size={14} lineHeight={"17px"} color="var(--accent)">
-          RickKir
+      {currentNft?.collection && (
+        <Text
+          style={{ width: "100%" }}
+          size={14}
+          weight="400"
+          color="var(--color_primary_color)"
+        >
+          {t("Collection")}{" "}
+          <Text
+            weight="600"
+            size={14}
+            lineHeight={"17px"}
+            color="var(--accent)"
+          >
+            {currentNft.collection.name}
+          </Text>
         </Text>
-      </Text>
+      )}
 
       <Button
         onClick={navigateToSendNtf}
@@ -85,7 +95,7 @@ export function NftDetailPanel() {
         size="m"
         stretched
       >
-        Send
+        {t("Send")}
       </Button>
     </div>
   );

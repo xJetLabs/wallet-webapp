@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {
   apiInit,
@@ -25,6 +26,7 @@ import styles from "./Load.module.css";
 export const LoadPanel: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const requestTokenData = async () => {
@@ -59,6 +61,9 @@ export const LoadPanel: FC = () => {
 
     const requestMyServerData = async () => {
       const response = await getMyServerData();
+
+      const langCode = response.data.lang_code;
+      i18n.changeLanguage(langCode);
 
       dispatch(userActions.setServerData(response.data));
     };

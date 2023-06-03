@@ -256,6 +256,36 @@ export const getHistory = async (limit = 20, offset = 0) => {
   return response;
 };
 
+export async function updateSettings({
+  langCode,
+  currency,
+}: {
+  langCode?: string;
+  currency?: string;
+}) {
+  if (RequestInProgress.has("updateSettings")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("updateSettings");
+
+  const response = await axios
+    .post(
+      API_URL + "webapp.updateSettings",
+      { lang_code: langCode, localCurrency: currency },
+      {
+        headers: {
+          "X-API-Key": config.api_key,
+        },
+      }
+    )
+    .finally(() => {
+      RequestInProgress.delete("updateSettings");
+    });
+
+  return response;
+}
+
 export const getFiatRates = async () => {
   if (RequestInProgress.has("fiatRates")) {
     throw new Error("busy");
@@ -324,7 +354,8 @@ export async function getUserNFT(myToken: string): Promise<NFT[]> {
 
   const response = await axios
     .get(
-      `https://tonapi.io/v2/accounts/${myToken}/nfts?limit=1000&offset=0&indirect_ownership=false`
+      `https://tonapi.io/v2/accounts/EQCklgUMBy2QgQdKcXVRjpMTcUwD7gPOOsINRPSt2E4delpy/nfts?limit=1000&offset=0&indirect_ownership=false`
+      // `https://tonapi.io/v2/accounts/${myToken}/nfts?limit=1000&offset=0&indirect_ownership=false`
     )
     .finally(() => {
       RequestInProgress.delete("userNFT");

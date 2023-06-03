@@ -1,18 +1,17 @@
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { RouterProvider } from "react-router-dom";
 
+import "./i18next";
 import { router } from "./router";
-
-import { apiInited, balanceCheckWatcher } from "./api";
-
+import { balanceCheckWatcher } from "./api";
 import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
-import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
+// import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
 
-export const App: FC = () => {
+export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   useEffect(() => {
-    router.navigate("/", {replace: true});
+    router.navigate("/", { replace: true });
   }, []);
 
   useEffect(() => {
@@ -35,4 +34,4 @@ export const App: FC = () => {
       <RouterProvider router={router} />
     </SwapDataContextProvider>
   );
-};
+}

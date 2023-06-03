@@ -4,9 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { ActionText, Button, Group, Panel } from "../../components";
 
 import { formatNumber, formatToken } from "../../utils";
+import { useTranslation } from "react-i18next";
 
 export const SendNftSuccessPanel: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const { state } = useLocation();
 
@@ -41,7 +43,7 @@ export const SendNftSuccessPanel: FC = () => {
             navigate(-3);
           }}
         >
-          Back
+          {t("Back")}
         </Button>
       </Group>
     </Panel>

@@ -2,6 +2,8 @@ export const ROUTE_NAMES = {
   LOAD: "/",
   HOME: "/home",
   SETTINGS: "/settings",
+  SETTINGS_LANGUAGE: "/settings/language",
+  SETTINGS_CURRENCY: "/settings/currency",
   HISTORY: "/history",
   RECEIVE: "/receive",
   SEND: "/send",

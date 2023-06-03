@@ -90,4 +90,8 @@ export const allCurrenciesSelector = (state: any) => {
 
 export const availableFiatsSelector = (state: any) => {
   return state[SLICE_NAMES.USER].availableFiats;
-}
+};
+
+export const myServerData = (state: any) => {
+  return state[SLICE_NAMES.USER].serverData;
+};

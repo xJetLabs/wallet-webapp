@@ -2,12 +2,14 @@ import { FC, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { ActionText, Button, Group, Panel } from "../../components";
+import { useTranslation } from "react-i18next";
 
 import { formatNumber, formatToken } from "../../utils";
 
 export const SendSuccessPanel: FC = () => {
   const navigate = useNavigate();
 
+  const { t } = useTranslation();
   const { state } = useLocation();
 
   useEffect(() => {
@@ -43,7 +45,7 @@ export const SendSuccessPanel: FC = () => {
             navigate(-3);
           }}
         >
-          Back
+          {t("Back")}
         </Button>
       </Group>
     </Panel>

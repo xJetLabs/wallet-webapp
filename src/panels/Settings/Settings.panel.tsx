@@ -1,16 +1,94 @@
-import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Block, Cell, Group, Link, Panel, Text } from "../../components";
+import {
+  Block,
+  Cell,
+  Group,
+  Input,
+  Link,
+  Panel,
+  Select,
+  Text,
+} from "../../components";
 
 import { ReactComponent as GoArrow24OutlineIcon } from "../../icons/GoArrow24Outline.svg";
 import { ReactComponent as AstralyxLogoIcon } from "../../icons/AstralyxLogo.svg";
 
 import styles from "./Settings.module.css";
+import { ROUTE_NAMES } from "../../router/constants";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { myServerData } from "../../store/reducers/user/user.selectors";
 
-export const SettingsPanel: FC = () => {
+export function SettingsPanel() {
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+
+  const navigateToLanguageSelect = () => {
+    try {
+      window.navigator.vibrate(70); // Вибрация
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.SETTINGS_LANGUAGE);
+  };
+
+  const navigateToCurrencySelect = () => {
+    try {
+      window.navigator.vibrate(70); // Вибрация
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.SETTINGS_CURRENCY);
+  };
+
+  const myData = useSelector(myServerData);
+
   return (
     <Panel>
       <Group space={24}>
+        <Group space={12}>
+          <Text
+            weight={"600"}
+            size={14}
+            lineHeight={"17px"}
+            color={"var(--accent)"}
+          >
+            {t("Wallet")}
+          </Text>
+
+          <Input
+            value={t("Language") as string}
+            readonly
+            after={
+              <Select
+                value={
+                  i18n.language === "en"
+                    ? t("English")
+                    : i18n.language === "ru"
+                    ? t("Russian")
+                    : ""
+                }
+                onClick={navigateToLanguageSelect}
+              />
+            }
+          />
+
+          <Input
+            value={t("Currency") as string}
+            readonly
+            after={
+              <Select
+                style={{ textTransform: "uppercase" }}
+                value={myData.localCurrency}
+                onClick={navigateToCurrencySelect}
+              />
+            }
+          />
+        </Group>
+
         <Group space={24}>
           <Text
             weight={"600"}
@@ -18,7 +96,7 @@ export const SettingsPanel: FC = () => {
             lineHeight={"17px"}
             color={"var(--accent)"}
           >
-            OTHER
+            {t("OTHER")}
           </Text>
           <Link href="https://github.com/xJetLabs">
             <Cell
@@ -33,7 +111,7 @@ export const SettingsPanel: FC = () => {
               after={<GoArrow24OutlineIcon color={"var(--accent)"} />}
               withCursor
             >
-              Channel
+              {t("Channel")}
             </Cell>
           </Link>
           <Link href="https://teletype.in/@xjetswap/faq">
@@ -49,10 +127,11 @@ export const SettingsPanel: FC = () => {
               after={<GoArrow24OutlineIcon color={"var(--accent)"} />}
               withCursor
             >
-              Support
+              {t("Support")}
             </Cell>
           </Link>
         </Group>
+
         <Link href="https://astralyx.dev/">
           <Block className={styles.__astalyx_info}>
             <Text weight={"600"} size={14} lineHeight={"17px"}>
@@ -64,4 +143,4 @@ export const SettingsPanel: FC = () => {
       </Group>
     </Panel>
   );
-};
+}

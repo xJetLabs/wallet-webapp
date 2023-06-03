@@ -2,13 +2,11 @@ import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import cx from "classnames";
+import { useTranslation } from "react-i18next";
 
 import { isMobile } from "../../constants";
-
 import { formatNumber } from "../../utils";
-
 import { ROUTE_NAMES } from "../../router/constants";
-
 import {
   myTonBalanceSelector,
   myUnverifiedBalancesSelector,
@@ -17,7 +15,6 @@ import {
   totalTONValueSelector,
   totalUSDValueSelector,
 } from "../../store/reducers/user/user.selectors";
-
 import {
   ActionText,
   Avatar,
@@ -48,6 +45,7 @@ export const HomePanel: FC = () => {
   const [searchInputFocused, setSearchInputFocused] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const myVerifiedBalances = useSelector(myVerifiedBalancesSelector);
   const myUnverifiedBalances = useSelector(myUnverifiedBalancesSelector);
@@ -187,7 +185,7 @@ export const HomePanel: FC = () => {
           })}
         >
           <ActionText
-            top="Total balance"
+            top={t("Total balance") as string}
             middle={`${formatNumber(totalTONValue || 0)} TON`}
             bottom={`≈ ${formatNumber(totalUSDValue || 0, {
               minimumFractionDigits: 3,
@@ -203,7 +201,7 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToSend}
                 >
-                  Send
+                  {t("Send")}
                 </Button>
                 <Button
                   stretched
@@ -211,7 +209,7 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToReceive}
                 >
-                  Receive
+                  {t("Receive")}
                 </Button>
               </div>
               <div className={styles.__buttonGroup}>
@@ -221,7 +219,7 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToMenu}
                 >
-                  More
+                  {t("More")}
                 </Button>
                 <Button
                   stretched
@@ -229,7 +227,7 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToHistory}
                 >
-                  History
+                  {t("History")}
                 </Button>
                 <Button
                   stretched
@@ -237,12 +235,12 @@ export const HomePanel: FC = () => {
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToSettings}
                 >
-                  Settings
+                  {t("Settings")}
                 </Button>
               </div>
             </Group>
             <Input
-              placeholder="Search..."
+              placeholder={`${t("Search")}...`}
               onChange={onSearchInputChange}
               after={<Search17OutlineIcon color="var(--accent)" />}
               className={styles.__search_input}

@@ -23,6 +23,8 @@ import {
 } from "../panels";
 import { SendNftPanel } from "../panels/SendNft";
 import { SendNftSuccessPanel } from "../panels/SendNftSuccessPanel";
+import { SelectLanguage } from "../panels/Settings/SelectLanguage";
+import { SelectCurrency } from "../panels/Settings/SelectCurrency";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SETTINGS,
     element: <SettingsPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SETTINGS_LANGUAGE,
+    element: <SelectLanguage />,
+  },
+  {
+    path: ROUTE_NAMES.SETTINGS_CURRENCY,
+    element: <SelectCurrency />,
   },
   {
     path: ROUTE_NAMES.HISTORY,

@@ -12,8 +12,11 @@ import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.s
 import { ReactComponent as CopySuccess24OutlineIcon } from "../../icons/CopySuccess24Outline.svg";
 
 import styles from "./Receive.module.css";
+import { useTranslation } from "react-i18next";
 
 export const ReceivePanel: FC = () => {
+  const { t } = useTranslation();
+
   const [buttonDisabled, setIsButtonDisabled] = useState<boolean>(false);
   const [copySuccess, setCopySuccess] = useState<boolean>(false);
 
@@ -75,7 +78,7 @@ export const ReceivePanel: FC = () => {
       <Group space={12}>
         <Group space={24} className={styles.__qr_wrapper}>
           <Text weight="600" size={14} lineHeight={"17px"}>
-            Scan this QR-code to transfer funds
+            {t("Scan this QR-code to transfer funds")}
           </Text>
           <QRCodeSVG
             width={256}
@@ -85,7 +88,9 @@ export const ReceivePanel: FC = () => {
             bgColor="transparent"
           />
           <Text weight="600" size={14} lineHeight={"17px"}>
-            TON deposit from 0.1 TON, deposit with any jettons - unlimited.
+            {t(
+              "TON deposit from 0.1 TON, deposit with any jettons - unlimited."
+            )}
           </Text>
         </Group>
         <Input
@@ -113,7 +118,7 @@ export const ReceivePanel: FC = () => {
           onClick={check}
           disabled={buttonDisabled}
         >
-          Check deposit
+          {t("Check deposit")}
         </Button>
       </Group>
     </Panel>
