@@ -1,16 +1,16 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-
-import { Avatar, Block, Cell, Group, Panel, Text } from "../../components";
-import { updateSettings } from "../../api";
 import { useDispatch, useSelector } from "react-redux";
+
+import { Block, Cell, Group, Panel, Text } from "../../components";
 import { userActions } from "../../store/reducers";
+import { updateSettings } from "../../api";
 import { myServerData } from "../../store/reducers/user/user.selectors";
 
 export function SelectCurrency() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const myData = useSelector(myServerData);
 
   const allCurrencies = [
@@ -54,16 +54,15 @@ export function SelectCurrency() {
       }
 
       // Логика изменения валюты глобально
-      updateSettings({ langCode: i18n.language, currency }).then(() => {
+      updateSettings({ currency }).then(() => {
         dispatch(
           userActions.setServerData({
             ...myData,
             localCurrency: currency,
-            lang_code: i18n.language,
           })
         );
       });
-      navigate(-2); // Возвращаем в главное меню
+      navigate(-1); // Возвращаемся назад
     };
   }
 

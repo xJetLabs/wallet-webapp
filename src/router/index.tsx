@@ -25,6 +25,9 @@ import { SendNftPanel } from "../panels/SendNft";
 import { SendNftSuccessPanel } from "../panels/SendNftSuccessPanel";
 import { SelectLanguage } from "../panels/Settings/SelectLanguage";
 import { SelectCurrency } from "../panels/Settings/SelectCurrency";
+import { SellNftPanel } from "../panels/SellNft";
+import { SellNftSuccessPanel } from "../panels/SellNftSuccess";
+import { SellNftCurrencies } from "../panels/SellNft/SellNftCurrencies";
 
 export const router = createBrowserRouter([
   {
@@ -74,6 +77,18 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SEND_NFT_SUCCESS,
     element: <SendNftSuccessPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT,
+    element: <SellNftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT_SELECTCURRENCY,
+    element: <SellNftCurrencies />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT_SUCCESS,
+    element: <SellNftSuccessPanel />,
   },
   {
     path: ROUTE_NAMES.MENU,

@@ -10,6 +10,7 @@ export const Input: FC<InputProps> = ({
   defaultValue,
   value,
   after,
+  inputMode,
   indicator,
   readonly,
   placeholder,
@@ -39,6 +40,7 @@ export const Input: FC<InputProps> = ({
     >
       <div className={styles.__wrapper_in}>
         <input
+          inputMode={inputMode}
           ref={inputRef}
           className={styles.__content}
           onChange={onChange}

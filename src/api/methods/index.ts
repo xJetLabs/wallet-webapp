@@ -193,6 +193,48 @@ export const sendNft = async ({
   }
 };
 
+export const sellNft = async ({
+  payload,
+}: {
+  payload: {
+    nft_address: string;
+    currency: string;
+    price: number;
+  };
+}) => {
+  if (RequestInProgress.has("nft.castodialSell")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("nft.castodialSell");
+
+  try {
+    const signedMessage = await sign_message(payload, config.private_key);
+
+    const response = await axios
+      .post(
+        API_URL + "nft.castodialSell",
+        {
+          ...signedMessage,
+        },
+        {
+          headers: {
+            "X-API-Key": config.api_key,
+          },
+        }
+      )
+      .finally(() => {
+        RequestInProgress.delete("nft.castodialSell");
+      });
+
+    return response;
+  } catch (e) {
+    RequestInProgress.delete("nft.castodialSell");
+
+    return e;
+  }
+};
+
 export const checkDeposit = async () => {
   if (RequestInProgress.has("submitDeposit")) {
     throw new Error("busy");
@@ -272,7 +314,7 @@ export async function updateSettings({
   const response = await axios
     .post(
       API_URL + "webapp.updateSettings",
-      { lang_code: langCode, localCurrency: currency },
+      { language: langCode, localCurrency: currency },
       {
         headers: {
           "X-API-Key": config.api_key,

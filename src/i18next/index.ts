@@ -55,6 +55,8 @@ const resources = {
       Back: "Back",
       "Check deposit": "Check deposit",
       "Waiting for detail": "Waiting for details",
+      Sell: "Sell",
+      "Successfully sold for": "Successfully sold for",
     },
   },
   ru: {
@@ -109,6 +111,8 @@ const resources = {
       Back: "Назад",
       "Check deposit": "Проверить депозит",
       "Waiting for detail": "В ожидании подробностей",
+      Sell: "Продать",
+      "Successfully sold for": "Успешно продано за",
     },
   },
 };

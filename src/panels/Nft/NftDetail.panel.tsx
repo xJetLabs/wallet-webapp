@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import styles from "./NftDetail.panel.module.css";
-import { Avatar, Button, Text } from "../../components";
+import { Avatar, Block, Button, Text } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserNFT } from "../../api";
 import { NFT } from "../../types";
@@ -25,6 +25,16 @@ export function NftDetailPanel() {
     }
 
     navigate(`/nft/${params.address}/send`);
+  };
+
+  const navigateToSellNtf = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (error) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(`/nft/${params.address}/sell`);
   };
 
   useEffect(() => {
@@ -89,14 +99,26 @@ export function NftDetailPanel() {
         </Text>
       )}
 
-      <Button
-        onClick={navigateToSendNtf}
-        color="var(--color_black_color)"
-        size="m"
-        stretched
-      >
-        {t("Send")}
-      </Button>
+      <div className={styles.__button_group}>
+        <Button
+          onClick={navigateToSendNtf}
+          color="var(--color_black_color)"
+          size="m"
+          stretched
+        >
+          {t("Send")}
+        </Button>
+
+        <Button
+          onClick={navigateToSellNtf}
+          color="var(--color_primary_color)"
+          stretched
+          size="m"
+          className={styles.__sell_button}
+        >
+          {t("Sell")}
+        </Button>
+      </div>
     </div>
   );
 }
