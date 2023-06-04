@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ContentLoader from "react-content-loader";
 import { useNavigate } from "react-router-dom";
 
@@ -52,7 +52,7 @@ function NftPanelLoader() {
 
 export function NftPanel() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  // const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const [nfts, setNfts] = useState<NFT[]>([]);
   const navigate = useNavigate();
   const myTonAddress = useSelector(myTonAddressSelector);
@@ -68,23 +68,24 @@ export function NftPanel() {
     navigate(to);
   }
 
-  useEffect(() => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
+  // useEffect(() => {
+  //   if (timerRef.current) {
+  //     clearTimeout(timerRef.current);
+  //   }
 
-    timerRef.current = setTimeout(() => {
-      setIsLoaded(true);
-    }, 2000);
+  //   timerRef.current = setTimeout(() => {
+  //     setIsLoaded(true);
+  //   }, 2000);
 
-    return () => {
-      clearTimeout(timerRef.current);
-    };
-  }, []);
+  //   return () => {
+  //     clearTimeout(timerRef.current);
+  //   };
+  // }, []);
 
   useEffect(() => {
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
+      setIsLoaded(true);
       // console.log(data);
     });
   }, [myTonAddress]);

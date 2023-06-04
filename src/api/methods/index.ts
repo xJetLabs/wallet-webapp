@@ -396,8 +396,8 @@ export async function getUserNFT(myToken: string): Promise<NFT[]> {
 
   const response = await axios
     .get(
-      `https://tonapi.io/v2/accounts/EQCklgUMBy2QgQdKcXVRjpMTcUwD7gPOOsINRPSt2E4delpy/nfts?limit=1000&offset=0&indirect_ownership=false`
-      // `https://tonapi.io/v2/accounts/${myToken}/nfts?limit=1000&offset=0&indirect_ownership=false`
+      // `https://tonapi.io/v2/accounts/EQCklgUMBy2QgQdKcXVRjpMTcUwD7gPOOsINRPSt2E4delpy/nfts?limit=1000&offset=0&indirect_ownership=false`
+      `https://tonapi.io/v2/accounts/${myToken}/nfts?limit=1000&offset=0&indirect_ownership=false`
     )
     .finally(() => {
       RequestInProgress.delete("userNFT");
