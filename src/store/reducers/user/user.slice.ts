@@ -10,8 +10,9 @@ const initialState: any = {
   allCurrencies: null,
   history: [],
   availableFiats: [
-    { base_symbol: "RUB", last_price: 10000, price: 10000, minAmount: 5 }
+    { base_symbol: "RUB", last_price: 10000, price: 10000, minAmount: 5 },
   ],
+  exchangesPair: [],
 };
 
 const userSlice = createSlice({
@@ -88,6 +89,14 @@ const userSlice = createSlice({
       }
 
       draft.availableFiats = action.payload;
+    },
+
+    setExchangesPair(draft, action) {
+      if (!action.payload) {
+        return;
+      }
+
+      draft.exchangesPair = action.payload;
     },
   },
 });

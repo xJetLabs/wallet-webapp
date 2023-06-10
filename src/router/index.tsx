@@ -28,6 +28,9 @@ import { SelectCurrency } from "../panels/Settings/SelectCurrency";
 import { SellNftPanel } from "../panels/SellNft";
 import { SellNftSuccessPanel } from "../panels/SellNftSuccess";
 import { SellNftCurrencies } from "../panels/SellNft/SellNftCurrencies";
+import { TradingPanel } from "../panels/Trading";
+import { TradingSelectPanel } from "../panels/Trading/TradingSelect.panel";
+import { TradingSuccessPanel } from "../panels/Trading/TradingSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -125,6 +128,18 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SWAP_SELECT,
     element: <SwapSelect />,
+  },
+  {
+    path: ROUTE_NAMES.TRADING,
+    element: <TradingPanel />,
+  },
+  {
+    path: ROUTE_NAMES.TRADING_SELECT,
+    element: <TradingSelectPanel />,
+  },
+  {
+    path: ROUTE_NAMES.TRADING_SUCCESS,
+    element: <TradingSuccessPanel />,
   },
 ]);
 

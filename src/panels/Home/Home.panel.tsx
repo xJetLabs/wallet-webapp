@@ -45,7 +45,7 @@ export const HomePanel: FC = () => {
   const [searchInputFocused, setSearchInputFocused] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const myVerifiedBalances = useSelector(myVerifiedBalancesSelector);
   const myUnverifiedBalances = useSelector(myUnverifiedBalancesSelector);
@@ -298,7 +298,7 @@ const renderJettonItem = (v: any, i: number) => {
     : "_blank";
 
   return (
-    <Link href={ProjectURL} target={urlTarget} withCursor>
+    <Link key={i} href={ProjectURL} target={urlTarget} withCursor>
       <Cell
         key={`Jetton_${i}`}
         before={

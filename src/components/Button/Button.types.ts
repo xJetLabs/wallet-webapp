@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export interface ButtonProps {
   size?: "s" | "m" | "l" | "content";
@@ -15,5 +15,6 @@ export interface ButtonProps {
   disabled?: boolean;
   hasHover?: boolean;
   color?: string;
+  style?: CSSProperties;
   onClick?: () => void;
 }

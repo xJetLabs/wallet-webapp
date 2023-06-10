@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import {
   apiInit,
   getAllCurrencies,
+  getExchangesPair,
   getMyBalance,
   getMyServerData,
   initMainnet,
@@ -78,6 +79,12 @@ export const LoadPanel: FC = () => {
       });
     };
 
+    const requestExhangesPair = async () => {
+      const response = await getExchangesPair();
+
+      dispatch(userActions.setExchangesPair(response.pairs));
+    };
+
     if (mainnetInited) {
       return;
     }
@@ -85,7 +92,11 @@ export const LoadPanel: FC = () => {
     initMainnet().then(() => {
       requestAllCurrencies();
       requestTokenData().then(() => {
-        Promise.all([requestMyServerData(), requestMyBalance()]);
+        Promise.all([
+          requestMyServerData(),
+          requestExhangesPair(),
+          requestMyBalance(),
+        ]);
       });
     });
   }, [navigate, dispatch]);

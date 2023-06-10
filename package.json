@@ -18,6 +18,7 @@
     "react-content-loader": "^6.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^12.3.1",
+    "react-number-format": "^5.2.2",
     "react-qr-code": "^2.0.11",
     "react-qrcode-logo": "^2.8.0",
     "react-redux": "^8.0.5",

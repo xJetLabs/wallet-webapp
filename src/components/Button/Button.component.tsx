@@ -12,6 +12,7 @@ export const Button: FC<ButtonProps> = ({
   stretched,
   disabled,
   color,
+  style,
   hasHover = true,
   size = "s",
   mode = "primary",
@@ -20,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
+      style={style}
       className={cx(styles.__wrapper, {
         [styles.__disabled]: disabled,
         [styles.__stretched]: stretched,

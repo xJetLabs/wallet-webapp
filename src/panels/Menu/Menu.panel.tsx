@@ -185,6 +185,16 @@ export const MenuPanel: FC = () => {
     navigate(ROUTE_NAMES.NFT);
   };
 
+  const navigateToSwap = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.TRADING);
+  };
+
   const navigateToPurchaseTon = () => {
     try {
       window.navigator.vibrate(70);
@@ -277,7 +287,8 @@ export const MenuPanel: FC = () => {
               stretched
               mode={"secondary_with_accent_text"}
               before={<Swap24OutlineIcon />}
-              disabled
+              onClick={navigateToSwap}
+              // disabled
             >
               {t("Swap")}
             </Button>

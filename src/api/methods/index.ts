@@ -405,3 +405,54 @@ export async function getUserNFT(myToken: string): Promise<NFT[]> {
 
   return response.data.nft_items as NFT[];
 }
+
+export async function getExchangesPair() {
+  if (RequestInProgress.has("exchanges.pair")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("exchanges.pairs");
+
+  const response = await axios.get(API_URL + "exchanges.pairs").finally(() => {
+    RequestInProgress.delete("exchanges.pairs");
+  });
+
+  return response.data;
+}
+
+export async function getExchangesEstimate(data: {
+  pair: string[];
+  type: "buy" | "sell";
+  amount: number;
+}) {
+  const response = await axios.post(API_URL + "exchanges.estimate", data, {
+    headers: {
+      "X-API-Key": config.api_key,
+    },
+  });
+
+  return response.data;
+}
+
+export async function createOrder(data: {
+  pair: string[];
+  type: "buy" | "sell";
+  amount: number;
+  price?: number;
+}) {
+  if (RequestInProgress.has("exchanges.createOrder")) {
+    throw new Error("busy");
+  }
+
+  const response = await axios
+    .post(API_URL + "exchanges.createOrder", data, {
+      headers: {
+        "X-API-Key": config.api_key,
+      },
+    })
+    .finally(() => {
+      RequestInProgress.delete("exchanges.createOrder");
+    });
+
+  return response.data;
+}

@@ -6,6 +6,7 @@ import { router } from "./router";
 import { balanceCheckWatcher } from "./api";
 import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
 import { JetTokensContextProvider } from "./providers/JetTokensContextProvider";
+import { ExchangePairContextProvider } from "./providers/ExchangePairContextProvider";
 // import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
 
 export function App() {
@@ -31,10 +32,12 @@ export function App() {
   }, []);
 
   return (
-    <JetTokensContextProvider>
-      <SwapDataContextProvider>
-        <RouterProvider router={router} />
-      </SwapDataContextProvider>
-    </JetTokensContextProvider>
+    <ExchangePairContextProvider>
+      <JetTokensContextProvider>
+        <SwapDataContextProvider>
+          <RouterProvider router={router} />
+        </SwapDataContextProvider>
+      </JetTokensContextProvider>
+    </ExchangePairContextProvider>
   );
 }
