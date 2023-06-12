@@ -43,7 +43,7 @@ export function TradingPanel() {
   function navigateToSelectExchangePair() {
     vibrate();
 
-    navigate(ROUTE_NAMES.TRADING_SELECT);
+    navigate(ROUTE_NAMES.SWAP_SELECT);
   }
 
   function vibrate() {
@@ -71,7 +71,7 @@ export function TradingPanel() {
       }
 
       if (res.success) {
-        return navigate(ROUTE_NAMES.TRADING_SUCCESS);
+        return navigate(ROUTE_NAMES.SWAP_SUCCESS);
       }
     });
   }
@@ -90,7 +90,7 @@ export function TradingPanel() {
   }, [activeSwitch, selectedExchangePair, price, buy, navigate]);
 
   if (!selectedExchangePair.assets) {
-    return <Navigate to={ROUTE_NAMES.TRADING_SELECT} />;
+    return <Navigate to={ROUTE_NAMES.SWAP_SELECT} />;
   }
 
   return (

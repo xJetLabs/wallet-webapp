@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 
 import styles from "./NftDetail.panel.module.css";
-import { Avatar, Block, Button, Text } from "../../components";
+import { Avatar, Button, Text } from "../../components";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUserNFT } from "../../api";
 import { NFT } from "../../types";
 import { useSelector } from "react-redux";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "../../hooks/useQuery";
 
 export function NftDetailPanel() {
   const params = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const query: any = useQuery();
+
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [currentNft, setCurrentNtf] = useState<NFT>();
   const myTonAddress = useSelector(myTonAddressSelector);
-  const { t } = useTranslation();
 
   const navigateToSendNtf = () => {
     try {
@@ -38,14 +41,36 @@ export function NftDetailPanel() {
   };
 
   useEffect(() => {
-    getUserNFT(myTonAddress).then((data) => {
+    // Если нету tonAddress в параметрах url то применяются эти стили как дефолтные
+    if (query.get("tonAddress") !== null) {
+      document.body.style.setProperty("--tg-color-scheme", "dark");
+      document.body.style.setProperty("--tg-theme-bg-color", "#212121");
+      document.body.style.setProperty("--tg-theme-button-color", "#8774e1");
+      document.body.style.setProperty(
+        "--tg-theme-button-text-color",
+        "#ffffff"
+      );
+      document.body.style.setProperty("--tg-theme-hint-color", "#aaaaaa");
+      document.body.style.setProperty("--tg-theme-link-color", "#8774e1");
+      document.body.style.setProperty(
+        "--tg-theme-secondary-bg-color",
+        "#181818"
+      );
+      document.body.style.setProperty("--tg-theme-text-color", "#fff");
+      document.body.style.setProperty("--tg-viewport-height", "100vh");
+      document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
+    }
+  }, [query]);
+
+  useEffect(() => {
+    getUserNFT(myTonAddress || query.get("tonAddress")).then((data) => {
       const current = data.filter(
         (item: any) => item.address === params.address
       );
       setCurrentNtf(current[0]);
       setIsLoaded(true);
     });
-  }, [params.address, myTonAddress]);
+  }, [params.address, myTonAddress, query]);
 
   if (!isLoaded) return <p>loading...</p>;
 

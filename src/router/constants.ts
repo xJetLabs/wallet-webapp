@@ -23,7 +23,5 @@ export const ROUTE_NAMES = {
   NFT_DETAIL: "/nft/:address",
   SWAP: "/swap",
   SWAP_SELECT: "/swap/select",
-  TRADING: "/trading",
-  TRADING_SELECT: "/trading/select",
-  TRADING_SUCCESS: "/trading/success",
+  SWAP_SUCCESS: "/swap/success",
 };

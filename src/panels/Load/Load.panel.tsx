@@ -61,22 +61,32 @@ export const LoadPanel: FC = () => {
     };
 
     const requestMyServerData = async () => {
-      const response = await getMyServerData();
+      try {
+        const response = await getMyServerData();
 
-      const langCode = response.data.lang_code;
-      i18n.changeLanguage(langCode);
+        const langCode = response.data.lang_code;
+        i18n.changeLanguage(langCode);
 
-      dispatch(userActions.setServerData(response.data));
+        dispatch(userActions.setServerData(response.data));
+      } catch (error: any) {
+        if (error.response.data.error === "Unauthorized") {
+          console.log("[xJetWallet] You are not authorized!");
+        }
+      }
     };
 
     const requestMyBalance = async () => {
-      const response = await getMyBalance();
+      try {
+        const response = await getMyBalance();
 
-      dispatch(userActions.setBalances(response.data?.balances));
+        dispatch(userActions.setBalances(response.data?.balances));
 
-      navigate(ROUTE_NAMES.HOME, {
-        replace: true,
-      });
+        navigate(ROUTE_NAMES.HOME, {
+          replace: true,
+        });
+      } catch (e) {
+        console.log("[xJetWallet | Balance] You are not authorized!");
+      }
     };
 
     const requestExhangesPair = async () => {
@@ -85,6 +95,7 @@ export const LoadPanel: FC = () => {
       dispatch(userActions.setExchangesPair(response.pairs));
     };
 
+    // if (mainnetInited) {
     if (mainnetInited) {
       return;
     }
@@ -99,7 +110,7 @@ export const LoadPanel: FC = () => {
         ]);
       });
     });
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, i18n]);
 
   return (
     <Panel centerVertical centerHorizontal>

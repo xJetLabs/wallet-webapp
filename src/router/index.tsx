@@ -14,8 +14,6 @@ import {
   SendPanel,
   SendSuccessPanel,
   SettingsPanel,
-  SwapPanel,
-  SwapSelect,
   PurchaseTonPage,
   PurchaseFiatSelect,
   PurchaseTonFirstStep,
@@ -121,32 +119,36 @@ export const router = createBrowserRouter([
     path: ROUTE_NAMES.NFT_DETAIL,
     element: <NftDetailPanel />,
   },
+  // {
+  //   path: ROUTE_NAMES.SWAP,
+  //   element: <SwapPanel />,
+  // },
+  // {
+  //   path: ROUTE_NAMES.SWAP_SELECT,
+  //   element: <SwapSelect />,
+  // },
   {
     path: ROUTE_NAMES.SWAP,
-    element: <SwapPanel />,
-  },
-  {
-    path: ROUTE_NAMES.SWAP_SELECT,
-    element: <SwapSelect />,
-  },
-  {
-    path: ROUTE_NAMES.TRADING,
     element: <TradingPanel />,
   },
   {
-    path: ROUTE_NAMES.TRADING_SELECT,
+    path: ROUTE_NAMES.SWAP_SELECT,
     element: <TradingSelectPanel />,
   },
   {
-    path: ROUTE_NAMES.TRADING_SUCCESS,
+    path: ROUTE_NAMES.SWAP_SUCCESS,
     element: <TradingSuccessPanel />,
   },
 ]);
 
 router.subscribe((v) => {
-  if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
-    (window as any).Telegram.WebApp.BackButton.show();
-  } else {
-    (window as any).Telegram.WebApp.BackButton.hide();
+  try {
+    if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
+      (window as any).Telegram.WebApp.BackButton.show();
+    } else {
+      (window as any).Telegram.WebApp.BackButton.hide();
+    }
+  } catch (e) {
+    console.log("[xJetWallet] Please login via Telegram!");
   }
 });

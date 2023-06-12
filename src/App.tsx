@@ -13,6 +13,13 @@ export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   useEffect(() => {
+    if (
+      window.location.pathname.includes("/receive") ||
+      window.location.pathname.includes("/nft/")
+    ) {
+      return;
+    }
+
     router.navigate("/", { replace: true });
   }, []);
 
