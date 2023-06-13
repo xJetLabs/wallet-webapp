@@ -30,9 +30,9 @@ export function App() {
 
   useEffect(() => {
     if (
-      window.location.pathname.includes("/receive?tonAddress") ||
+      window.location.pathname.includes("/receive?tonAddress=") ||
       (window.location.pathname.includes("/nft/") &&
-        window.location.pathname.includes("?tonAddress"))
+        window.location.pathname.includes("?tonAddress="))
     ) {
       return;
     }
