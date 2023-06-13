@@ -14,7 +14,7 @@ export const ROUTE_NAMES = {
   SELL_NFT: "/nft/:address/sell",
   SELL_NFT_SELECTCURRENCY: "/nft/:address/sell/selectCurrency",
   SELL_NFT_SUCCESS: "/nft/sell/success",
-  MENU: "/menu",
+  MENU: "/market",
   MENU_EXPANDED: "/menuexpanded",
   BUY_TON: "/purchaseTon",
   FIAT_SELECT: "/pTonSelectFiat",
