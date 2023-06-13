@@ -1,6 +1,7 @@
-import { FC, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContentLoader from "react-content-loader";
+import { useTranslation } from "react-i18next";
 
 import { ROUTE_NAMES } from "../../router/constants";
 
@@ -157,6 +158,7 @@ const MenuLoader: FC = () => {
 
 export const MenuPanel: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { setData }: any = useContext(SwapDataContext);
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -171,6 +173,26 @@ export const MenuPanel: FC = () => {
     }
 
     navigate(ROUTE_NAMES.HISTORY);
+  };
+
+  const navigateToNFT = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.NFT);
+  };
+
+  const navigateToSwap = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.SWAP);
   };
 
   const navigateToPurchaseTon = () => {
@@ -259,23 +281,25 @@ export const MenuPanel: FC = () => {
               before={<History24OutlineIcon />}
               onClick={navigateToHistory}
             >
-              History
+              {t("History")}
             </Button>
             <Button
               stretched
               mode={"secondary_with_accent_text"}
               before={<Swap24OutlineIcon />}
-              disabled
+              onClick={navigateToSwap}
+              // disabled
             >
-              Swap
+              {t("Swap")}
             </Button>
             <Button
               stretched
               mode={"secondary_with_accent_text"}
               before={<Picture24OutlineIcon />}
-              disabled
+              onClick={navigateToNFT}
+              // disabled
             >
-              NFT
+              {t("NFT")}
             </Button>
           </div>
           <div className={styles.button_group}>
@@ -285,7 +309,7 @@ export const MenuPanel: FC = () => {
               before={<Cheque24OutlineIcon />}
               disabled
             >
-              Cheque
+              {t("Cheque")}
             </Button>
             <Button
               stretched
@@ -293,7 +317,7 @@ export const MenuPanel: FC = () => {
               before={<Invoice24OutlineIcon />}
               disabled
             >
-              Invoice
+              {t("Invoice")}
             </Button>
             <Button
               stretched
@@ -301,7 +325,7 @@ export const MenuPanel: FC = () => {
               before={<Burn24OutlineIcon />}
               onClick={navigateToPurchaseTon}
             >
-              Buy
+              {t("Buy")}
             </Button>
           </div>
         </Group>
@@ -317,7 +341,7 @@ export const MenuPanel: FC = () => {
                       className={styles.block_header_button}
                       onClick={() => navigateToExpandedMenu(tabData.id)}
                     >
-                      Show all
+                      {t("Show all")}
                     </span>
                   }
                   className={styles.__block_header}
@@ -335,6 +359,7 @@ export const MenuPanel: FC = () => {
 
                     return (
                       <Link
+                        key={index}
                         href={cellData.action}
                         target={urlTarget}
                         className={styles.block_cell}

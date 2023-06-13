@@ -1,18 +1,26 @@
-import { FC, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { RouterProvider } from "react-router-dom";
 
+import "./i18next";
 import { router } from "./router";
-
-import { apiInited, balanceCheckWatcher } from "./api";
-
+import { balanceCheckWatcher } from "./api";
 import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
-import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
+import { JetTokensContextProvider } from "./providers/JetTokensContextProvider";
+import { ExchangePairContextProvider } from "./providers/ExchangePairContextProvider";
+// import { PurchaseTonContextProvider } from "./providers/PurchaseTonContextProvider";
 
-export const App: FC = () => {
+export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   useEffect(() => {
-    router.navigate("/", {replace: true});
+    if (
+      window.location.pathname.includes("/receive") ||
+      window.location.pathname.includes("/nft/")
+    ) {
+      return;
+    }
+
+    router.navigate("/", { replace: true });
   }, []);
 
   useEffect(() => {
@@ -31,8 +39,12 @@ export const App: FC = () => {
   }, []);
 
   return (
-    <SwapDataContextProvider>
-      <RouterProvider router={router} />
-    </SwapDataContextProvider>
+    <ExchangePairContextProvider>
+      <JetTokensContextProvider>
+        <SwapDataContextProvider>
+          <RouterProvider router={router} />
+        </SwapDataContextProvider>
+      </JetTokensContextProvider>
+    </ExchangePairContextProvider>
   );
-};
+}

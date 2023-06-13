@@ -1,18 +1,18 @@
 {
-    "content": [
+  "content": [
+    {
+      "id": "xApps",
+      "title": "xApps Updates",
+      "cells": [
         {
-            "id": "xApps",
-            "title": "xApps Updates",
-            "cells": [
-                {
-                    "title": "Buying TON with a bank card is already available!",
-                    "subtitle": "TLDR; first post",
-                    "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ton_symbol.png?raw=true",
-                    "action": "https://t.me/xJetNews/43",
-                    "type": "text"
-                }
-            ],
-            "showedOnMainScreen": 3
+          "title": "Buying TON with a bank card is already available!",
+          "subtitle": "TLDR; first post",
+          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ton_symbol.png?raw=true",
+          "action": "https://t.me/xJetNews/43",
+          "type": "text"
         }
-    ]
+      ],
+      "showedOnMainScreen": 3
+    }
+  ]
 }

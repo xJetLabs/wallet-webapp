@@ -27,10 +27,13 @@ import {
 
 import { ReactComponent as QRCopy17OutlineIcon } from "../../icons/QRCopy17Outline.svg";
 import { ReactComponent as Date24OutlineIcon } from "../../icons/Date24Outline.svg";
+import { useTranslation } from "react-i18next";
 
 import ton from "../../images/ton.jpeg";
 
 export const SendPanel: FC = () => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState<{
     receiverToken: string;
     amount: string;
@@ -51,6 +54,7 @@ export const SendPanel: FC = () => {
     Number(formData.amount) <= 0 ||
     isAwaitResponse;
 
+  const locationn = useLocation();
   const {
     state: locationState,
   }: {
@@ -58,6 +62,8 @@ export const SendPanel: FC = () => {
       currency: string;
     };
   } = useLocation();
+
+  console.log(locationState, locationn);
 
   const currencyData = useSelector((state) =>
     currencyDataSelector(state, locationState.currency)
@@ -114,7 +120,7 @@ export const SendPanel: FC = () => {
 
   const openQRScanner = () => {
     (window as any).Telegram.WebApp.showScanQrPopup({
-      text: "Scan token",
+      text: t("Scan token"),
     });
   };
 
@@ -146,7 +152,7 @@ export const SendPanel: FC = () => {
 
   const withdraw = async () => {
     if (myTonBalance.amount < comission) {
-      (window as any).Telegram.WebApp.showAlert("You don't have enough TON");
+      (window as any).Telegram.WebApp.showAlert(t("You don't have enough TON"));
 
       return;
     }
@@ -217,7 +223,7 @@ export const SendPanel: FC = () => {
         </Block>
         <Group space={12}>
           <Input
-            placeholder="Enter receiver address"
+            placeholder={t("Enter receiver address") as string}
             after={
               <QRCopy17OutlineIcon
                 style={{ cursor: "pointer" }}
@@ -237,7 +243,7 @@ export const SendPanel: FC = () => {
             disabled={isAwaitResponse}
           />
           <Input
-            placeholder="Amount"
+            placeholder={t("Amount") as string}
             after={
               <div onClick={selectMaxAmount}>
                 <Text
@@ -247,7 +253,7 @@ export const SendPanel: FC = () => {
                   color={"var(--accent)"}
                   style={{ cursor: "pointer" }}
                 >
-                  Max
+                  {t("Max")}
                 </Text>
               </div>
             }
@@ -289,7 +295,7 @@ export const SendPanel: FC = () => {
           />
         </Group>
         <ErrorBlock
-          text={`Comission — ${comission} TON`}
+          text={`${t("Comission")} — ${comission} TON`}
           iconColor="var(--color_primary_color)"
           color="var(--background_block)"
           backgroundColor="transparent"
@@ -301,7 +307,7 @@ export const SendPanel: FC = () => {
           disabled={isButtonDisabled}
           before={isAwaitResponse ? <Date24OutlineIcon /> : null}
         >
-          {isAwaitResponse ? "Sending..." : "Send"}
+          {isAwaitResponse ? `${t("Sending")}...` : t("Send")}
         </Button>
         {error ? <ErrorBlock text={errorMapping(error)} /> : null}
       </Group>

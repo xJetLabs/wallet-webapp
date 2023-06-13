@@ -11,6 +11,8 @@ export const Button: FC<ButtonProps> = ({
   children,
   stretched,
   disabled,
+  color,
+  style,
   hasHover = true,
   size = "s",
   mode = "primary",
@@ -19,6 +21,7 @@ export const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
+      style={style}
       className={cx(styles.__wrapper, {
         [styles.__disabled]: disabled,
         [styles.__stretched]: stretched,
@@ -34,7 +37,9 @@ export const Button: FC<ButtonProps> = ({
         {before ? <div className={styles.__before}>{before}</div> : null}
         {children ? (
           <div className={styles.__content}>
-            <Text className={styles.__content_in}>{children}</Text>
+            <Text color={color} className={styles.__content_in}>
+              {children}
+            </Text>
           </div>
         ) : null}
       </div>

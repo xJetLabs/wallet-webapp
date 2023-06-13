@@ -1,13 +1,16 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
+import { useTranslation } from "react-i18next";
 
-import { Avatar, Group, Input, Panel, Text } from "../../components";
-
-import { ReactComponent as Search17OutlineIcon } from "../../icons/Search17Outline.svg";
-
+import { Avatar, Group, Panel, Text } from "../../components";
+import { getUserNFT } from "../../api";
+import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
+import { NFT } from "../../types";
 import styles from "./Nft.module.css";
 
-const NftPanelLoader: FC = () => {
+function NftPanelLoader() {
   return (
     <div className={styles.__wrapper}>
       <ContentLoader
@@ -45,156 +48,87 @@ const NftPanelLoader: FC = () => {
       </ContentLoader>
     </div>
   );
-};
+}
 
-export const NftPanel: FC = () => {
+export function NftPanel() {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const timerRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const [nfts, setNfts] = useState<NFT[]>([]);
+  const navigate = useNavigate();
+  const myTonAddress = useSelector(myTonAddressSelector);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
+  function navigateToDetail(to: string) {
+    try {
+      window.navigator.vibrate(70);
+    } catch (error) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     }
 
-    timerRef.current = setTimeout(() => {
-      setIsLoaded(true);
-    }, 2000);
+    navigate(to);
+  }
 
-    return () => {
-      clearTimeout(timerRef.current);
-    };
-  }, []);
+  useEffect(() => {
+    getUserNFT(myTonAddress).then((data) => {
+      setNfts(data);
+      setIsLoaded(true);
+      // console.log(data);
+    });
+  }, [myTonAddress]);
 
   return (
     <Panel>
       <Group space={12}>
-        <Input
+        {/* <Input
           placeholder="Search"
           after={<Search17OutlineIcon color="var(--accent)" />}
           disabled={!isLoaded}
-        />
+        /> */}
+
         {!isLoaded ? (
           <NftPanelLoader />
         ) : (
           <div className={styles.__wrapper}>
-            <Group space={6} className={styles.__block}>
-              <Avatar
-                type="square"
-                src="https://www.flippies.art/penguins/Flipper1.png"
-                size={166}
-              />
+            {nfts.length === 0 ? (
               <Text
                 weight="600"
                 size={14}
                 lineHeight={"17px"}
                 color="var(--accent)"
+                style={{ margin: "0 auto" }}
               >
-                NFT NAME #21412
+                {t("You don't have NFTs!")}
               </Text>
-              <Text
-                weight="400"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--color_gray_color)"
-              >
-                Small description of this item
-              </Text>
-            </Group>
-            <Group space={6} className={styles.__block}>
-              <Avatar
-                type="square"
-                src="https://www.flippies.art/penguins/Flipper1.png"
-                size={166}
-              />
-              <Text
-                weight="600"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--accent)"
-              >
-                NFT NAME #21412
-              </Text>
-              <Text
-                weight="400"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--color_gray_color)"
-              >
-                Small description of this item
-              </Text>
-            </Group>
-            <Group space={6} className={styles.__block}>
-              <Avatar
-                type="square"
-                src="https://www.flippies.art/penguins/Flipper1.png"
-                size={166}
-              />
-              <Text
-                weight="600"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--accent)"
-              >
-                NFT NAME #21412
-              </Text>
-              <Text
-                weight="400"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--color_gray_color)"
-              >
-                Small description of this item
-              </Text>
-            </Group>
-            <Group space={6} className={styles.__block}>
-              <Avatar
-                type="square"
-                src="https://www.flippies.art/penguins/Flipper1.png"
-                size={166}
-              />
-              <Text
-                weight="600"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--accent)"
-              >
-                NFT NAME #21412
-              </Text>
-              <Text
-                weight="400"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--color_gray_color)"
-              >
-                Small description of this item
-              </Text>
-            </Group>
-            <Group space={6} className={styles.__block}>
-              <Avatar
-                type="square"
-                src="https://www.flippies.art/penguins/Flipper1.png"
-                size={166}
-              />
-              <Text
-                weight="600"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--accent)"
-              >
-                NFT NAME #21412
-              </Text>
-              <Text
-                weight="400"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--color_gray_color)"
-              >
-                Small description of this item
-              </Text>
-            </Group>
+            ) : (
+              nfts.map((nft, index) => (
+                <Group
+                  onClick={() => navigateToDetail(`/nft/${nft.address}`)}
+                  key={index}
+                  space={6}
+                  className={styles.__block}
+                >
+                  <Avatar type="square" src={nft.metadata.image} size={166} />
+                  <Text
+                    weight="600"
+                    size={14}
+                    lineHeight={"17px"}
+                    color="var(--accent)"
+                  >
+                    {nft.metadata.name}
+                  </Text>
+                  <Text
+                    weight="400"
+                    size={14}
+                    lineHeight={"17px"}
+                    color="var(--color_gray_color)"
+                  >
+                    {nft.metadata.description}
+                  </Text>
+                </Group>
+              ))
+            )}
           </div>
         )}
       </Group>
     </Panel>
   );
-};
+}

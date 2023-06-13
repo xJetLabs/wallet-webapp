@@ -11,6 +11,7 @@ import styles from "./Select.module.css";
 
 export const Select: FC<SelectProps> = ({
   disabled,
+  style,
   value = "",
   className = "",
   onClick = () => {},
@@ -29,6 +30,7 @@ export const Select: FC<SelectProps> = ({
             weight="600"
             size={14}
             lineHeight={"17px"}
+            style={style}
           >
             {value}
           </Text>

@@ -1,10 +1,12 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import {
   apiInit,
   getAllCurrencies,
+  getExchangesPair,
   getMyBalance,
   getMyServerData,
   initMainnet,
@@ -25,6 +27,7 @@ import styles from "./Load.module.css";
 export const LoadPanel: FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { i18n } = useTranslation();
 
   useEffect(() => {
     const requestTokenData = async () => {
@@ -58,21 +61,41 @@ export const LoadPanel: FC = () => {
     };
 
     const requestMyServerData = async () => {
-      const response = await getMyServerData();
+      try {
+        const response = await getMyServerData();
 
-      dispatch(userActions.setServerData(response.data));
+        const langCode = response.data.lang_code;
+        i18n.changeLanguage(langCode);
+
+        dispatch(userActions.setServerData(response.data));
+      } catch (error: any) {
+        if (error.response.data.error === "Unauthorized") {
+          console.log("[xJetWallet] You are not authorized!");
+        }
+      }
     };
 
     const requestMyBalance = async () => {
-      const response = await getMyBalance();
+      try {
+        const response = await getMyBalance();
 
-      dispatch(userActions.setBalances(response.data?.balances));
+        dispatch(userActions.setBalances(response.data?.balances));
 
-      navigate(ROUTE_NAMES.HOME, {
-        replace: true,
-      });
+        navigate(ROUTE_NAMES.HOME, {
+          replace: true,
+        });
+      } catch (e) {
+        console.log("[xJetWallet | Balance] You are not authorized!");
+      }
     };
 
+    const requestExhangesPair = async () => {
+      const response = await getExchangesPair();
+
+      dispatch(userActions.setExchangesPair(response.pairs));
+    };
+
+    // if (mainnetInited) {
     if (mainnetInited) {
       return;
     }
@@ -80,10 +103,14 @@ export const LoadPanel: FC = () => {
     initMainnet().then(() => {
       requestAllCurrencies();
       requestTokenData().then(() => {
-        Promise.all([requestMyServerData(), requestMyBalance()]);
+        Promise.all([
+          requestMyServerData(),
+          requestExhangesPair(),
+          requestMyBalance(),
+        ]);
       });
     });
-  }, [navigate, dispatch]);
+  }, [navigate, dispatch, i18n]);
 
   return (
     <Panel centerVertical centerHorizontal>

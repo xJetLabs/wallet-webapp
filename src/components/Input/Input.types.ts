@@ -14,4 +14,14 @@ export interface InputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  inputMode?:
+    | "email"
+    | "search"
+    | "tel"
+    | "text"
+    | "url"
+    | "none"
+    | "numeric"
+    | "decimal"
+    | undefined;
 }

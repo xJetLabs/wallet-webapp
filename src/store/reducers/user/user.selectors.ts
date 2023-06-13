@@ -68,6 +68,26 @@ export const totalTONValueSelector = (state: any) => {
   }, 0);
 };
 
+export const totalEXCValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "exc") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
+export const totalBOLTValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "bolt") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
 export const totalAmountsSelector = (state: any) => {
   return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
     return a + Number(isNaN(b.amount) ? 0 : b.amount);
@@ -90,4 +110,12 @@ export const allCurrenciesSelector = (state: any) => {
 
 export const availableFiatsSelector = (state: any) => {
   return state[SLICE_NAMES.USER].availableFiats;
-}
+};
+
+export const myServerData = (state: any) => {
+  return state[SLICE_NAMES.USER].serverData;
+};
+
+export const exhangesPair = (state: any) => {
+  return state[SLICE_NAMES.USER].exchangesPair;
+};

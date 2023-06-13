@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 export interface AvatarProps {
-  size?: number;
+  size?: number | string;
   fallbackName?: ReactNode;
   src?: string;
   className?: string;

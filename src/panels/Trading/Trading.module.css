@@ -1,0 +1,60 @@
+.__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--tg-theme-hint-color);
+  padding-bottom: 10px;
+}
+
+.__switcher {
+  display: flex;
+  background: var(--tg-theme-secondary-bg-color);
+  margin-top: 12px;
+  border-radius: 14px;
+  position: relative;
+}
+
+.__switcher_button {
+  width: 100%;
+  font-family: var(--text_font);
+  font-size: 14px;
+  cursor: pointer;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: center;
+  color: var(--color_primary_color);
+  margin: 6px;
+  border-radius: 8px;
+  background: none;
+  outline: none;
+  border: none;
+  z-index: 2;
+}
+
+.__active_switch {
+  position: absolute;
+  height: calc(100% - 12px);
+  width: calc(50% - 6px);
+  /* transition: 0.4s ease; */
+  border-radius: 8px;
+  z-index: 1;
+  margin: 6px;
+}
+
+.__active_switch.buy {
+  background: #29b77f;
+  transform: translateX(0%);
+}
+
+.__active_switch.sell {
+  background: red;
+  transform: translateX(100%);
+}
+
+.__select {
+  /* display: none; */
+}
+
+.__select::before {
+  content: "Arrow";
+}

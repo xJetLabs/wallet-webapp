@@ -146,7 +146,7 @@ export const HistoryPanel: FC = () => {
     return () => {
       document.body.removeEventListener("scroll", onScroll);
     };
-  }, [requestHistory]);
+  }, [requestHistory, history.length]);
 
   return (
     <Panel centerVertical={isPanelCenter} centerHorizontal={isPanelCenter}>

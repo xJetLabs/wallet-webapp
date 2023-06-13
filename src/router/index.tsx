@@ -14,12 +14,21 @@ import {
   SendPanel,
   SendSuccessPanel,
   SettingsPanel,
-  SwapPanel,
-  SwapSelect,
   PurchaseTonPage,
   PurchaseFiatSelect,
   PurchaseTonFirstStep,
+  NftDetailPanel,
 } from "../panels";
+import { SendNftPanel } from "../panels/SendNft";
+import { SendNftSuccessPanel } from "../panels/SendNftSuccessPanel";
+import { SelectLanguage } from "../panels/Settings/SelectLanguage";
+import { SelectCurrency } from "../panels/Settings/SelectCurrency";
+import { SellNftPanel } from "../panels/SellNft";
+import { SellNftSuccessPanel } from "../panels/SellNftSuccess";
+import { SellNftCurrencies } from "../panels/SellNft/SellNftCurrencies";
+import { TradingPanel } from "../panels/Trading";
+import { TradingSelectPanel } from "../panels/Trading/TradingSelect.panel";
+import { TradingSuccessPanel } from "../panels/Trading/TradingSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +42,14 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SETTINGS,
     element: <SettingsPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SETTINGS_LANGUAGE,
+    element: <SelectLanguage />,
+  },
+  {
+    path: ROUTE_NAMES.SETTINGS_CURRENCY,
+    element: <SelectCurrency />,
   },
   {
     path: ROUTE_NAMES.HISTORY,
@@ -53,6 +70,26 @@ export const router = createBrowserRouter([
   {
     path: ROUTE_NAMES.SEND_SUCCESS,
     element: <SendSuccessPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SEND_NFT,
+    element: <SendNftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SEND_NFT_SUCCESS,
+    element: <SendNftSuccessPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT,
+    element: <SellNftPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT_SELECTCURRENCY,
+    element: <SellNftCurrencies />,
+  },
+  {
+    path: ROUTE_NAMES.SELL_NFT_SUCCESS,
+    element: <SellNftSuccessPanel />,
   },
   {
     path: ROUTE_NAMES.MENU,
@@ -79,19 +116,39 @@ export const router = createBrowserRouter([
     element: <NftPanel />,
   },
   {
+    path: ROUTE_NAMES.NFT_DETAIL,
+    element: <NftDetailPanel />,
+  },
+  // {
+  //   path: ROUTE_NAMES.SWAP,
+  //   element: <SwapPanel />,
+  // },
+  // {
+  //   path: ROUTE_NAMES.SWAP_SELECT,
+  //   element: <SwapSelect />,
+  // },
+  {
     path: ROUTE_NAMES.SWAP,
-    element: <SwapPanel />,
+    element: <TradingPanel />,
   },
   {
     path: ROUTE_NAMES.SWAP_SELECT,
-    element: <SwapSelect />,
+    element: <TradingSelectPanel />,
+  },
+  {
+    path: ROUTE_NAMES.SWAP_SUCCESS,
+    element: <TradingSuccessPanel />,
   },
 ]);
 
 router.subscribe((v) => {
-  if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
-    (window as any).Telegram.WebApp.BackButton.show();
-  } else {
-    (window as any).Telegram.WebApp.BackButton.hide();
+  try {
+    if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
+      (window as any).Telegram.WebApp.BackButton.show();
+    } else {
+      (window as any).Telegram.WebApp.BackButton.hide();
+    }
+  } catch (e) {
+    console.log("[xJetWallet] Please login via Telegram!");
   }
 });

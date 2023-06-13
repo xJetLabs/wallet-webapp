@@ -3,6 +3,7 @@ import axios from "axios";
 import { sign_message } from "../utils";
 import { store } from "../../store";
 import { userActions } from "../../store/reducers";
+import { NFT } from "../../types";
 
 const RequestInProgress = new Set();
 
@@ -105,7 +106,6 @@ export const getMyBalance = async () => {
     .finally(() => {
       RequestInProgress.delete("balances");
     });
-
   return response;
 };
 
@@ -146,6 +146,89 @@ export const sendCoins = async ({
     return response;
   } catch (e) {
     RequestInProgress.delete("withdraw");
+
+    return e;
+  }
+};
+
+export const sendNft = async ({
+  payload,
+}: {
+  payload: {
+    nft_address: string;
+    to_address: string;
+  };
+}) => {
+  if (RequestInProgress.has("nft.transfer")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("nft.transfer");
+
+  try {
+    const signedMessage = await sign_message(payload, config.private_key);
+
+    const response = await axios
+      .post(
+        API_URL + "nft.transfer",
+        {
+          ...signedMessage,
+        },
+        {
+          headers: {
+            "X-API-Key": config.api_key,
+          },
+        }
+      )
+      .finally(() => {
+        RequestInProgress.delete("nft.transfer");
+      });
+
+    return response;
+  } catch (e) {
+    RequestInProgress.delete("nft.transfer");
+
+    return e;
+  }
+};
+
+export const sellNft = async ({
+  payload,
+}: {
+  payload: {
+    nft_address: string;
+    currency: string;
+    price: number;
+  };
+}) => {
+  if (RequestInProgress.has("nft.castodialSell")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("nft.castodialSell");
+
+  try {
+    const signedMessage = await sign_message(payload, config.private_key);
+
+    const response = await axios
+      .post(
+        API_URL + "nft.castodialSell",
+        {
+          ...signedMessage,
+        },
+        {
+          headers: {
+            "X-API-Key": config.api_key,
+          },
+        }
+      )
+      .finally(() => {
+        RequestInProgress.delete("nft.castodialSell");
+      });
+
+    return response;
+  } catch (e) {
+    RequestInProgress.delete("nft.castodialSell");
 
     return e;
   }
@@ -214,6 +297,36 @@ export const getHistory = async (limit = 20, offset = 0) => {
   return response;
 };
 
+export async function updateSettings({
+  langCode,
+  currency,
+}: {
+  langCode?: string;
+  currency?: string;
+}) {
+  if (RequestInProgress.has("updateSettings")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("updateSettings");
+
+  const response = await axios
+    .post(
+      API_URL + "webapp.updateSettings",
+      { language: langCode, localCurrency: currency },
+      {
+        headers: {
+          "X-API-Key": config.api_key,
+        },
+      }
+    )
+    .finally(() => {
+      RequestInProgress.delete("updateSettings");
+    });
+
+  return response;
+}
+
 export const getFiatRates = async () => {
   if (RequestInProgress.has("fiatRates")) {
     throw new Error("busy");
@@ -222,9 +335,7 @@ export const getFiatRates = async () => {
   RequestInProgress.add("fiatRates");
 
   const response = await axios
-    .get(
-      API_URL + "fiatExchange.rates"
-    )
+    .get(API_URL + "fiatExchange.rates")
     .finally(() => {
       RequestInProgress.delete("fiatRates");
     });
@@ -259,7 +370,6 @@ export const initFiatPayment = async (amount: number) => {
   return response;
 };
 
-
 export const getDedustTokens = async () => {
   if (RequestInProgress.has("dedust")) {
     throw new Error("busy");
@@ -275,3 +385,73 @@ export const getDedustTokens = async () => {
 
   return response;
 };
+
+export async function getUserNFT(tonAddress: string): Promise<NFT[]> {
+  if (RequestInProgress.has("userNFT")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("userNFT");
+
+  const response = await axios
+    .get(
+      // `https://tonapi.io/v2/accounts/EQCklgUMBy2QgQdKcXVRjpMTcUwD7gPOOsINRPSt2E4delpy/nfts?limit=1000&offset=0&indirect_ownership=false`
+      `https://tonapi.io/v2/accounts/${tonAddress}/nfts?limit=1000&offset=0&indirect_ownership=false`
+    )
+    .finally(() => {
+      RequestInProgress.delete("userNFT");
+    });
+
+  return response.data.nft_items as NFT[];
+}
+
+export async function getExchangesPair() {
+  if (RequestInProgress.has("exchanges.pair")) {
+    throw new Error("busy");
+  }
+
+  RequestInProgress.add("exchanges.pairs");
+
+  const response = await axios.get(API_URL + "exchanges.pairs").finally(() => {
+    RequestInProgress.delete("exchanges.pairs");
+  });
+
+  return response.data;
+}
+
+export async function getExchangesEstimate(data: {
+  pair: string[];
+  type: "buy" | "sell";
+  amount: number;
+}) {
+  const response = await axios.post(API_URL + "exchanges.estimate", data, {
+    headers: {
+      "X-API-Key": config.api_key,
+    },
+  });
+
+  return response.data;
+}
+
+export async function createOrder(data: {
+  pair: string[];
+  type: "buy" | "sell";
+  amount: number;
+  price?: number;
+}) {
+  if (RequestInProgress.has("exchanges.createOrder")) {
+    throw new Error("busy");
+  }
+
+  const response = await axios
+    .post(API_URL + "exchanges.createOrder", data, {
+      headers: {
+        "X-API-Key": config.api_key,
+      },
+    })
+    .finally(() => {
+      RequestInProgress.delete("exchanges.createOrder");
+    });
+
+  return response.data;
+}
