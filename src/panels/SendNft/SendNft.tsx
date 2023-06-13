@@ -190,7 +190,7 @@ export const SendNftPanel: FC = () => {
           />
         </Group>
         <ErrorBlock
-          text={`${t("Comission")} — 0.05 TON`}
+          text={`${t("Comission")} — 0.15 TON`}
           iconColor="var(--color_primary_color)"
           color="var(--background_block)"
           backgroundColor="transparent"

@@ -72,7 +72,7 @@ export const SendPanel: FC = () => {
   const myTonBalance = useSelector(myTonBalanceSelector);
 
   const comission =
-    currencyData?.currency === "ton" || currencyData?.verified ? 0.05 : 0.1;
+    currencyData?.currency === "ton" || currencyData?.verified ? 0.07 : 0.12;
 
   const navigate = useNavigate();
 

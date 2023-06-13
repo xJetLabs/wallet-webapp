@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
 import { useTranslation } from "react-i18next";
 
-import { Avatar, Group, Panel, Text } from "../../components";
+import { Avatar, Group, Panel, Text, AppTitle } from "../../components";
 import { getUserNFT } from "../../api";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { NFT } from "../../types";
@@ -67,6 +67,10 @@ export function NftPanel() {
     navigate(to);
   }
 
+  function handleImageError(e: any) {
+    console.log("error", e);
+  }
+
   useEffect(() => {
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
@@ -96,17 +100,25 @@ export function NftPanel() {
                 color="var(--accent)"
                 style={{ margin: "0 auto" }}
               >
-                {t("You don't have NFTs!")}
+                {t("You don't have any NFT. Try transferring it to your deposit wallet and it will show up here.")}
               </Text>
             ) : (
               nfts.map((nft, index) => (
                 <Group
-                  onClick={() => navigateToDetail(`/nft/${nft.address}`)}
+                  onClick={() => {
+                    let nftAddress = nft.address;
+                    navigateToDetail(`/nft/${nftAddress}`);
+                  }}
                   key={index}
                   space={6}
                   className={styles.__block}
                 >
-                  <Avatar type="square" src={nft.metadata.image} size={166} />
+                  <Avatar
+                    type="square"
+                    src={nft.metadata.image ? nft.metadata.image.replace("ipfs://", "https://cloudflare-ipfs.com/ipfs/") : ''}
+                    size={166}
+                    fallbackName={t("Error")}
+                  />
                   <Text
                     weight="600"
                     size={14}
@@ -119,7 +131,8 @@ export function NftPanel() {
                     weight="400"
                     size={14}
                     lineHeight={"17px"}
-                    color="var(--color_gray_color)"
+                    color="var(--tg-theme-text-color)"
+                    style={{ paddingInline: 4 }}
                   >
                     {nft.metadata.description}
                   </Text>

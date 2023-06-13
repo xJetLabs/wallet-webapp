@@ -9,6 +9,8 @@ import { ReactComponent as Send18OutlineIcon } from "../../icons/Send18Outline.s
 import { ReactComponent as BoxSend18OutlineIcon } from "../../icons/BoxSend18Outline.svg";
 import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
 
+import { useTranslation } from "react-i18next";
+
 import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
 
@@ -89,9 +91,11 @@ const historyIconMap = (serverType: string) => {
 };
 
 export const HistoryPanel: FC = () => {
+  const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
   const [history, setHistory] = useState<any>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
+
 
   const isPanelCenter = history.length === 0 && isLoadingFirstBatch;
 
@@ -193,7 +197,17 @@ export const HistoryPanel: FC = () => {
           ) : null}
         </Group>
       ) : (
-        <LogoIcon className={styles.logo_animation} color={"var(--accent)"} />
+        <Text
+          weight="600"
+          size={14}
+          lineHeight={"17px"}
+          color="var(--accent)"
+          style={{ margin: "0 auto" }}
+        >
+          {t("Your history is empty. Send or receive tokens to see it here.")}
+        </Text>
+
+        // <LogoIcon className={styles.logo_animation} color={"var(--accent)"} />
       )}
     </Panel>
   );

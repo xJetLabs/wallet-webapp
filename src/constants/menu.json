@@ -5,10 +5,17 @@
       "title": "xApps Updates",
       "cells": [
         {
+          "title": "NFTs in xJet!",
+          "subtitle": "Now you can use NFT in our bot, besides the possibility of convenient sale contracts will appear soon.",
+          "imageUrl": "https://raw.githubusercontent.com/xJetLabs/assets/main/64523743ad0e4caacf782d0f.png",
+          "action": "https://t.me/xJetNews/45",
+          "type": "text"
+        },
+        {
           "title": "Buying TON with a bank card is already available!",
           "subtitle": "TLDR; first post",
           "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ton_symbol.png?raw=true",
-          "action": "https://t.me/xJetNews/43",
+          "action": "https://t.me/xJetNews/44",
           "type": "text"
         }
       ],
