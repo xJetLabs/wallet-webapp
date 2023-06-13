@@ -135,14 +135,17 @@ export const ReceivePanel: FC = () => {
             )
           }
         />
-        <Button
-          size="m"
-          mode="secondary"
-          onClick={check}
-          disabled={buttonDisabled}
-        >
-          {t("Check deposit")}
-        </Button>
+
+        {query.get("tonAddress") === null && (
+          <Button
+            size="m"
+            mode="secondary"
+            onClick={check}
+            disabled={buttonDisabled}
+          >
+            {t("Check deposit")}
+          </Button>
+        )}
       </Group>
     </Panel>
   );

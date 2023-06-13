@@ -124,26 +124,28 @@ export function NftDetailPanel() {
         </Text>
       )}
 
-      <div className={styles.__button_group}>
-        <Button
-          onClick={navigateToSendNtf}
-          color="var(--color_black_color)"
-          size="m"
-          stretched
-        >
-          {t("Send")}
-        </Button>
+      {query.get("tonAddress") === null && (
+        <div className={styles.__button_group}>
+          <Button
+            onClick={navigateToSendNtf}
+            color="var(--color_black_color)"
+            size="m"
+            stretched
+          >
+            {t("Send")}
+          </Button>
 
-        <Button
-          onClick={navigateToSellNtf}
-          color="var(--color_primary_color)"
-          stretched
-          size="m"
-          className={styles.__sell_button}
-        >
-          {t("Sell")}
-        </Button>
-      </div>
+          <Button
+            onClick={navigateToSellNtf}
+            color="var(--color_primary_color)"
+            stretched
+            size="m"
+            className={styles.__sell_button}
+          >
+            {t("Sell")}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
