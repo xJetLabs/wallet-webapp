@@ -124,6 +124,7 @@ export function NftPanel() {
                     size={14}
                     lineHeight={"17px"}
                     color="var(--accent)"
+                    style={{ padding: 4 }}
                   >
                     {nft.metadata.name}
                   </Text>

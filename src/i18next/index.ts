@@ -59,6 +59,7 @@ const resources = {
       Sell: "Sell",
       "Successfully sold for": "Successfully sold for",
       "Your history is empty. Send or receive tokens to see it here.": "Your history is empty. Send or receive tokens to see it here.",
+      "Loading..": "Loading..",
     },
   },
   ru: {
@@ -117,6 +118,7 @@ const resources = {
       "Successfully sold for": "Успешно продано за",
       "Error": "Ошибка",
       "Your history is empty. Send or receive tokens to see it here.": "Ваша история транзакций пуста. Отправьте или получите жетоны, чтобы увидеть ее здесь.",
+      "Loading..": "Загрузка..",
     },
   },
 };

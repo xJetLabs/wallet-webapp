@@ -25,7 +25,7 @@ export const errorMapping = (serverError: string) => {
     case "Invalid ton_address":
       return "Receiver address is invalid";
     default:
-      return "An error occured";
+      return serverError.replace("error_", ""); // "An error occured";
   }
 };
 

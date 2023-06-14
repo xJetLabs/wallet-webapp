@@ -72,7 +72,17 @@ export function NftDetailPanel() {
     });
   }, [params.address, myTonAddress, query]);
 
-  if (!isLoaded) return <p>loading...</p>;
+  if (!isLoaded) return (
+    <Text
+      weight="600"
+      size={14}
+      lineHeight={"17px"}
+      color="var(--tg-theme-text-color)"
+      style={{ margin: "0 auto" }}
+    >
+      {t("Loading..")}
+    </Text>
+  );
 
   return (
     <div className={styles.__wrapper}>
@@ -99,7 +109,7 @@ export function NftDetailPanel() {
         weight="400"
         size={14}
         lineHeight={"17px"}
-        color="var(--color_gray_color)"
+        color="var(--tg-theme-text-color)"
         style={{ width: "100%" }}
       >
         {currentNft?.metadata.description}
