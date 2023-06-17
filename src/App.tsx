@@ -40,6 +40,7 @@ export function App() {
     if (
       window.location.pathname.includes("/receive") ||
       window.location.pathname.includes("/nft") ||
+      window.location.pathname.includes("/swap") ||
       window.location.pathname.includes("/market")
     ) {
       const requestTokenData = async () => {

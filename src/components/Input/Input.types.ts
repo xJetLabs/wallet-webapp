@@ -1,4 +1,9 @@
-import { ChangeEvent, HTMLInputTypeAttribute, ReactNode } from "react";
+import {
+  CSSProperties,
+  ChangeEvent,
+  HTMLInputTypeAttribute,
+  ReactNode,
+} from "react";
 
 export interface InputProps {
   value?: string;
@@ -14,6 +19,7 @@ export interface InputProps {
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onFocus?: () => void;
   onBlur?: () => void;
+  style?: CSSProperties;
   inputMode?:
     | "email"
     | "search"

@@ -13,7 +13,7 @@ export function SellNftCurrencies() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const allJetTokens = useSelector(allCurrenciesSelector);
-  const { _, setJetToken }: any = useContext(JetTokensContext);
+  const { setJetToken }: any = useContext(JetTokensContext);
 
   const [filterValue, setFilterValue] = useState<string>("");
 

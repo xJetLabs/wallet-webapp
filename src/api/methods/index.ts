@@ -455,3 +455,25 @@ export async function createOrder(data: {
 
   return response.data;
 }
+
+export async function purchaseShortName() {
+  if (RequestInProgress.has("account.purchaseShortName")) {
+    throw new Error("busy");
+  }
+
+  const response = await axios
+    .post(
+      API_URL + "account.purchaseShortName",
+      {},
+      {
+        headers: {
+          "X-API-Key": config.api_key,
+        },
+      }
+    )
+    .finally(() => {
+      RequestInProgress.delete("account.purchaseShortName");
+    });
+
+  return response.data;
+}

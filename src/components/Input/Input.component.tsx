@@ -14,6 +14,7 @@ export const Input: FC<InputProps> = ({
   indicator,
   readonly,
   placeholder,
+  style,
   selectAll,
   type = "text",
   className = "",
@@ -37,6 +38,7 @@ export const Input: FC<InputProps> = ({
         [styles.__disabled]: disabled,
         [className]: className,
       })}
+      style={style}
     >
       <div className={styles.__wrapper_in}>
         <input

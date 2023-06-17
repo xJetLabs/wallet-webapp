@@ -88,6 +88,56 @@ export const totalBOLTValueSelector = (state: any) => {
   }, 0);
 };
 
+export const totalLAVEValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "lave") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
+export const totalTAKEValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "take") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
+export const totalJUSDTValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "jusdt") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
+export const totalJUSDCValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "jusdc") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
+export const totalKISSValueSelector = (state: any) => {
+  return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
+    if (b.currency === "kiss") {
+      return a + Number(b.amount || 0);
+    }
+
+    return a + Number(b?.values?.ton || 0);
+  }, 0);
+};
+
 export const totalAmountsSelector = (state: any) => {
   return (state[SLICE_NAMES.USER].balances || []).reduce((a: any, b: any) => {
     return a + Number(isNaN(b.amount) ? 0 : b.amount);

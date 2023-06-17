@@ -20,7 +20,6 @@ import { ReactComponent as Date24OutlineIcon } from "../../icons/Date24Outline.s
 import { ROUTE_NAMES } from "../../router/constants";
 import { getUserNFT, sendNft } from "../../api";
 import { NFT } from "../../types";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { useTranslation } from "react-i18next";
@@ -39,6 +38,8 @@ export const SendNftPanel: FC = () => {
   });
   const [isAwaitResponse, setIsAwaitResponse] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);
+  
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [currentNft, setCurrentNtf] = useState<NFT>();
   const myTonAddress = useSelector(myTonAddressSelector);

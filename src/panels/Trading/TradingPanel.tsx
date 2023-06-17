@@ -15,22 +15,38 @@ import { ROUTE_NAMES } from "../../router/constants";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
 import { errorMapping, formatNumber } from "../../utils";
 import {
+  exhangesPair,
   totalBOLTValueSelector,
   totalEXCValueSelector,
+  totalJUSDCValueSelector,
+  totalJUSDTValueSelector,
+  totalKISSValueSelector,
+  totalLAVEValueSelector,
+  totalTAKEValueSelector,
   totalTONValueSelector,
 } from "../../store/reducers/user/user.selectors";
 import styles from "./Trading.module.css";
 import { createOrder, getExchangesEstimate } from "../../api";
+import { useQuery } from "../../hooks/useQuery";
 
 export function TradingPanel() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const query: any = useQuery();
 
-  const { selectedExchangePair } = useExchangePairContext();
+  const { selectedExchangePair, updateSelectedExchangePair } =
+    useExchangePairContext();
+  const localExchangesPair = useSelector(exhangesPair);
+
   const total: { [key: string]: number } = {
     ton: useSelector(totalTONValueSelector),
     exc: useSelector(totalEXCValueSelector),
     bolt: useSelector(totalBOLTValueSelector),
+    lave: useSelector(totalLAVEValueSelector),
+    take: useSelector(totalTAKEValueSelector),
+    jusdc: useSelector(totalJUSDCValueSelector),
+    jusdt: useSelector(totalJUSDTValueSelector),
+    kiss: useSelector(totalKISSValueSelector),
   };
 
   const [activeSwitch, setActiveSwitch] = useState<"buy" | "sell">("buy");
@@ -43,7 +59,9 @@ export function TradingPanel() {
   function navigateToSelectExchangePair() {
     vibrate();
 
-    navigate(ROUTE_NAMES.SWAP_SELECT);
+    navigate(ROUTE_NAMES.SWAP_SELECT, {
+      state: { isPairParam: query.get("pair") !== null },
+    });
   }
 
   function vibrate() {
@@ -77,7 +95,18 @@ export function TradingPanel() {
   }
 
   useEffect(() => {
-    if (buy === 0) return;
+    if (query.get("pair") !== null) {
+      localExchangesPair.forEach((item: any) => {
+        if (
+          item?.assets[0] === query.get("pair").split("_")[0] &&
+          item?.assets[1] === query.get("pair").split("_")[1]
+        ) {
+          updateSelectedExchangePair(item);
+        }
+      });
+    }
+
+    if (Number(buy) === Number(0)) return;
 
     getExchangesEstimate({
       type: activeSwitch,
@@ -87,198 +116,167 @@ export function TradingPanel() {
           ? [selectedExchangePair?.assets[0], selectedExchangePair?.assets[1]]
           : [selectedExchangePair?.assets[1], selectedExchangePair?.assets[0]],
     }).then((res) => setEstimate(Number(res.out)));
-  }, [activeSwitch, selectedExchangePair, price, buy, navigate]);
-
-  if (!selectedExchangePair.assets) {
-    return <Navigate to={ROUTE_NAMES.SWAP_SELECT} />;
-  }
+  }, [
+    activeSwitch,
+    selectedExchangePair,
+    price,
+    buy,
+    navigate,
+    query,
+    localExchangesPair,
+    updateSelectedExchangePair,
+  ]);
 
   return (
-    <Panel>
-      <div className={styles.__header}>
-        <SwitcherIcon
-          color="var(--tg-theme-hint-color)"
-          width={18}
-          height={18}
-        />
+    <>
+      {/* {!selectedExchangePair.hasOwnProperty("assets") ? ( */}
+      {query.get("pair") === null ? (
+        <Navigate to={ROUTE_NAMES.SWAP_SELECT} />
+      ) : (
+        <Panel>
+          <div className={styles.__header}>
+            <SwitcherIcon
+              color="var(--tg-theme-hint-color)"
+              width={18}
+              height={18}
+            />
 
-        <Cell
-          before={
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
+            <Cell
+              before={
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Text
+                    style={{ marginRight: "8px", textTransform: "uppercase" }}
+                    size={24}
+                    weight="700"
+                  >
+                    {selectedExchangePair?.assets[0]}/
+                    {selectedExchangePair?.assets[1]}
+                  </Text>
+                  <Text weight="500" size={14}>
+                    {selectedExchangePair?.trading_data.avg_price}
+                  </Text>
+                </div>
+              }
+              after={
+                <Text weight="500" size={12} color="#29B77F">
+                  +
+                  {Number(
+                    selectedExchangePair?.trading_data.change_24h
+                  ).toFixed(2) + " %"}
+                </Text>
+              }
+              onClick={navigateToSelectExchangePair}
+            />
+          </div>
+
+          <div className={styles.__switcher}>
+            <button
+              className={cx(styles.__switcher_button, {
+                [styles.buy]: activeSwitch === "buy",
+              })}
+              onClick={() => {
+                vibrate();
+                setActiveSwitch("buy");
+                setBuy(0);
+                setEstimate(0);
+              }}
+              style={
+                activeSwitch === "buy"
+                  ? {
+                      color: "var(--tg-theme-bg-color)",
+                    }
+                  : {}
+              }
+            >
+              {t("Buy")}
+            </button>
+
+            <button
+              className={cx(styles.__switcher_button, {
+                [styles.sell]: activeSwitch === "sell",
+              })}
+              style={
+                activeSwitch === "sell"
+                  ? {
+                      color: "var(--tg-theme-bg-color)",
+                    }
+                  : {}
+              }
+              onClick={() => {
+                vibrate();
+                setActiveSwitch("sell");
+                setBuy(0);
+                setEstimate(0);
               }}
             >
-              <Text
-                style={{ marginRight: "8px", textTransform: "uppercase" }}
-                size={24}
-                weight="700"
-              >
-                {selectedExchangePair?.assets[0]}/
-                {selectedExchangePair?.assets[1]}
-              </Text>
-              <Text weight="500" size={14}>
-                {selectedExchangePair?.trading_data.avg_price}
-              </Text>
-            </div>
-          }
-          after={
-            <Text weight="500" size={12} color="#29B77F">
-              +
-              {Number(selectedExchangePair?.trading_data.change_24h).toFixed(
-                2
-              ) + " %"}
-            </Text>
-          }
-          onClick={navigateToSelectExchangePair}
-        />
-      </div>
+              {t("Sell")}
+            </button>
 
-      <div className={styles.__switcher}>
-        <button
-          className={cx(styles.__switcher_button, {
-            [styles.buy]: activeSwitch === "buy",
-          })}
-          onClick={() => {
-            vibrate();
-            setActiveSwitch("buy");
-            setBuy(0);
-            setEstimate(0);
-          }}
-          style={
-            activeSwitch === "buy"
-              ? {
-                  color: "var(--tg-theme-bg-color)",
-                }
-              : {}
-          }
-        >
-          {t("Buy")}
-        </button>
+            <div
+              className={cx(styles.__active_switch, {
+                [styles.buy]: activeSwitch === "buy",
+                [styles.sell]: activeSwitch === "sell",
+              })}
+            ></div>
+          </div>
 
-        <button
-          className={cx(styles.__switcher_button, {
-            [styles.sell]: activeSwitch === "sell",
-          })}
-          style={
-            activeSwitch === "sell"
-              ? {
-                  color: "var(--tg-theme-bg-color)",
-                }
-              : {}
-          }
-          onClick={() => {
-            vibrate();
-            setActiveSwitch("sell");
-            setBuy(0);
-            setEstimate(0);
-          }}
-        >
-          {t("Sell")}
-        </button>
+          <div
+            style={{
+              display: "flex",
+              padding: "8px 12px",
+              background: "var(--tg-theme-secondary-bg-color)",
+              marginTop: "12px",
+              borderRadius: "14px",
+            }}
+          >
+            <InfoIcon
+              color="var(--tg-theme-hint-color)"
+              width={24}
+              height={24}
+            />
 
-        <div
-          className={cx(styles.__active_switch, {
-            [styles.buy]: activeSwitch === "buy",
-            [styles.sell]: activeSwitch === "sell",
-          })}
-        ></div>
-      </div>
+            <select
+              style={{
+                background: "none",
+                color: "var(--color_primary_color)",
+                outline: "none",
+                border: "none",
+                fontFamily: "var(--text_font)",
+                fontSize: "16px",
+                cursor: "pointer",
+                width: "100%",
+                textAlign: "center",
+              }}
+              defaultValue={select}
+              onChange={(e) => {
+                vibrate();
+                setSelect(e.currentTarget.value as "Market" | "Limit");
+              }}
+            >
+              <option value="Market">Market</option>
+              <option value="Limit">Limit</option>
+            </select>
+          </div>
 
-      <div
-        style={{
-          display: "flex",
-          padding: "8px 12px",
-          background: "var(--tg-theme-secondary-bg-color)",
-          marginTop: "12px",
-          borderRadius: "14px",
-        }}
-      >
-        <InfoIcon color="var(--tg-theme-hint-color)" width={24} height={24} />
-
-        <select
-          style={{
-            background: "none",
-            color: "var(--color_primary_color)",
-            outline: "none",
-            border: "none",
-            fontFamily: "var(--text_font)",
-            fontSize: "16px",
-            cursor: "pointer",
-            width: "100%",
-            textAlign: "center",
-          }}
-          defaultValue={select}
-          onChange={(e) => {
-            vibrate();
-            setSelect(e.currentTarget.value as "Market" | "Limit");
-          }}
-        >
-          <option value="Market">Market</option>
-          <option value="Limit">Limit</option>
-        </select>
-      </div>
-
-      <div
-        style={{
-          padding: "12px",
-          background: "var(--tg-theme-secondary-bg-color)",
-          marginTop: "6px",
-          borderRadius: "14px",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <input
-          style={{
-            background: "none",
-            color: "var(--color_primary_color)",
-            outline: "none",
-            border: "none",
-            fontFamily: "var(--text_font)",
-            fontSize: "16px",
-            textAlign: "center",
-          }}
-          inputMode="numeric"
-          onChange={(e) => setPrice(Number(e.target.value))}
-          value={select === "Market" ? "" : price}
-          placeholder="Market Price"
-          disabled={select === "Market"}
-        />
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-        <div>
           <div
             style={{
               padding: "12px",
               background: "var(--tg-theme-secondary-bg-color)",
-              marginTop: "12px",
+              marginTop: "6px",
               borderRadius: "14px",
               display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "center",
             }}
           >
-            <MinusSmallIcon
-              width={28}
-              height={28}
-              strokeWidth="2"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                vibrate();
-
-                setBuy((prev) => prev - 1);
-              }}
-            />
-            <NumericFormat
+            <input
               style={{
                 background: "none",
-                width: "100%",
                 color: "var(--color_primary_color)",
                 outline: "none",
                 border: "none",
@@ -287,305 +285,357 @@ export function TradingPanel() {
                 textAlign: "center",
               }}
               inputMode="numeric"
-              onChange={(e) => {
-                setBuy(
-                  Number(
-                    e.target.value
-                      .toLowerCase()
-                      .replace(
-                        ` ${
-                          activeSwitch === "sell"
-                            ? selectedExchangePair?.assets[0]
-                            : selectedExchangePair?.assets[1]
-                        }`,
-                        ""
-                      )
-                  )
-                );
-
-                // handleCalculate(
-                //   Number(
-                //     e.currentTarget.value
-                //       .toLowerCase()
-                //       .replace(
-                //         ` ${
-                //           activeSwitch === "sell"
-                //             ? selectedExchangePair?.assets[0]
-                //             : selectedExchangePair?.assets[1]
-                //         }`,
-                //         ""
-                //       )
-                //   )
-                // );
-              }}
-              value={buy}
-              suffix={` ${
-                activeSwitch === "sell"
-                  ? String(selectedExchangePair?.assets[0]).toUpperCase()
-                  : String(selectedExchangePair?.assets[1]).toUpperCase()
-              }`}
-            />
-            <PlusSmallIcon
-              width={28}
-              height={28}
-              strokeWidth="2"
-              style={{
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                vibrate();
-
-                setBuy((prev) => prev + 1);
-              }}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              value={select === "Market" ? "" : price}
+              placeholder="Market Price"
+              disabled={select === "Market"}
             />
           </div>
 
-          <ul
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <div>
+              <div
+                style={{
+                  padding: "12px",
+                  background: "var(--tg-theme-secondary-bg-color)",
+                  marginTop: "12px",
+                  borderRadius: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <MinusSmallIcon
+                  width={28}
+                  height={28}
+                  strokeWidth="2"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    vibrate();
+
+                    setBuy((prev) => prev - 1);
+                  }}
+                />
+                <NumericFormat
+                  style={{
+                    background: "none",
+                    width: "100%",
+                    color: "var(--color_primary_color)",
+                    outline: "none",
+                    border: "none",
+                    fontFamily: "var(--text_font)",
+                    fontSize: "16px",
+                    textAlign: "center",
+                  }}
+                  inputMode="numeric"
+                  onChange={(e) => {
+                    setBuy(
+                      Number(
+                        e.target.value
+                          .toLowerCase()
+                          .replace(
+                            ` ${
+                              activeSwitch === "sell"
+                                ? selectedExchangePair?.assets[0] || "ton"
+                                : selectedExchangePair?.assets[1] || "exc"
+                            }`,
+                            ""
+                          )
+                      )
+                    );
+                  }}
+                  value={buy}
+                  suffix={` ${
+                    activeSwitch === "sell"
+                      ? String(
+                          selectedExchangePair?.assets[0] || "ton"
+                        ).toUpperCase()
+                      : String(
+                          selectedExchangePair?.assets[1] || "exc"
+                        ).toUpperCase()
+                  }`}
+                />
+                <PlusSmallIcon
+                  width={28}
+                  height={28}
+                  strokeWidth="2"
+                  style={{
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    vibrate();
+
+                    setBuy((prev) => prev + 1);
+                  }}
+                />
+              </div>
+
+              <ul
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  listStyle: "none",
+                  padding: "0",
+                  gap: "4px",
+                  margin: "0",
+                  marginTop: "6px",
+                }}
+              >
+                <li style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setBuy(
+                        total[
+                          activeSwitch === "sell"
+                            ? selectedExchangePair?.assets[0] || "ton"
+                            : selectedExchangePair?.assets[1] || "exc"
+                        ] * 0.25
+                      );
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "var(--tg-theme-secondary-bg-color)",
+                        height: "16px",
+                        borderRadius: "9999px",
+                        width: "100%",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        color: "var(--color_primary_color)",
+                        fontSize: "14px",
+                      }}
+                    >
+                      25%
+                    </span>
+                  </div>
+                </li>
+
+                <li style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setBuy(
+                        total[
+                          activeSwitch === "sell"
+                            ? selectedExchangePair?.assets[0] || "ton"
+                            : selectedExchangePair?.assets[1] || "exc"
+                        ] * 0.5
+                      );
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "var(--tg-theme-secondary-bg-color)",
+                        height: "16px",
+                        borderRadius: "9999px",
+                        width: "100%",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        color: "var(--color_primary_color)",
+                        fontSize: "14px",
+                      }}
+                    >
+                      50%
+                    </span>
+                  </div>
+                </li>
+
+                <li style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setBuy(
+                        total[
+                          activeSwitch === "sell"
+                            ? selectedExchangePair?.assets[0] || "ton"
+                            : selectedExchangePair?.assets[1] || "exc"
+                        ] * 0.75
+                      );
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "var(--tg-theme-secondary-bg-color)",
+                        height: "16px",
+                        borderRadius: "9999px",
+                        width: "100%",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        color: "var(--color_primary_color)",
+                        fontSize: "14px",
+                      }}
+                    >
+                      75%
+                    </span>
+                  </div>
+                </li>
+
+                <li style={{ width: "100%" }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: "4px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      setBuy(
+                        total[
+                          activeSwitch === "sell"
+                            ? selectedExchangePair?.assets[0] || "ton"
+                            : selectedExchangePair?.assets[1] || "exc"
+                        ]
+                      );
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: "var(--tg-theme-secondary-bg-color)",
+                        height: "16px",
+                        borderRadius: "9999px",
+                        width: "100%",
+                      }}
+                    ></div>
+                    <span
+                      style={{
+                        color: "var(--color_primary_color)",
+                        fontSize: "14px",
+                      }}
+                    >
+                      100%
+                    </span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              style={{
+                padding: "12px",
+                background: "var(--tg-theme-secondary-bg-color)",
+                marginTop: "12px",
+                borderRadius: "14px",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <NumericFormat
+                style={{
+                  background: "none",
+                  width: "100%",
+                  color: "var(--color_primary_color)",
+                  outline: "none",
+                  border: "none",
+                  fontFamily: "var(--text_font)",
+                  fontSize: "16px",
+                  textAlign: "center",
+                }}
+                inputMode="numeric"
+                value={estimate}
+                suffix={` ${
+                  activeSwitch === "buy"
+                    ? String(
+                        selectedExchangePair?.assets[0] || "ton"
+                      ).toUpperCase()
+                    : String(
+                        selectedExchangePair?.assets[1] || "exc"
+                      ).toUpperCase()
+                }`}
+                // onChange={(e) => }
+                disabled
+              />
+            </div>
+          </div>
+
+          <div
             style={{
+              marginTop: "24px",
               display: "flex",
-              alignItems: "center",
-              listStyle: "none",
-              padding: "0",
-              gap: "4px",
-              margin: "0",
-              marginTop: "6px",
+              justifyContent: "space-between",
             }}
           >
-            <li style={{ width: "100%" }}>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setBuy(
-                    total[
-                      activeSwitch === "sell"
-                        ? selectedExchangePair?.assets[0]
-                        : selectedExchangePair?.assets[1]
-                    ] * 0.25
-                  );
-                }}
-              >
-                <div
-                  style={{
-                    background: "var(--tg-theme-secondary-bg-color)",
-                    height: "16px",
-                    borderRadius: "9999px",
-                    width: "100%",
-                  }}
-                ></div>
-                <span
-                  style={{
-                    color: "var(--color_primary_color)",
-                    fontSize: "14px",
-                  }}
-                >
-                  25%
-                </span>
-              </div>
-            </li>
+            <span
+              style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
+            >
+              Balance
+            </span>
+            <span
+              style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
+            >
+              {`${
+                activeSwitch === "sell"
+                  ? formatNumber(
+                      (total[
+                        selectedExchangePair.assets[0] || "ton"
+                      ] as number) || 0
+                    )
+                  : formatNumber(
+                      (total[
+                        selectedExchangePair.assets[1] || "exc"
+                      ] as number) || 0
+                    )
+              } ${
+                activeSwitch === "sell"
+                  ? String(
+                      selectedExchangePair?.assets[0] || "ton"
+                    ).toUpperCase()
+                  : String(
+                      selectedExchangePair?.assets[1] || "exc"
+                    ).toUpperCase()
+              }`}
+            </span>
+          </div>
 
-            <li style={{ width: "100%" }}>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setBuy(
-                    total[
-                      activeSwitch === "sell"
-                        ? selectedExchangePair?.assets[0]
-                        : selectedExchangePair?.assets[1]
-                    ] * 0.5
-                  );
-                }}
-              >
-                <div
-                  style={{
-                    background: "var(--tg-theme-secondary-bg-color)",
-                    height: "16px",
-                    borderRadius: "9999px",
-                    width: "100%",
-                  }}
-                ></div>
-                <span
-                  style={{
-                    color: "var(--color_primary_color)",
-                    fontSize: "14px",
-                  }}
-                >
-                  50%
-                </span>
-              </div>
-            </li>
-
-            <li style={{ width: "100%" }}>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setBuy(
-                    total[
-                      activeSwitch === "sell"
-                        ? selectedExchangePair?.assets[0]
-                        : selectedExchangePair?.assets[1]
-                    ] * 0.75
-                  );
-                }}
-              >
-                <div
-                  style={{
-                    background: "var(--tg-theme-secondary-bg-color)",
-                    height: "16px",
-                    borderRadius: "9999px",
-                    width: "100%",
-                  }}
-                ></div>
-                <span
-                  style={{
-                    color: "var(--color_primary_color)",
-                    fontSize: "14px",
-                  }}
-                >
-                  75%
-                </span>
-              </div>
-            </li>
-
-            <li style={{ width: "100%" }}>
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setBuy(
-                    total[
-                      activeSwitch === "sell"
-                        ? selectedExchangePair?.assets[0]
-                        : selectedExchangePair?.assets[1]
-                    ]
-                  );
-                }}
-              >
-                <div
-                  style={{
-                    background: "var(--tg-theme-secondary-bg-color)",
-                    height: "16px",
-                    borderRadius: "9999px",
-                    width: "100%",
-                  }}
-                ></div>
-                <span
-                  style={{
-                    color: "var(--color_primary_color)",
-                    fontSize: "14px",
-                  }}
-                >
-                  100%
-                </span>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div
-          style={{
-            padding: "12px",
-            background: "var(--tg-theme-secondary-bg-color)",
-            marginTop: "12px",
-            borderRadius: "14px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <NumericFormat
+          <Button
+            size="m"
             style={{
-              background: "none",
+              marginTop: "12px",
+              background: activeSwitch === "sell" ? "red" : "#29B77F",
               width: "100%",
-              color: "var(--color_primary_color)",
-              outline: "none",
-              border: "none",
-              fontFamily: "var(--text_font)",
-              fontSize: "16px",
-              textAlign: "center",
+              textTransform: "uppercase",
             }}
-            inputMode="numeric"
-            value={estimate}
-            suffix={` ${
-              activeSwitch === "buy"
-                ? String(selectedExchangePair?.assets[0]).toUpperCase()
-                : String(selectedExchangePair?.assets[1]).toUpperCase()
-            }`}
-            // onChange={(e) => }
-            disabled
-          />
-        </div>
-      </div>
+            onClick={handleSubmit}
+          >
+            {activeSwitch} {selectedExchangePair?.assets[0] || "ton"}
+          </Button>
 
-      <div
-        style={{
-          marginTop: "24px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <span style={{ color: "var(--color_primary_color)", fontSize: "14px" }}>
-          Balance
-        </span>
-        <span style={{ color: "var(--color_primary_color)", fontSize: "14px" }}>
-          {`${
-            activeSwitch === "sell"
-              ? formatNumber(
-                  (total[selectedExchangePair.assets[0]] as number) || 0
-                )
-              : formatNumber(
-                  (total[selectedExchangePair.assets[1]] as number) || 0
-                )
-          } ${
-            activeSwitch === "sell"
-              ? String(selectedExchangePair?.assets[0]).toUpperCase()
-              : String(selectedExchangePair?.assets[1]).toUpperCase()
-          }`}
-        </span>
-      </div>
+          <div style={{ margin: "16px 0", width: "100%" }}></div>
 
-      <Button
-        size="m"
-        style={{
-          marginTop: "12px",
-          background: activeSwitch === "sell" ? "red" : "#29B77F",
-          width: "100%",
-          textTransform: "uppercase",
-        }}
-        onClick={handleSubmit}
-      >
-        {activeSwitch} {selectedExchangePair?.assets[0]}
-      </Button>
-
-      <div style={{ margin: "16px 0", width: "100%" }}></div>
-
-      {error ? <ErrorBlock text={errorMapping(error)} /> : null}
-    </Panel>
+          {error ? <ErrorBlock text={errorMapping(error)} /> : null}
+        </Panel>
+      )}
+    </>
   );
 }

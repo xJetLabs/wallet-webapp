@@ -1,9 +1,6 @@
 import { FC, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { ActionText, Button, Group, Panel } from "../../components";
-
-import { formatNumber, formatToken } from "../../utils";
 import { useTranslation } from "react-i18next";
 
 export const SendNftSuccessPanel: FC = () => {

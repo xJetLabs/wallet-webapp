@@ -5,14 +5,14 @@ import { Block, Cell, Group, Panel, Text } from "../../components";
 import { useSelector } from "react-redux";
 import { exhangesPair } from "../../store/reducers/user/user.selectors";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
+import { ROUTE_NAMES } from "../../router/constants";
 
 export function TradingSelectPanel() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   const exchangesPair = useSelector(exhangesPair);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { _, updateSelectedExchangePair } = useExchangePairContext();
+  const { updateSelectedExchangePair } = useExchangePairContext();
 
   function changeExchagePair(exchangePair: any) {
     try {
@@ -21,7 +21,13 @@ export function TradingSelectPanel() {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     } finally {
       updateSelectedExchangePair(exchangePair);
-      navigate(-1);
+      navigate(
+        ROUTE_NAMES.SWAP +
+          "?pair=" +
+          exchangePair.assets[0] +
+          "_" +
+          exchangePair.assets[1]
+      );
     }
   }
 
@@ -35,7 +41,9 @@ export function TradingSelectPanel() {
                 key={index}
                 style={{ cursor: "pointer" }}
                 padding={12}
-                onClick={() => changeExchagePair(item)}
+                onClick={() => {
+                  changeExchagePair(item);
+                }}
               >
                 <Cell
                   before={
