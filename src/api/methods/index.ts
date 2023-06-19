@@ -270,7 +270,7 @@ export const getAllCurrencies = async () => {
   return response;
 };
 
-export const getHistory = async (limit = 20, offset = 0) => {
+export const getHistory = async (limit = 20, offset = 0, api_key = config.api_key) => {
   if (RequestInProgress.has("operations")) {
     throw new Error("busy");
   }
@@ -286,7 +286,7 @@ export const getHistory = async (limit = 20, offset = 0) => {
       },
       {
         headers: {
-          "X-API-Key": config.api_key,
+          "X-API-Key": (api_key || config.api_key),
         },
       }
     )
