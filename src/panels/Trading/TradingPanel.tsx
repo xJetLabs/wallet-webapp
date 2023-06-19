@@ -6,7 +6,15 @@ import { NumericFormat } from "react-number-format";
 import cx from "classnames";
 import { Navigate } from "react-router-dom";
 
-import { Button, Cell, ErrorBlock, Panel, Text } from "../../components";
+import {
+  Button,
+  Cell,
+  ErrorBlock,
+  Input,
+  Panel,
+  Select,
+  Text,
+} from "../../components";
 import { ReactComponent as SwitcherIcon } from "../../icons/Switcher.svg";
 import { ReactComponent as InfoIcon } from "../../icons/Info.svg";
 import { ReactComponent as MinusSmallIcon } from "../../icons/MinusSmall.svg";
@@ -51,6 +59,8 @@ export function TradingPanel() {
 
   const [activeSwitch, setActiveSwitch] = useState<"buy" | "sell">("buy");
   const [select, setSelect] = useState<"Market" | "Limit">("Market");
+  const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
+
   const [buy, setBuy] = useState(0);
   const [estimate, setEstimate] = useState(0);
   const [price, setPrice] = useState<number>();
@@ -96,6 +106,23 @@ export function TradingPanel() {
 
   useEffect(() => {
     if (query.get("pair") !== null) {
+      document.body.style.setProperty("--tg-color-scheme", "dark");
+      document.body.style.setProperty("--tg-theme-bg-color", "#212121");
+      document.body.style.setProperty("--tg-theme-button-color", "#8774e1");
+      document.body.style.setProperty(
+        "--tg-theme-button-text-color",
+        "#ffffff"
+      );
+      document.body.style.setProperty("--tg-theme-hint-color", "#aaaaaa");
+      document.body.style.setProperty("--tg-theme-link-color", "#8774e1");
+      document.body.style.setProperty(
+        "--tg-theme-secondary-bg-color",
+        "#181818"
+      );
+      document.body.style.setProperty("--tg-theme-text-color", "#fff");
+      document.body.style.setProperty("--tg-viewport-height", "100vh");
+      document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
+
       localExchangesPair.forEach((item: any) => {
         if (
           item?.assets[0] === query.get("pair").split("_")[0] &&
@@ -233,6 +260,8 @@ export function TradingPanel() {
               background: "var(--tg-theme-secondary-bg-color)",
               marginTop: "12px",
               borderRadius: "14px",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
             <InfoIcon
@@ -241,7 +270,84 @@ export function TradingPanel() {
               height={24}
             />
 
-            <select
+            <div
+              style={{
+                cursor: "default",
+                color: "#fff",
+                fontFamily: "var(--text_font)",
+              }}
+            >
+              {select}
+            </div>
+
+            <div
+              style={{
+                position: "relative",
+              }}
+            >
+              <svg
+                onClick={() => setIsSelectOpen((prev) => !prev)}
+                style={{
+                  cursor: "pointer",
+                  width: "18px",
+                  height: "18px",
+                  color: "var(--tg-theme-hint-color)",
+                }}
+                xmlns="http://www.w3.org/2000/svg"
+                height="1em"
+                viewBox="0 0 512 512"
+                fill="currentColor"
+              >
+                <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
+              </svg>
+
+              <div
+                hidden={!isSelectOpen}
+                style={{
+                  position: "absolute",
+                  top: "24px",
+                  right: "0px",
+                  background: "var(--tg-theme-bg-color)",
+                  color: "var(--color_primary_color)",
+                  padding: "4px 0",
+                  width: "116px",
+                  borderRadius: "8px",
+                }}
+              >
+                <div
+                  style={{
+                    cursor: "pointer",
+                    padding: "8px 14px",
+                    fontFamily: "var(--text_font)",
+                    fontSize: "16px",
+                    userSelect: "none",
+                  }}
+                  onClick={() => {
+                    setSelect("Market");
+                    setIsSelectOpen(false);
+                  }}
+                >
+                  Market
+                </div>
+                <div
+                  style={{
+                    cursor: "pointer",
+                    padding: "8px 14px",
+                    fontFamily: "var(--text_font)",
+                    fontSize: "16px",
+                    userSelect: "none",
+                  }}
+                  onClick={() => {
+                    setSelect("Limit");
+                    setIsSelectOpen(false);
+                  }}
+                >
+                  Limit
+                </div>
+              </div>
+            </div>
+
+            {/* <select
               style={{
                 background: "none",
                 color: "var(--color_primary_color)",
@@ -261,7 +367,7 @@ export function TradingPanel() {
             >
               <option value="Market">Market</option>
               <option value="Limit">Limit</option>
-            </select>
+            </select> */}
           </div>
 
           <div

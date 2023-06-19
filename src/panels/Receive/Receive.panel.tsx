@@ -66,8 +66,6 @@ export const ReceivePanel: FC = () => {
       document.body.style.setProperty("--tg-theme-text-color", "#fff");
       document.body.style.setProperty("--tg-viewport-height", "100vh");
       document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
-    } else {
-      // setIsShortWalletDisabled();
     }
   }, [query]);
 

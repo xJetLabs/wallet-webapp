@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC } from "react";
 import cx from "classnames";
 
 import { Text } from "../Text";
