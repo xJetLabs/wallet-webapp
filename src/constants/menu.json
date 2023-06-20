@@ -2,7 +2,42 @@
   "content": [
     {
       "id": "xApps",
-      "title": "xApps Updates",
+      "title": "xApps",
+      "cells": [
+        {
+          "title": "Tonbet",
+          "subtitle": "The betting platform on the TON blockchain",
+          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/tonbet-logo.jpeg?raw=true",
+          "action": "https://t.me/tonbetapp_bot?start=referral_code_R-BET-XJET",
+          "type": "text"
+        },
+        {
+          "title": "INVADERS RPG",
+          "subtitle": "The RPG game in Telegram",
+          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/inc-logo.jpeg?raw=true",
+          "action": "https://t.me/ton_invaders_bot?start=263737173",
+          "type": "text"
+        },
+        {
+          "title": "Stalin Bridge",
+          "subtitle": "Bridge between xJetSwap and TonROcket",
+          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ivsBridge-logo.jpeg?raw=true",
+          "action": "https://t.me/ton_invaders_bot?start=263737173",
+          "type": "text"
+        },
+        {
+          "title": "EXTON",
+          "subtitle": "Exchange on xJetSwap API",
+          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/exton-logo.jpeg?raw=true",
+          "action": "https://t.me/EXTON_SWAP_BOT",
+          "type": "text"
+        }
+      ],
+      "showedOnMainScreen": 4
+    },
+    {
+      "id": "xJetNews",
+      "title": "xJetNews",
       "cells": [
         {
           "title": "NFTs in xJet!",
@@ -19,7 +54,7 @@
           "type": "text"
         }
       ],
-      "showedOnMainScreen": 3
+      "showedOnMainScreen": 2
     }
   ]
 }
