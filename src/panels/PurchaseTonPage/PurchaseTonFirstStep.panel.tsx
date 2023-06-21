@@ -1,20 +1,14 @@
-import { FC, useEffect, useRef, useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import { FC, useEffect, useState, useContext } from "react";
 import { SwapDataContext } from "../../providers/SwapDataContextProvider";
 import { initFiatPayment } from "../../api/methods";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  AppTitle,
-  BlockHeader,
   Button,
   Group,
-  Input,
   Panel,
-  Select,
   Text,
 } from "../../components";
 import { Timeline } from "antd";
-import { render } from "react-dom";
 import { useTranslation } from "react-i18next";
 
 export const PurchaseTonFirstStep: FC = () => {
@@ -75,12 +69,6 @@ export const PurchaseTonFirstStep: FC = () => {
         (window as any).Telegram.WebApp.colorScheme == "dark" ? "darktheme" : ""
       }
     >
-      <AppTitle
-        screenName={
-          t("Fiat Exchange") +
-          (paymentState.paymentId ? " – " + paymentState.paymentId : "")
-        }
-      ></AppTitle>{" "}
       <br />
       <Timeline
         pending={paymentState.pendingStep}

@@ -167,7 +167,6 @@ export const PurchaseTonPage: FC = () => {
     <Panel>
       <Group space={24}>
         <Group space={12}>
-          <AppTitle screenName={t("Fiat Exchange") as string}></AppTitle>
           <br />
           <Input
             placeholder={t("From") as string}

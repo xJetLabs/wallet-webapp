@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
 import { useTranslation } from "react-i18next";
 
-import { Avatar, Group, Panel, Text, AppTitle } from "../../components";
+import { Avatar, Group, Panel, Text } from "../../components";
 import { getUserNFT } from "../../api";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { NFT } from "../../types";
@@ -75,7 +75,6 @@ export function NftPanel() {
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
       setIsLoaded(true);
-      // console.log(data);
     });
   }, [myTonAddress]);
 
