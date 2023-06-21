@@ -7,14 +7,12 @@ import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg
 import { ReactComponent as Receive18OutlineIcon } from "../../icons/Receive18Outline.svg";
 import { ReactComponent as Send18OutlineIcon } from "../../icons/Send18Outline.svg";
 import { ReactComponent as BoxSend18OutlineIcon } from "../../icons/BoxSend18Outline.svg";
-import { ReactComponent as LogoIcon } from "../../icons/Logo.svg";
 
 import { useTranslation } from "react-i18next";
 
 import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
-
-import styles from "./History.module.css";
+import { useQuery } from "../../hooks/useQuery";
 
 const historyTypeMap = (serverType: string) => {
   switch (serverType) {
@@ -93,16 +91,16 @@ const historyIconMap = (serverType: string) => {
 export const HistoryPanel: FC = () => {
   const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
+  const query: any = useQuery();
   const [history, setHistory] = useState<any>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
-
 
   const isPanelCenter = history.length === 0 && isLoadingFirstBatch;
 
   const requestHistory = useCallback(async () => {
     pageScrollRef.current = true;
 
-    const historyResponse = await getHistory(20, history.length || 0);
+    const historyResponse = await getHistory(20, history.length || 0, query.get("apiKey"));
     const operations = historyResponse?.data?.operations;
 
     if (operations) {
