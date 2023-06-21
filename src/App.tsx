@@ -31,6 +31,7 @@ export function App() {
   useEffect(() => {
     if (
       window.location.pathname.includes("/receive?tonAddress=") ||
+      window.location.pathname.includes("/history?apiKey=") ||
       (window.location.pathname.includes("/nft/") &&
         window.location.pathname.includes("?tonAddress="))
     ) {
@@ -41,7 +42,8 @@ export function App() {
       window.location.pathname.includes("/receive") ||
       window.location.pathname.includes("/nft") ||
       window.location.pathname.includes("/swap") ||
-      window.location.pathname.includes("/market")
+      window.location.pathname.includes("/market") ||
+	  window.location.pathname.includes("/history")
     ) {
       const requestTokenData = async () => {
         const response = await apiInit({
