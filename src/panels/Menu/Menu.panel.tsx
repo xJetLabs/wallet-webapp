@@ -163,7 +163,6 @@ export const MenuPanel: FC = () => {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [filtredData, setFiltredData] = useState<CellData[]>([]);
-  const timerRef = useRef<NodeJS.Timer | undefined>(undefined);
 
   const navigateToHistory = () => {
     try {
@@ -242,18 +241,7 @@ export const MenuPanel: FC = () => {
     }, []);
 
     setFiltredData(filtred);
-
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    timerRef.current = setTimeout(() => {
-      setIsLoaded(true);
-    }, 1000);
-
-    return () => {
-      clearTimeout(timerRef.current);
-    };
+    setIsLoaded(true);
   }, []);
 
   const getCellAvatar = (type: string) => {
