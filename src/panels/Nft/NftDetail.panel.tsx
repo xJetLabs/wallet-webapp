@@ -72,19 +72,7 @@ export function NftDetailPanel() {
     });
   }, [params.address, myTonAddress, query]);
 
-  if (!isLoaded) return (
-    <Text
-      weight="600"
-      size={14}
-      lineHeight={"17px"}
-      color="var(--tg-theme-text-color)"
-      style={{ margin: "0 auto" }}
-    >
-      {t("Loading..")}
-    </Text>
-  );
-
-  return (
+  if (isLoaded) return (
     <div className={styles.__wrapper}>
       <Avatar type="square" src={currentNft?.metadata.image} size={"100%"} />
 
