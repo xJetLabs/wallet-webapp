@@ -287,8 +287,8 @@ export const MenuPanel: FC = () => {
               stretched
               mode={"secondary_with_accent_text"}
               before={<Swap24OutlineIcon />}
-              onClick={navigateToSwap}
-              // disabled
+              // onClick={navigateToSwap}
+              disabled
             >
               {t("Swap")}
             </Button>

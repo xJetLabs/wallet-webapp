@@ -185,7 +185,7 @@ export const ReceivePanel: FC = () => {
           }
         />
 
-        {query.get("tonAddress") === null && serverData.short_wallet && (
+        {/* {query.get("tonAddress") === null && serverData.short_wallet && (
           <Input
             value={serverData.short_wallet}
             readonly
@@ -221,7 +221,7 @@ export const ReceivePanel: FC = () => {
               )
             }
           />
-        )}
+        )} */}
 
         {query.get("tonAddress") === null && (
           <Button
