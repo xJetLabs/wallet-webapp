@@ -26,7 +26,7 @@ export const ReceivePanel: FC = () => {
   const [shortWalletCopySuccess, setShortWalletCopySuccess] =
     useState<boolean>(false);
   const [isShortWalletDisabled, setIsShortWalletDisabled] = useState<boolean>(
-    query.get("tonAddress") === null ? serverData.short_disabled : true
+    query.get("tonAddress") === null /*? serverData.short_disabled : true*/ // TODO: Fix short names
   );
 
   const copyTimeoutRef = useRef<NodeJS.Timer | undefined>(undefined);
@@ -185,7 +185,8 @@ export const ReceivePanel: FC = () => {
           }
         />
 
-        {/* {query.get("tonAddress") === null && serverData.short_wallet && (
+
+        {false && query.get("tonAddress") === null && serverData.short_wallet && (
           <Input
             value={serverData.short_wallet}
             readonly
@@ -221,7 +222,7 @@ export const ReceivePanel: FC = () => {
               )
             }
           />
-        )} */}
+        )}
 
         {query.get("tonAddress") === null && (
           <Button
