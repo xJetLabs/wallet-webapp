@@ -2,15 +2,6 @@
   display: flex;  
   flex-wrap: wrap;
   gap: 1em;
-
-}
-
-.__content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 80vh;
 }
 
 .__wrapper .__block {
@@ -26,6 +17,14 @@
 
 .__wrapper .__block > div:first-child {
   border-radius: 10px;
+}
+
+.__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
 }
 
 .__button {
