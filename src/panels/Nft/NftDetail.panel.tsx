@@ -41,7 +41,7 @@ export function NftDetailPanel() {
   };
 
   useEffect(() => {
-    // Если нету tonAddress в параметрах url то применяются эти стили как дефолтные
+    // Если нет tonAddress в параметрах url, то применяются эти стили как дефолтные
     if (query.get("tonAddress") !== null) {
       document.body.style.setProperty("--tg-color-scheme", "dark");
       document.body.style.setProperty("--tg-theme-bg-color", "#212121");

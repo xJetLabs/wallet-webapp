@@ -108,9 +108,9 @@ export function NftPanel() {
           <NftPanelLoader />
         ) : (
           <div className={styles.__wrapper}>
-            {nfts.length === 0 ? (
-              <div> {/*TODO: Center*/}
-                <Lottie 
+            {nfts.length === 0 || true ?  (
+              <div className={styles.__content}>
+                <Lottie
                   animationData={animationData} 
                   loop={true}
                 />
@@ -123,14 +123,14 @@ export function NftPanel() {
                 >
                   {t("You don't have any NFT. Try transferring it to your deposit wallet and it will show up here.")}
                 </Text>
-                <Button
+                <Button className={styles.__button}
                   stretched
                   before={<Receive24OutlineIcon />}
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToReceive}
                 >
                   {t("Receive")}
-                </Button>  {/*TODO: Center*/}
+                </Button>
               </div>
             ) : (
               nfts.map((nft, index) => (
