@@ -62,3 +62,11 @@
 .__panel_mobile .__balance_group_focused .__button_group {
   row-gap: 0 !important;
 }
+
+.__centered_text {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  Display: flex;
+  justify-content: center;
+}

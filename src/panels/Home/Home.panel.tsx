@@ -280,6 +280,19 @@ export const HomePanel: FC = () => {
             })}
           </Group>
         ) : null}
+        {verifiedBalances.length > 0 && unverifiedBalances.length > 0 ? (
+          <Text
+            weight={"600"}
+            size={14}
+            lineHeight={"17px"}
+            color={"var(--accent)"}
+            className={styles.__centered_text}
+          >
+            You don't have any jettons yet
+            <br/>
+            You can deposit any jetton to your wallet!
+          </Text>
+        ) : null}
       </Group>
     </Panel>
   );
