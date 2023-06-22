@@ -4,11 +4,18 @@ import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
 import { useTranslation } from "react-i18next";
 
-import { Avatar, Group, Panel, Text } from "../../components";
+import { Avatar, Group, Panel, Text, Button } from "../../components";
 import { getUserNFT } from "../../api";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { NFT } from "../../types";
+import { ROUTE_NAMES } from "../../router/constants";
 import styles from "./Nft.module.css";
+
+import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
+
+import Lottie from 'lottie-react';
+import animationData from '../../lotties/loading-plane.json';
+
 
 function NftPanelLoader() {
   return (
@@ -78,6 +85,16 @@ export function NftPanel() {
     });
   }, [myTonAddress]);
 
+  const navigateToReceive = () => {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+    }
+
+    navigate(ROUTE_NAMES.RECEIVE);
+  };
+
   return (
     <Panel>
       <Group space={12}>
@@ -91,16 +108,30 @@ export function NftPanel() {
           <NftPanelLoader />
         ) : (
           <div className={styles.__wrapper}>
-            {nfts.length === 0 ? (
-              <Text
-                weight="600"
-                size={14}
-                lineHeight={"17px"}
-                color="var(--accent)"
-                style={{ margin: "0 auto" }}
-              >
-                {t("You don't have any NFT. Try transferring it to your deposit wallet and it will show up here.")}
-              </Text>
+            {true ? (
+              <div> {/*TODO: Center*/}
+                <Lottie 
+                  animationData={animationData} 
+                  loop={true}
+                />
+                <Text
+                  weight="600"
+                  size={14}
+                  lineHeight={"17px"}
+                  color="var(--accent)"
+                  style={{ margin: "0 auto" }}
+                >
+                  {t("You don't have any NFT. Try transferring it to your deposit wallet and it will show up here.")}
+                </Text>
+                <Button
+                  stretched
+                  before={<Receive24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToReceive}
+                >
+                  {t("Receive")}
+                </Button>  {/*TODO: Center*/}
+              </div>
             ) : (
               nfts.map((nft, index) => (
                 <Group
