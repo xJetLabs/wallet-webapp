@@ -47,10 +47,13 @@
 }
 
 .__active_switch.sell {
-  background: red;
+  background: #de2c2c;
   transform: translateX(100%);
 }
 
+.sell{
+  background: #de2c2c;
+}
 .__select {
   /* display: none; */
 }
