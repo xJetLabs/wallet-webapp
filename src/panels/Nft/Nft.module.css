@@ -10,6 +10,7 @@
   max-width: calc(50% - 18px);
   border: 1px solid var(--tg-theme-secondary-bg-color);
   border-radius: 15px;
+  padding: 5px;
   background-color: var(--tg-theme-secondary-bg-color);
   color: var(--tg-theme-text-color);
   cursor: pointer;
