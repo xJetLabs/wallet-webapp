@@ -115,10 +115,10 @@ export const router = createBrowserRouter([
     path: ROUTE_NAMES.NFT,
     element: <NftPanel />,
   },
-  {
-    path: ROUTE_NAMES.NFT_DETAIL,
-    element: <NftDetailPanel />,
-  },
+  // {
+  //   path: ROUTE_NAMES.NFT_DETAIL,
+  //   element: <NftDetailPanel />,
+  // },
   // {
   //   path: ROUTE_NAMES.SWAP,
   //   element: <SwapPanel />,

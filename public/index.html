@@ -12,17 +12,19 @@
   </head>
   <body theme="tg">
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
     <script>
       if (window.Telegram) {
         window.Telegram.WebApp.expand();
 
         const goBack = () => {
-          window.history.back();
+          window.history.go(-1);
         };
 
         window.Telegram.WebApp.BackButton.onClick(goBack);
       }
     </script>
+
     <div id="root"></div>
   </body>
 </html>
