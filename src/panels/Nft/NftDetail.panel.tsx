@@ -146,4 +146,5 @@ export function NftDetailPanel() {
       )}
     </div>
   );
+  return <div />;
 }
