@@ -108,7 +108,7 @@ export function NftPanel() {
           <NftPanelLoader />
         ) : (
           <div className={styles.__wrapper}>
-            {nfts.length === 0 || true ?  (
+            {nfts.length === 0 ?  (
               <div className={styles.__content}>
                 <Lottie
                   animationData={animationData} 
