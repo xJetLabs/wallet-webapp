@@ -106,23 +106,6 @@ export function TradingPanel() {
 
   useEffect(() => {
     if (query.get("pair") !== null) {
-      document.body.style.setProperty("--tg-color-scheme", "dark");
-      document.body.style.setProperty("--tg-theme-bg-color", "#212121");
-      document.body.style.setProperty("--tg-theme-button-color", "#8774e1");
-      document.body.style.setProperty(
-        "--tg-theme-button-text-color",
-        "#ffffff"
-      );
-      document.body.style.setProperty("--tg-theme-hint-color", "#aaaaaa");
-      document.body.style.setProperty("--tg-theme-link-color", "#8774e1");
-      document.body.style.setProperty(
-        "--tg-theme-secondary-bg-color",
-        "#181818"
-      );
-      document.body.style.setProperty("--tg-theme-text-color", "#fff");
-      document.body.style.setProperty("--tg-viewport-height", "100vh");
-      document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
-
       localExchangesPair.forEach((item: any) => {
         if (
           item?.assets[0] === query.get("pair").split("_")[0] &&
@@ -186,18 +169,18 @@ export function TradingPanel() {
                     {selectedExchangePair?.assets[1]}
                   </Text>
                   <Text weight="500" size={14}>
-                    {selectedExchangePair?.trading_data.avg_price}
+                    {selectedExchangePair?.trading_data.avg_price.toFixed(5)}
                   </Text>
                 </div>
               }
-              after={
-                <Text weight="500" size={12} color="#29B77F">
-                  +
-                  {Number(
-                    selectedExchangePair?.trading_data.change_24h
-                  ).toFixed(2) + " %"}
-                </Text>
-              }
+              // after={
+              //   <Text weight="500" size={12} color="#29B77F">
+              //     +
+              //     {Number(
+              //       selectedExchangePair?.trading_data.change_24h
+              //     ).toFixed(2) + " %"}
+              //   </Text>
+              // }
               onClick={navigateToSelectExchangePair}
             />
           </div>
@@ -417,6 +400,7 @@ export function TradingPanel() {
                   strokeWidth="2"
                   style={{
                     cursor: "pointer",
+                    color: "var(--color_primary_color)"
                   }}
                   onClick={() => {
                     vibrate();
@@ -469,6 +453,7 @@ export function TradingPanel() {
                   strokeWidth="2"
                   style={{
                     cursor: "pointer",
+                    color: "var(--color_primary_color)",
                   }}
                   onClick={() => {
                     vibrate();
