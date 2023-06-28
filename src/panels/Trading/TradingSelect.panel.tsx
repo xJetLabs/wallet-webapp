@@ -75,9 +75,9 @@ export function TradingSelectPanel() {
                         lineHeight={"17px"}
                         color="var(--color_primary_color)"
                       >
-                        {item.trading_data.avg_price}
+                        {item.trading_data.avg_price.toFixed(5) }
                       </Text>
-                      <Text
+                      {/* <Text
                         weight="400"
                         size={12}
                         lineHeight={"17px"}
@@ -85,7 +85,7 @@ export function TradingSelectPanel() {
                       >
                         +
                         {Number(item.trading_data.change_24h).toFixed(2) + " %"}
-                      </Text>
+                      </Text> */}
                     </div>
                   }
                 />
