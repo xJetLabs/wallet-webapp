@@ -88,11 +88,12 @@ export function TradingPanel() {
     createOrder({
       type: activeSwitch,
       amount: buy,
-      price: price,
+      // price: price,
       pair:
         activeSwitch === "buy"
           ? [selectedExchangePair?.assets[0], selectedExchangePair?.assets[1]]
           : [selectedExchangePair?.assets[1], selectedExchangePair?.assets[0]],
+      min_expected_amount: 0.001,
     }).then((res) => {
       if (res.error) {
         return setError(res.error);
