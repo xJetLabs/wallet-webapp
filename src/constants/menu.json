@@ -40,6 +40,13 @@
       "title": "xJetNews",
       "cells": [
         {
+          "title": "Swaps available in xJetSwap!",
+          "subtitle": "You can swap TON, IVS, EXC and more on dedust!",
+          "imageUrl": "https://raw.githubusercontent.com/xJetLabs/assets/main/xjet-logo.png",
+          "action": "https://t.me/xJetSwapBot/swap",
+          "type": "text"
+        },
+        {
           "title": "NFTs in xJet!",
           "subtitle": "Now you can use NFT in our bot, besides the possibility of convenient sale contracts will appear soon.",
           "imageUrl": "https://raw.githubusercontent.com/xJetLabs/assets/main/64523743ad0e4caacf782d0f.png",
