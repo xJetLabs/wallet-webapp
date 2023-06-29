@@ -1,7 +1,7 @@
 {
   "name": "xjet-tg",
   "version": "0.1.0",
-  "homepage": "/webapp.xjet.app/",
+  "homepage": "https://webapp.xjet.app/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.1",
