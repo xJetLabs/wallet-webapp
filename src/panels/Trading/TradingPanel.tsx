@@ -99,7 +99,7 @@ export function TradingPanel() {
         return setError(res.error);
       }
 
-      if (res.success) {
+      if (res.status === "wait") {
         return navigate(ROUTE_NAMES.SWAP_SUCCESS);
       }
     });

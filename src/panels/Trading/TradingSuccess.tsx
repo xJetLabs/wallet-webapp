@@ -23,7 +23,7 @@ export const TradingSuccessPanel: FC = () => {
         <ActionText
           top={""}
           middle={t("Order successfully created") as string}
-          // bottom={formatToken(state?.ton_address || "tonaddress")}
+          bottom={t("In a few minutes the funds will arrive on your balance") as string}
         />
         <Button
           size={"m"}

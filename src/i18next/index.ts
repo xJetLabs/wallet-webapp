@@ -60,6 +60,8 @@ const resources = {
       "Successfully sold for": "Successfully sold for",
       "Your history is empty. Send or receive tokens to see it here.": "Your history is empty. Send or receive tokens to see it here.",
       "Loading..": "Loading..",
+      "Order successfully created": "Order successfully created",
+      "In a few minutes the funds will arrive on your balance": "In a few minutes the funds will arrive on your balance",
     },
   },
   ru: {
@@ -119,6 +121,8 @@ const resources = {
       "Error": "Ошибка",
       "Your history is empty. Send or receive tokens to see it here.": "Ваша история транзакций пуста. Отправьте или получите жетоны, чтобы увидеть ее здесь.",
       "Loading..": "Загрузка..",
+      "Order successfully created": "Заявка успешно создана",
+      "In a few minutes the funds will arrive on your balance": "В течение нескольких минут средства поступят на ваш баланс",
     },
   },
 };
