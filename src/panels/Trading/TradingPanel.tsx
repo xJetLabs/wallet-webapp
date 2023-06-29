@@ -32,6 +32,7 @@ import {
   totalLAVEValueSelector,
   totalTAKEValueSelector,
   totalTONValueSelector,
+  myBalancesSelector,
 } from "../../store/reducers/user/user.selectors";
 import styles from "./Trading.module.css";
 import { createOrder, getExchangesEstimate } from "../../api";
@@ -56,6 +57,8 @@ export function TradingPanel() {
     jusdt: useSelector(totalJUSDTValueSelector),
     kiss: useSelector(totalKISSValueSelector),
   };
+
+  const balances = useSelector(myBalancesSelector);
 
   const [activeSwitch, setActiveSwitch] = useState<"buy" | "sell">("buy");
   const [select, setSelect] = useState<"Market" | "Limit">("Market");
@@ -126,6 +129,8 @@ export function TradingPanel() {
       });
     }
 
+    console.log(balances);
+  
     if (Number(buy) === Number(0)) return;
 
     getExchangesEstimate({
@@ -496,11 +501,11 @@ export function TradingPanel() {
                     }}
                     onClick={() => {
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.25
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.25
                       );
                     }}
                   >
@@ -535,11 +540,11 @@ export function TradingPanel() {
                     }}
                     onClick={() => {
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.5
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.5
                       );
                     }}
                   >
@@ -574,11 +579,11 @@ export function TradingPanel() {
                     }}
                     onClick={() => {
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.75
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.75
                       );
                     }}
                   >
@@ -613,11 +618,11 @@ export function TradingPanel() {
                     }}
                     onClick={() => {
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ]
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount
                       );
                     }}
                   >
@@ -698,14 +703,18 @@ export function TradingPanel() {
               {`${
                 activeSwitch === "sell"
                   ? formatNumber(
-                      (total[
-                        selectedExchangePair.assets[0] || "ton"
-                      ] as number) || 0
+                      (
+                        balances.find(
+                          (i: any) => i.currency === selectedExchangePair.assets[0]
+                        )?.amount || 0
+                      )
                     )
                   : formatNumber(
-                      (total[
-                        selectedExchangePair.assets[1] || "exc"
-                      ] as number) || 0
+                      (
+                        balances.find(
+                          (i: any) => i.currency === selectedExchangePair.assets[1]
+                        )?.amount || 0
+                      )
                     )
               } ${
                 activeSwitch === "sell"

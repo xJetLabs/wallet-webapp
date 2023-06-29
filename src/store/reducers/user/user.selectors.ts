@@ -41,9 +41,7 @@ export const myUnverifiedBalancesSelector = (state: any) => {
 };
 
 export const myBalancesSelector = (state: any) => {
-  return (state[SLICE_NAMES.USER].balances || []).filter(
-    (v: any) => v?.currency !== "ton"
-  );
+  return (state[SLICE_NAMES.USER].balances || [])
 };
 
 export const myTonBalanceSelector = (state: any) => {
