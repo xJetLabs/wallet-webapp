@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/wallet-webapp/static/css/main.5fbeb54a.css",
-    "main.js": "/wallet-webapp/static/js/main.c29b0ae1.js",
+    "main.js": "/wallet-webapp/static/js/main.57fca674.js",
     "static/media/Receive18Outline.svg": "/wallet-webapp/static/media/Receive18Outline.606cc293be0b3b9b54e02165d925a4cc.svg",
     "static/media/BoxSend18Outline.svg": "/wallet-webapp/static/media/BoxSend18Outline.dcbee234455a9c7062a3c7d155d6a52e.svg",
     "static/media/Fire18Outline.svg": "/wallet-webapp/static/media/Fire18Outline.70f09ac109fb355422413531e1ebaae7.svg",
@@ -42,6 +42,6 @@
   },
   "entrypoints": [
     "static/css/main.5fbeb54a.css",
-    "static/js/main.c29b0ae1.js"
+    "static/js/main.57fca674.js"
   ]
 }
