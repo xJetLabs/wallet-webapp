@@ -241,7 +241,7 @@ export function TradingPanel() {
             <div
               style={{
                 cursor: "default",
-                color: "#fff",
+                color: "var(--color_primary_color)",
                 fontFamily: "var(--text_font)",
               }}
             >
@@ -289,6 +289,7 @@ export function TradingPanel() {
                     fontFamily: "var(--text_font)",
                     fontSize: "16px",
                     userSelect: "none",
+                    color: "var(--color_primary_color)",
                   }}
                   onClick={() => {
                     setSelect("Market");
@@ -297,7 +298,7 @@ export function TradingPanel() {
                 >
                   Market
                 </div>
-                <div
+                {/* <div
                   style={{
                     cursor: "pointer",
                     padding: "8px 14px",
@@ -311,7 +312,7 @@ export function TradingPanel() {
                   }}
                 >
                   Limit
-                </div>
+                </div> */}
               </div>
             </div>
 
