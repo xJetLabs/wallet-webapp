@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect, useRef, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ContentLoader from "react-content-loader";
 import { useTranslation } from "react-i18next";
@@ -191,7 +191,7 @@ export const MenuPanel: FC = () => {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     }
 
-    navigate(ROUTE_NAMES.SWAP);
+    navigate(ROUTE_NAMES.SWAP_SELECT);
   };
 
   const navigateToPurchaseTon = () => {

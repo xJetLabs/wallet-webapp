@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useContext } from "react";
 import { SwapDataContext } from "../../providers/SwapDataContextProvider";
 import { initFiatPayment } from "../../api/methods";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   Button,
   Group,
@@ -12,9 +12,7 @@ import { Timeline } from "antd";
 import { useTranslation } from "react-i18next";
 
 export const PurchaseTonFirstStep: FC = () => {
-  const navigate = useNavigate();
   const { setData, ...data }: any = useContext(SwapDataContext);
-  const { selectedTokens } = data;
   const { t } = useTranslation();
   const { state } = useLocation();
 

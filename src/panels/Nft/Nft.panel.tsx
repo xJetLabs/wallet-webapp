@@ -74,10 +74,6 @@ export function NftPanel() {
     navigate(to);
   }
 
-  function handleImageError(e: any) {
-    console.log("error", e);
-  }
-
   useEffect(() => {
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
