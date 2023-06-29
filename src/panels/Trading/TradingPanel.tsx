@@ -70,7 +70,7 @@ export function TradingPanel() {
     vibrate();
 
     navigate(ROUTE_NAMES.SWAP_SELECT, {
-      state: { isPairParam: query.get("pair") !== null },
+      state: { isPairParam: (query.get("pair") !== null) || ((window as any).Telegram.WebApp.tgWebAppStartParam !== null) },
     });
   }
 
@@ -111,6 +111,15 @@ export function TradingPanel() {
         if (
           item?.assets[0] === query.get("pair").split("_")[0] &&
           item?.assets[1] === query.get("pair").split("_")[1]
+        ) {
+          updateSelectedExchangePair(item);
+        }
+      });
+    } else if ((window as any).Telegram.WebApp.tgWebAppStartParam !== null) {
+      localExchangesPair.forEach((item: any) => {
+        if (
+          item?.assets[0] === (window as any).Telegram.WebApp.tgWebAppStartParam.split("_")[0] &&
+          item?.assets[1] === (window as any).Telegram.WebApp.tgWebAppStartParam.split("_")[1]
         ) {
           updateSelectedExchangePair(item);
         }
