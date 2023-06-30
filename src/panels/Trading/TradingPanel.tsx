@@ -98,8 +98,6 @@ export function TradingPanel() {
         }
       });
     }
-
-    console.log(balances);
   
     if (Number(buy) === Number(0)) return;
 

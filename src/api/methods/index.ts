@@ -446,7 +446,6 @@ export async function createOrder(data: {
   RequestInProgress.add("exchanges.createOrder");
 
   try {
-    console.log({payload: data})
     const signedMessage = await sign_message(data, config.private_key)
 
     const response = await axios
