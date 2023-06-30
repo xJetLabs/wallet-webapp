@@ -52,7 +52,7 @@ export function TradingPanel() {
     vibrate();
 
     navigate(ROUTE_NAMES.SWAP_SELECT, {
-      state: { isPairParam: query.get("pair") !== null},
+      state: { isPairParam: query.get("pair") !== null || (window as any).Telegram.WebApp.initDataUnsafe.start_param !== null },
     });
   }
 
@@ -97,6 +97,15 @@ export function TradingPanel() {
           updateSelectedExchangePair(item);
         }
       });
+    } else if ((window as any).Telegram.WebApp.initDataUnsafe.start_param !== null) {
+      localExchangesPair.forEach((item: any) => {
+        if (
+          item?.assets[0] === (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_")[0] &&
+          item?.assets[1] === (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_")[1]
+        ) {
+          updateSelectedExchangePair(item);
+        }
+      });
     }
   
     if (Number(buy) === Number(0)) return;
@@ -123,7 +132,7 @@ export function TradingPanel() {
   return (
     <>
       {/* {!selectedExchangePair.hasOwnProperty("assets") ? ( */}
-      {query.get("pair") === null ? (
+      { (query.get("pair") === null) && ((window as any).Telegram.WebApp.initDataUnsafe.start_param === null) ? (
         <Navigate to={ROUTE_NAMES.SWAP_SELECT} />
       ) : (
         <Panel>
@@ -701,7 +710,7 @@ export function TradingPanel() {
             size="m"
             style={{
               marginTop: "12px",
-              background: activeSwitch === "sell" ? "red" : "#29B77F",
+              background: activeSwitch === "sell" ? "#de2c2c" : "#29B77F",
               width: "100%",
               textTransform: "uppercase",
             }}
