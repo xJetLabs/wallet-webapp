@@ -143,10 +143,10 @@ export const router = createBrowserRouter([
 
 router.subscribe((v) => {
   try {
-    if (![ROUTE_NAMES.HOME, ROUTE_NAMES.LOAD].includes(v.location.pathname)) {
-      (window as any).Telegram.WebApp.BackButton.show();
-    } else {
+    if (window.history.state.idx === 0 && v.historyAction != "PUSH") {
       (window as any).Telegram.WebApp.BackButton.hide();
+    } else {
+      (window as any).Telegram.WebApp.BackButton.show();
     }
   } catch (e) {
     console.log("[xJetWallet] Please login via Telegram!");
