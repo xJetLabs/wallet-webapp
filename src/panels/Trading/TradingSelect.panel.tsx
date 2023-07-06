@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { exhangesPair } from "../../store/reducers/user/user.selectors";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
 import { ROUTE_NAMES } from "../../router/constants";
+import { useEffect } from "react";
 
 export function TradingSelectPanel() {
   const { t } = useTranslation();
@@ -30,6 +31,20 @@ export function TradingSelectPanel() {
       );
     }
   }
+
+  useEffect(() => {
+    if ((window as any).Telegram.WebApp.initDataUnsafe.start_param != null) {
+      const args = (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_");
+      navigate(
+        ROUTE_NAMES.SWAP +
+          "?pair=" +
+          args[0] +
+          "_" +
+          args[1]
+      );
+      (window as any).Telegram.WebApp.initDataUnsafe.start_param = null;
+    }
+  }, []);
 
   return (
     <Panel>
