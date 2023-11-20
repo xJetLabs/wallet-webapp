@@ -143,15 +143,6 @@ export function SettingsPanel() {
               </Text>
             </Block>
           </Link>
-
-          <Link href="https://astralyx.dev/">
-            <Block className={styles.__astalyx_info}>
-              <Text weight={"600"} size={14} lineHeight={"17px"}>
-                Powered by
-              </Text>
-              <AstralyxLogoIcon />
-            </Block>
-          </Link>
         </Group>
       </Group>
     </Panel>
