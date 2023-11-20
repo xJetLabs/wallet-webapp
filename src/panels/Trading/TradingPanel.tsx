@@ -664,7 +664,7 @@ export function TradingPanel() {
             <span
               style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
             >
-              Balance
+              {t("Balance")}
             </span>
             <span
               style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
@@ -707,7 +707,7 @@ export function TradingPanel() {
             }}
             onClick={handleSubmit}
           >
-            {activeSwitch} {selectedExchangePair?.assets[0] || "ton"}
+            {t(activeSwitch)} {selectedExchangePair?.assets[0] || "ton"}
           </Button>
 
           <div style={{ margin: "16px 0", width: "100%" }}></div>

@@ -288,9 +288,9 @@ export const HomePanel: FC = () => {
             color={"var(--accent)"}
             className={styles.__centered_text}
           >
-            You don't have any jettons yet
+            {t("You don't have any jettons yet")}
             <br/>
-            You can deposit any jetton to your wallet!
+            {t("You can deposit any jetton to your wallet!")}
           </Text>
         ) : null}
       </Group>
