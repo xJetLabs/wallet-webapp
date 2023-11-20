@@ -19,13 +19,6 @@
           "type": "text"
         },
         {
-          "title": "Stalin Bridge",
-          "subtitle": "Bridge between xJetSwap and TonRocket",
-          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ivsBridge-logo.jpeg?raw=true",
-          "action": "https://t.me/Stalin_Bridge_bot",
-          "type": "text"
-        },
-        {
           "title": "EXTON",
           "subtitle": "Exchange on xJetSwap API",
           "imageUrl": "https://github.com/xJetLabs/assets/blob/main/exton-logo.jpeg?raw=true",
@@ -33,7 +26,7 @@
           "type": "text"
         }
       ],
-      "showedOnMainScreen": 4
+      "showedOnMainScreen": 3
     },
     {
       "id": "xJetNews",

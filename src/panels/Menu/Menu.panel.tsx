@@ -288,32 +288,6 @@ export const MenuPanel: FC = () => {
               {t("NFT")}
             </Button>
           </div>
-          <div className={styles.button_group}>
-            <Button
-              stretched
-              mode={"secondary_with_accent_text"}
-              before={<Cheque24OutlineIcon />}
-              disabled
-            >
-              {t("Cheque")}
-            </Button>
-            <Button
-              stretched
-              mode={"secondary_with_accent_text"}
-              before={<Invoice24OutlineIcon />}
-              disabled
-            >
-              {t("Invoice")}
-            </Button>
-            <Button
-              stretched
-              mode={"secondary_with_accent_text"}
-              before={<Burn24OutlineIcon />}
-              onClick={navigateToPurchaseTon}
-            >
-              {t("Buy")}
-            </Button>
-          </div>
         </Group>
         {!isLoaded ? (
           <MenuLoader />

@@ -280,7 +280,7 @@ export const HomePanel: FC = () => {
             })}
           </Group>
         ) : null}
-        {verifiedBalances.length > 0 && unverifiedBalances.length > 0 ? (
+        {verifiedBalances.length > 0 || unverifiedBalances.length > 0 ? (
           <Text
             weight={"600"}
             size={14}
