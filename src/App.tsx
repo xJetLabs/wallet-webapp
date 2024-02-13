@@ -150,7 +150,9 @@ export function App() {
     amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
     amplitude.track('App Opened');
     if ((window as any).Telegram) {
-      console.log((window as any).Telegram.initDataUnsafe)
+      const identifyEvent = new amplitude.Identify();
+      identifyEvent.set('telegram_id', (window as any).Telegram.WebApp.initDataUnsafe.user.id);
+      amplitude.identify(identifyEvent);
     }
   }, []);
 
