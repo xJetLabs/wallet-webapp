@@ -51,7 +51,7 @@ export const ReceivePanel: FC = () => {
   }
 
   useEffect(() => {
-    amplitude.track("Open Deposit Page");
+    amplitude.track("DepositPage.Launched");
     if (query.get("tonAddress") !== null) {
       document.body.style.setProperty("--tg-color-scheme", "dark");
       document.body.style.setProperty("--tg-theme-bg-color", "#212121");
@@ -100,6 +100,7 @@ export const ReceivePanel: FC = () => {
   }, [copySuccess, shortWalletCopySuccess]);
 
   const copyAddress = () => {
+    amplitude.track("DepositPage.CopyAddressButton.Pushed");
     setCopySuccess(true);
 
     try {
@@ -134,7 +135,7 @@ export const ReceivePanel: FC = () => {
   const check = async () => {
     setIsButtonDisabled(true);
 
-    amplitude.track("Check Deposit Pushed");
+    amplitude.track("DepositPage.CheckButton.Pushed");
 
     try {
       window.navigator.vibrate(70);

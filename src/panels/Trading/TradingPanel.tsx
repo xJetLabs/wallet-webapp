@@ -6,6 +6,8 @@ import { NumericFormat } from "react-number-format";
 import cx from "classnames";
 import { Navigate } from "react-router-dom";
 
+import * as amplitude from "@amplitude/analytics-browser";
+
 import {
   Button,
   Cell,
@@ -50,7 +52,9 @@ export function TradingPanel() {
 
   function navigateToSelectExchangePair() {
     vibrate();
-
+    
+    amplitude.track("SwapPage.SelectPair.Pushed");
+  
     navigate(ROUTE_NAMES.SWAP_SELECT, {
       state: { isPairParam: query.get("pair") !== null },
     });
@@ -66,6 +70,8 @@ export function TradingPanel() {
 
   async function handleSubmit() {
     vibrate();
+  
+    amplitude.track("SwapPage.SwapButton.Pushed");
 
     createOrder({
       type: activeSwitch,
@@ -88,6 +94,7 @@ export function TradingPanel() {
   }
 
   useEffect(() => {
+    amplitude.track("SwapPage.Launched");
     if (query.get("pair") !== null) {
       localExchangesPair.forEach((item: any) => {
         if (
@@ -175,6 +182,7 @@ export function TradingPanel() {
               })}
               onClick={() => {
                 vibrate();
+                amplitude.track("SwapPage.Segment.Changed", {wasType: "buy"});
                 setActiveSwitch("buy");
                 setBuy(0);
                 setEstimate(0);
@@ -203,6 +211,7 @@ export function TradingPanel() {
               }
               onClick={() => {
                 vibrate();
+                amplitude.track("SwapPage.Segment.Changed", {wasType: "sell"});
                 setActiveSwitch("sell");
                 setBuy(0);
                 setEstimate(0);
@@ -469,6 +478,7 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "25"});
                       setBuy(
                         balances.find( (i: any) => 
                           i.currency === (activeSwitch === "sell"
@@ -508,6 +518,7 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "50"});
                       setBuy(
                         balances.find( (i: any) => 
                           i.currency === (activeSwitch === "sell"
@@ -547,6 +558,7 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "75"});
                       setBuy(
                         balances.find( (i: any) => 
                           i.currency === (activeSwitch === "sell"
@@ -586,6 +598,7 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "100"});
                       setBuy(
                         balances.find( (i: any) => 
                           i.currency === (activeSwitch === "sell"

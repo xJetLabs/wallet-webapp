@@ -10,6 +10,8 @@ import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "../../hooks/useQuery";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 export function NftDetailPanel() {
   const params = useParams();
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ export function NftDetailPanel() {
   const myTonAddress = useSelector(myTonAddressSelector);
 
   const navigateToSendNtf = () => {
+    amplitude.track("NFTDetailedPage.SendButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (error) {
@@ -31,6 +34,7 @@ export function NftDetailPanel() {
   };
 
   const navigateToSellNtf = () => {
+    amplitude.track("NFTDetailedPage.SellButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (error) {
@@ -41,6 +45,7 @@ export function NftDetailPanel() {
   };
 
   useEffect(() => {
+    amplitude.track("NFTDetailedPage.Launched");
     // Если нет tonAddress в параметрах url, то применяются эти стили как дефолтные
     if (query.get("tonAddress") !== null) {
       document.body.style.setProperty("--tg-color-scheme", "dark");

@@ -8,6 +8,8 @@ import { useExchangePairContext } from "../../providers/ExchangePairContextProvi
 import { ROUTE_NAMES } from "../../router/constants";
 import { useEffect } from "react";
 
+import * as amplitude from "@amplitude/analytics-browser";
+
 export function TradingSelectPanel() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -21,6 +23,9 @@ export function TradingSelectPanel() {
     } catch (e) {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     } finally {
+      amplitude.track("SwapList.PairSelected", {
+        pair: exchangePair.assets[0] + "_" + exchangePair.assets[1],
+      });
       updateSelectedExchangePair(exchangePair);
       navigate(
         ROUTE_NAMES.SWAP +
@@ -33,6 +38,7 @@ export function TradingSelectPanel() {
   }
 
   useEffect(() => {
+    amplitude.track("SwapList.Launched");
     if ((window as any).Telegram.WebApp.initDataUnsafe.start_param != null) {
       const args = (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_");
       navigate(

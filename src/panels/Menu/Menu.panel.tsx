@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 
 import { ROUTE_NAMES } from "../../router/constants";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import {
   Avatar,
   Block,
@@ -20,9 +22,6 @@ import {
 import { ReactComponent as History24OutlineIcon } from "../../icons/History24Outline.svg";
 import { ReactComponent as Swap24OutlineIcon } from "../../icons/Swap24Outline.svg";
 import { ReactComponent as Picture24OutlineIcon } from "../../icons/Picture24Outline.svg";
-import { ReactComponent as Cheque24OutlineIcon } from "../../icons/Cheque24Outline.svg";
-import { ReactComponent as Invoice24OutlineIcon } from "../../icons/Invoice24Outline.svg";
-import { ReactComponent as Burn24OutlineIcon } from "../../icons/Burn24Outline.svg";
 import { ReactComponent as Text24OutlineIcon } from "../../icons/Text24Outline.svg";
 import { ReactComponent as File24OutlineIcon } from "../../icons/File24Outline.svg";
 import { ReactComponent as Program24OutlineIcon } from "../../icons/Program24Outline.svg";
@@ -165,6 +164,7 @@ export const MenuPanel: FC = () => {
   const [filtredData, setFiltredData] = useState<CellData[]>([]);
 
   const navigateToHistory = () => {
+    amplitude.track("MenuPage.HistoryButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -175,6 +175,7 @@ export const MenuPanel: FC = () => {
   };
 
   const navigateToNFT = () => {
+    amplitude.track("MenuPage.NFTButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -185,6 +186,7 @@ export const MenuPanel: FC = () => {
   };
 
   const navigateToSwap = () => {
+    amplitude.track("MenuPage.SwapButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -205,6 +207,7 @@ export const MenuPanel: FC = () => {
   };
 
   const navigateToExpandedMenu = (type: string) => {
+    amplitude.track("MenuPage.ExpandButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -219,6 +222,7 @@ export const MenuPanel: FC = () => {
   };
 
   useEffect(() => {
+    amplitude.track("MenuPage.Launched");
     document.body.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -323,6 +327,11 @@ export const MenuPanel: FC = () => {
                         href={cellData.action}
                         target={urlTarget}
                         className={styles.block_cell}
+                        onClick={() => {
+                          amplitude.track("MenuPage.MenuCell.Pushed", {
+                            cellTitle: cellData.title,
+                          })
+                        }}
                       >
                         <RichCell
                           before={

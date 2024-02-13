@@ -31,6 +31,8 @@ import { useTranslation } from "react-i18next";
 
 import ton from "../../images/ton.jpeg";
 
+import * as amplitude from "@amplitude/analytics-browser";
+
 export const SendPanel: FC = () => {
   const { t } = useTranslation();
 
@@ -63,8 +65,6 @@ export const SendPanel: FC = () => {
     };
   } = useLocation();
 
-  console.log(locationState, locationn);
-
   const currencyData = useSelector((state) =>
     currencyDataSelector(state, locationState.currency)
   );
@@ -77,6 +77,7 @@ export const SendPanel: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    amplitude.track("SendPage.Launched");
     const handlerQRText = ({ data }: { data: string }) => {
       try {
         window.navigator.vibrate(70);
@@ -119,20 +120,22 @@ export const SendPanel: FC = () => {
   }, [error]);
 
   const openQRScanner = () => {
+    amplitude.track("SendPage.QRButton.Pushed");
     (window as any).Telegram.WebApp.showScanQrPopup({
       text: t("Scan token"),
     });
   };
 
   const selectMaxAmount = () => {
+    amplitude.track("SendPage.MaxButton.Pushed");
     let newAmount = "";
 
     if (currencyData?.currency === "ton") {
-      if (currencyData?.amount <= 0.06) {
+      if (currencyData?.amount <= 0.07) {
         newAmount = "0";
       } else {
         newAmount =
-          String(+(Number(currencyData?.amount) - 0.06).toFixed(3)) || "";
+          String(+(Number(currencyData?.amount) - 0.07).toFixed(3)) || "";
       }
     } else {
       newAmount = String(+Number(currencyData?.amount).toFixed(3)) || "";
@@ -177,6 +180,8 @@ export const SendPanel: FC = () => {
       !response?.data.error
     ) {
       await balanceCheckWatcher();
+
+      amplitude.track("SendPage.SendButton.Pushed");
 
       navigate(ROUTE_NAMES.SEND_SUCCESS, {
         state: payload,

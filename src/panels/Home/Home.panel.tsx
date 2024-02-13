@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import cx from "classnames";
 import { useTranslation } from "react-i18next";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { isMobile } from "../../constants";
 import { formatNumber } from "../../utils";
 import { ROUTE_NAMES } from "../../router/constants";
@@ -55,6 +57,7 @@ export const HomePanel: FC = () => {
   const totalAmounts = useSelector(totalAmountsSelector);
 
   useEffect(() => {
+    amplitude.track("WalletPage.Launched");
     document.body.scrollTo({
       top: 0,
       behavior: "smooth",
@@ -92,6 +95,7 @@ export const HomePanel: FC = () => {
   }, [totalAmounts, cachedTotalAmounts]);
 
   const navigateToSend = () => {
+    amplitude.track("WalletPage.SendButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -102,6 +106,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToReceive = () => {
+    amplitude.track("WalletPage.ReceiveButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -112,6 +117,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToHistory = () => {
+    amplitude.track("WalletPage.HistoryButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -122,6 +128,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToSettings = () => {
+    amplitude.track("WalletPage.SettingsButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -132,6 +139,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToMenu = () => {
+    amplitude.track("WalletPage.MenuButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -298,7 +306,7 @@ const renderJettonItem = (v: any, i: number) => {
     : "_blank";
 
   return (
-    <Link key={i} href={ProjectURL} target={urlTarget} withCursor>
+    <Link key={i} href={ProjectURL} target={urlTarget} onClick={() => {amplitude.track("WalletPage.TokenButton.Pushed", {currency: v.currency})}} withCursor>
       <Cell
         key={`Jetton_${i}`}
         before={

@@ -13,6 +13,8 @@ import { ReactComponent as Receipt18Outline } from "../../icons/Receipt18Outline
 
 import { useTranslation } from "react-i18next";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
 import { useQuery } from "../../hooks/useQuery";
@@ -112,6 +114,7 @@ export const HistoryPanel: FC = () => {
   }, [history.length]);
 
   useEffect(() => {
+    amplitude.track("HistoryPage.Launched")
     const onScroll = () => {
       if (document.scrollingElement) {
         const { scrollTop, scrollHeight, clientHeight } =

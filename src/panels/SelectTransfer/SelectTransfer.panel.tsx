@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useMemo, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,8 @@ import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.s
 
 import ton from "../../images/ton.jpeg";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 export const SelectTransferPanel: FC = () => {
   const { t } = useTranslation();
   
@@ -41,6 +43,10 @@ export const SelectTransferPanel: FC = () => {
 
     setFilterValue(newValue);
   };
+
+  useEffect(() => {
+    amplitude.track('SendPage.ChooseToken.Launched');
+  });
 
   return (
     <Panel>
@@ -70,6 +76,9 @@ export const SelectTransferPanel: FC = () => {
                   );
                 }
 
+                amplitude.track("SendPage.ChooseToken.Selected", {
+                  token: v.currency,
+                });
                 navigate("/send", {
                   state: {
                     currency: v.currency,
