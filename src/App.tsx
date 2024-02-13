@@ -11,6 +11,7 @@ import { JetTokensContextProvider } from "./providers/JetTokensContextProvider";
 import { ExchangePairContextProvider } from "./providers/ExchangePairContextProvider";
 
 import * as amplitude from '@amplitude/analytics-browser';
+import { Analytics } from '@vercel/analytics/react';
 
 import {
   apiInit,
@@ -155,6 +156,7 @@ export function App() {
       <JetTokensContextProvider>
         <SwapDataContextProvider>
           <RouterProvider router={router} />
+          <Analytics />
         </SwapDataContextProvider>
       </JetTokensContextProvider>
     </ExchangePairContextProvider>
