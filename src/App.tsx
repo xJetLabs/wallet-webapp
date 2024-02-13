@@ -149,6 +149,11 @@ export function App() {
   useEffect(() => {
     amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
     amplitude.track('App Opened');
+    if ((window as any).Telegram) {
+      const identifyEvent = new amplitude.Identify();
+      identifyEvent.set('telegram_id', (window as any).Telegram.initDataUnsafe.user.id);
+      amplitude.identify(identifyEvent);
+    }
   }, []);
 
   return (
