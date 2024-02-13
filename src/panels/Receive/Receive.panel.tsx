@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { QRCodeSVG } from "qrcode.react";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { Button, Group, Input, Panel, Text } from "../../components";
 import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.svg";
 import { ReactComponent as CopySuccess24OutlineIcon } from "../../icons/CopySuccess24Outline.svg";
@@ -49,6 +51,7 @@ export const ReceivePanel: FC = () => {
   }
 
   useEffect(() => {
+    amplitude.track("Open Deposit Page");
     if (query.get("tonAddress") !== null) {
       document.body.style.setProperty("--tg-color-scheme", "dark");
       document.body.style.setProperty("--tg-theme-bg-color", "#212121");
@@ -130,6 +133,8 @@ export const ReceivePanel: FC = () => {
 
   const check = async () => {
     setIsButtonDisabled(true);
+
+    amplitude.track("Check Deposit Pushed");
 
     try {
       window.navigator.vibrate(70);
