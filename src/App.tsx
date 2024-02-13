@@ -10,6 +10,8 @@ import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
 import { JetTokensContextProvider } from "./providers/JetTokensContextProvider";
 import { ExchangePairContextProvider } from "./providers/ExchangePairContextProvider";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import {
   apiInit,
   getAllCurrencies,
@@ -140,6 +142,11 @@ export function App() {
       clearInterval(intervalIdRef.current);
       intervalIdRef.current = undefined;
     };
+  }, []);
+
+  useEffect(() => {
+    amplitude.init(process.env.AMPLITUDE_API_KEY as string);
+    amplitude.logEvent('App Opened');
   }, []);
 
   return (

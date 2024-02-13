@@ -4,6 +4,7 @@
   "homepage": "https://webapp.xjet.app/",
   "private": true,
   "dependencies": {
+    "@amplitude/analytics-browser": "^2.4.0",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
