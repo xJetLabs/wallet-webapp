@@ -12,6 +12,7 @@ import { ExchangePairContextProvider } from "./providers/ExchangePairContextProv
 
 import * as amplitude from '@amplitude/analytics-browser';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import {
   apiInit,
@@ -146,8 +147,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    console.log('Amplitude API Key:', process.env.AMPLITUDE_API_KEY);
-    amplitude.init(process.env.AMPLITUDE_API_KEY as string);
+    amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
     amplitude.track('App Opened');
   }, []);
 
@@ -157,6 +157,7 @@ export function App() {
         <SwapDataContextProvider>
           <RouterProvider router={router} />
           <Analytics />
+          <SpeedInsights />
         </SwapDataContextProvider>
       </JetTokensContextProvider>
     </ExchangePairContextProvider>
