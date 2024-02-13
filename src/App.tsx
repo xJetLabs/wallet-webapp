@@ -145,6 +145,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    console.log('Amplitude API Key:', process.env.AMPLITUDE_API_KEY);
     amplitude.init(process.env.AMPLITUDE_API_KEY as string);
     amplitude.track('App Opened');
   }, []);
