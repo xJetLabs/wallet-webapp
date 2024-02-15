@@ -30,7 +30,7 @@ import {
 } from "../../components";
 
 import { ReactComponent as History24OutlineIcon } from "../../icons/History24Outline.svg";
-import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24Outline.svg";
+import { ReactComponent as Swap24OutlineIcon } from "../../icons/Swap24Outline.svg";
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
 import { ReactComponent as Chains20OutlineIcon } from "../../icons/Chains20Outline.svg";
@@ -130,15 +130,15 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.HISTORY);
   };
 
-  const navigateToSettings = () => {
-    amplitude.track("WalletPage.SettingsButton.Pushed");
+  const navigateToSwaps = () => {
+    amplitude.track("WalletPage.SwapsButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     }
 
-    navigate(ROUTE_NAMES.SETTINGS);
+    navigate(ROUTE_NAMES.SWAP_SELECT);
   };
 
   const navigateToMenu = () => {
@@ -234,19 +234,19 @@ export const HomePanel: FC = () => {
                 </Button>
                 <Button
                   stretched
+                  before={<Swap24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToSwaps}
+                >
+                  {t("Swap")}
+                </Button>
+                <Button
+                  stretched
                   before={<History24OutlineIcon />}
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToHistory}
                 >
                   {t("History")}
-                </Button>
-                <Button
-                  stretched
-                  before={<Settings24OutlineIcon />}
-                  mode={"secondary_with_accent_text"}
-                  onClick={navigateToSettings}
-                >
-                  {t("Settings")}
                 </Button>
               </div>
             </Group>
