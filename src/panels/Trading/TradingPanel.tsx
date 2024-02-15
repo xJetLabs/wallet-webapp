@@ -9,7 +9,6 @@ import { Navigate } from "react-router-dom";
 import * as amplitude from "@amplitude/analytics-browser";
 
 import {
-  Button,
   Cell,
   ErrorBlock,
   Panel,

@@ -73,6 +73,19 @@ export const ReceivePanel: FC = () => {
   }, [query]);
 
   useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible && query.get("tonAddress") === null) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t("Check deposit"))
+      .onClick(check)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+  }, [])
+
+  useEffect(() => {
     if (copySuccess) {
       if (copyTimeoutRef.current) {
         clearTimeout(copyTimeoutRef.current);
@@ -228,17 +241,6 @@ export const ReceivePanel: FC = () => {
               )
             }
           />
-        )}
-
-        {query.get("tonAddress") === null && (
-          <Button
-            size="m"
-            mode="secondary"
-            onClick={check}
-            disabled={buttonDisabled}
-          >
-            {t("Check deposit")}
-          </Button>
         )}
       </Group>
     </Panel>

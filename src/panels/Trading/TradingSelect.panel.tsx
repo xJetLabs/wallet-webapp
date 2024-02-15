@@ -56,7 +56,7 @@ export function TradingSelectPanel() {
       );
       (window as any).Telegram.WebApp.initDataUnsafe.start_param = null;
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <Panel>

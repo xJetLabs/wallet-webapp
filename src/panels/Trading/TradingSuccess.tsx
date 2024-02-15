@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { ActionText, Button, Group, Panel } from "../../components";
+import { ActionText, Group, Panel } from "../../components";
 
 import { useTranslation } from "react-i18next";
 
@@ -28,7 +28,7 @@ export const TradingSuccessPanel: FC = () => {
       .setText(t("Back"))
       .onClick(buttonAction)
       .color = (window as any).Telegram.WebApp.themeParams.button_color;
-  }, []);
+  });
 
   function buttonAction() {
     (window as any).Telegram.WebApp.MainButton.offClick(buttonAction);

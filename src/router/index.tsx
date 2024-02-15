@@ -135,7 +135,7 @@ export const router = createBrowserRouter([
 
 router.subscribe((v) => {
   try {
-    if (window.history.state.idx === 0 && v.historyAction != "PUSH") {
+    if (window.history.state.idx === 0 && v.historyAction !== "PUSH") {
       (window as any).Telegram.WebApp.BackButton.hide();
     } else {
       (window as any).Telegram.WebApp.BackButton.show();

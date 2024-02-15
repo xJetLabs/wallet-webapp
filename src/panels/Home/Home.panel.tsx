@@ -62,6 +62,9 @@ export const HomePanel: FC = () => {
       top: 0,
       behavior: "smooth",
     });
+    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.hide();
+    }
   }, []);
 
   useEffect(() => {
