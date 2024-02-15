@@ -26,6 +26,7 @@ import {
 } from "./api";
 
 import { userActions } from "./store/reducers";
+import { ROUTE_NAMES } from "./router/constants";
 
 export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
@@ -163,6 +164,19 @@ export function App() {
       console.error('Telegram user identification error:', e);
     }
   }, []);
+
+  useEffect(() => {
+    (window as any)
+      .Telegram
+      .WebApp
+      .SettingsButton
+      .show()
+      .onClick(openSettings);
+  }, []);
+
+  function openSettings() {
+    router.navigate(ROUTE_NAMES.SETTINGS);
+  }
 
   return (
     <ExchangePairContextProvider>
