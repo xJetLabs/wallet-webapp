@@ -17,6 +17,32 @@ export const TradingSuccessPanel: FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t("Back"))
+      .onClick(buttonAction)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+  }, []);
+
+  function buttonAction() {
+    (window as any).Telegram.WebApp.MainButton.offClick(buttonAction);
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+        "light"
+      );
+    }
+
+    navigate(-2);
+  }
+
   return (
     <Panel centerVertical>
       <Group space={24}>
@@ -25,23 +51,6 @@ export const TradingSuccessPanel: FC = () => {
           middle={t("Order successfully created") as string}
           bottom={t("In a few minutes the funds will arrive on your balance") as string}
         />
-        <Button
-          size={"m"}
-          mode={"secondary"}
-          onClick={() => {
-            try {
-              window.navigator.vibrate(70);
-            } catch (e) {
-              (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
-                "light"
-              );
-            }
-
-            navigate(-2);
-          }}
-        >
-          {t("Back")}
-        </Button>
       </Group>
     </Panel>
   );

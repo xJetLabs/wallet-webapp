@@ -147,12 +147,20 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
-    amplitude.track('App Opened');
-    if ((window as any).Telegram) {
-      const identifyEvent = new amplitude.Identify();
-      identifyEvent.set('telegram_id', (window as any).Telegram.WebApp.initDataUnsafe.user.id);
-      amplitude.identify(identifyEvent);
+    try {
+      amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
+      amplitude.track('App Opened');
+    } catch (e) {
+      console.error('Amplitude initialization error:', e);
+    }
+    try {
+      if ((window as any).Telegram) {
+        const identifyEvent = new amplitude.Identify();
+        identifyEvent.set('telegram_id', (window as any).Telegram.WebApp.initDataUnsafe.user.id);
+        amplitude.identify(identifyEvent);
+      }
+    } catch (e) {
+      console.error('Telegram user identification error:', e);
     }
   }, []);
 

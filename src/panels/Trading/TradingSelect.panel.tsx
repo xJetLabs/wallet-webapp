@@ -38,6 +38,12 @@ export function TradingSelectPanel() {
   }
 
   useEffect(() => {
+    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.hide();
+    }
+  }, []);
+
+  useEffect(() => {
     amplitude.track("SwapList.Launched");
     if ((window as any).Telegram.WebApp.initDataUnsafe.start_param != null) {
       const args = (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_");

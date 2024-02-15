@@ -88,6 +88,7 @@ export function TradingPanel() {
       }
 
       if (res.status === "wait") {
+        (window as any).Telegram.WebApp.MainButton.offClick(handleSubmit);
         return navigate(ROUTE_NAMES.SWAP_SUCCESS);
       }
     });
@@ -95,6 +96,17 @@ export function TradingPanel() {
 
   useEffect(() => {
     amplitude.track("SwapPage.Launched");
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t(activeSwitch).toUpperCase() + " " + selectedExchangePair?.assets[0].toUpperCase())
+      .onClick(handleSubmit)
+      .color = activeSwitch === "sell" ? "#de2c2c" : "#29B77F";
+
     if (query.get("pair") !== null) {
       localExchangesPair.forEach((item: any) => {
         if (
@@ -709,19 +721,6 @@ export function TradingPanel() {
               }`}
             </span>
           </div>
-
-          <Button
-            size="m"
-            style={{
-              marginTop: "12px",
-              background: activeSwitch === "sell" ? "#de2c2c" : "#29B77F",
-              width: "100%",
-              textTransform: "uppercase",
-            }}
-            onClick={handleSubmit}
-          >
-            {t(activeSwitch)} {selectedExchangePair?.assets[0] || "ton"}
-          </Button>
 
           <div style={{ margin: "16px 0", width: "100%" }}></div>
 
