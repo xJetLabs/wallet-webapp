@@ -33,9 +33,9 @@ export function TradingSelectPanel() {
       navigate(
         ROUTE_NAMES.SWAP +
           "?pair=" +
-          exchangePair.assets[0] +
+          exchangePair.assets[0].toLowerCase() +
           "_" +
-          exchangePair.assets[1]
+          exchangePair.assets[1].toLowerCase()
       );
     }
   }
