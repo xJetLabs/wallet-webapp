@@ -167,52 +167,51 @@ export const SendPanel: FC = () => {
   };
 
   const withdraw = async () => {
-    navigate(ROUTE_NAMES.SEND_SUCCESS);
-    // if (myTonBalance.amount < comission) {
-    //   (window as any).Telegram.WebApp.showAlert(t("You don't have enough TON"));
+    if (myTonBalance.amount < comission) {
+      (window as any).Telegram.WebApp.showAlert(t("You don't have enough TON"));
 
-    //   return;
-    // }
+      return;
+    }
 
-    // (window as any).Telegram.WebApp.MainButton.showProgress(true);
-    // (window as any).Telegram.WebApp.MainButton.disable();
-    // setIsAwaitResponse(true);
+    (window as any).Telegram.WebApp.MainButton.showProgress(true);
+    (window as any).Telegram.WebApp.MainButton.disable();
+    setIsAwaitResponse(true);
 
-    // const payload = {
-    //   ton_address: formData.receiverToken,
-    //   amount: Number(formData.amount),
-    //   currency: locationState.currency,
-    // };
+    const payload = {
+      ton_address: formData.receiverToken,
+      amount: Number(formData.amount),
+      currency: locationState.currency,
+    };
 
-    // const response: any = await sendCoins({
-    //   payload,
-    // }).finally(() => {
-    //   (window as any).Telegram.WebApp.MainButton.hideProgress();
-    //   (window as any).Telegram.WebApp.MainButton.enable();
-    //   setIsAwaitResponse(false);
-    // });
+    const response: any = await sendCoins({
+      payload,
+    }).finally(() => {
+      (window as any).Telegram.WebApp.MainButton.hideProgress();
+      (window as any).Telegram.WebApp.MainButton.enable();
+      setIsAwaitResponse(false);
+    });
 
-    // if (
-    //   response?.data &&
-    //   !response?.response?.data.error &&
-    //   !response?.data.error
-    // ) {
-    //   await balanceCheckWatcher();
+    if (
+      response?.data &&
+      !response?.response?.data.error &&
+      !response?.data.error
+    ) {
+      await balanceCheckWatcher();
 
-    //   amplitude.track("SendPage.SendButton.Pushed");
+      amplitude.track("SendPage.SendButton.Pushed");
 
-    //   navigate(ROUTE_NAMES.SEND_SUCCESS, {
-    //     state: payload,
-    //   });
-    // } else if (response?.response?.data?.error || response?.data?.error) {
-    //   try {
-    //     window.navigator.vibrate(200);
-    //   } catch (e) {
-    //     (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
-    //   }
+      navigate(ROUTE_NAMES.SEND_SUCCESS, {
+        state: payload,
+      });
+    } else if (response?.response?.data?.error || response?.data?.error) {
+      try {
+        window.navigator.vibrate(200);
+      } catch (e) {
+        (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
+      }
 
-    //   setError(response?.response?.data?.error || response?.data?.error);
-    // }
+      setError(response?.response?.data?.error || response?.data?.error);
+    }
   };
 
   return (

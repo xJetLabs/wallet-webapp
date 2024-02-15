@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Block, Cell, Group, Panel, Text } from "../../components";
+import { Block, Cell, Group, Panel, Text, Filters } from "../../components";
 import { useSelector } from "react-redux";
-import { exhangesPair } from "../../store/reducers/user/user.selectors";
+import { exhangesPair, allCurrenciesSelector } from "../../store/reducers/user/user.selectors";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
 import { ROUTE_NAMES } from "../../router/constants";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import * as amplitude from "@amplitude/analytics-browser";
 
@@ -15,7 +15,10 @@ export function TradingSelectPanel() {
   const navigate = useNavigate();
 
   const exchangesPair = useSelector(exhangesPair);
+
   const { updateSelectedExchangePair } = useExchangePairContext();
+
+  const allJetTokens = useSelector(allCurrenciesSelector);
 
   function changeExchagePair(exchangePair: any) {
     try {
@@ -58,10 +61,43 @@ export function TradingSelectPanel() {
     }
   }, [navigate]);
 
+  const [item, setItem] = useState("All");
+
+  function showPairs() {
+    if (item == "All") {
+      return exchangesPair;
+    } else if (item == "Verified") {
+      return exchangesPair
+        .filter((item: any) => { 
+          return (allJetTokens
+            .filter((item: any) => { 
+              return item.verified 
+            }).map((item: any) => { 
+              return item.name.toLowerCase() 
+            }) as [string])
+          .includes(item.assets[0] as string) 
+        });
+    }
+  }
+
+  function pushFilter(item: string) {
+    if (item == "All") {
+      amplitude.track("SwapList.FilterAll");
+    } else if (item == "Verified") {
+      amplitude.track("SwapList.FilterVerified");
+    }
+    setItem(item);
+  }
+
   return (
     <Panel>
       <Group space={12}>
-        {exchangesPair?.map((item: any, index: number) => {
+        <Filters
+          setItem={pushFilter}
+          selectedItem={item}
+          menuItems={["All", "Verified"]}
+        />
+        {showPairs().map((item: any, index: number) => {
           if (item.active) {
             return (
               <Block

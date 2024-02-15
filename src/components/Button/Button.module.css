@@ -121,6 +121,11 @@
   background-color: var(--background_block);
 }
 
+.__mode_secondary_disabled {
+  color: var(--background_primary_button);
+  background-color: color-mix(in srgb, var(--background_primary_button), transparent 50%);
+}
+
 .__mode_secondary .__wrapper_in {
   color: var(--color_primary_color);
 }

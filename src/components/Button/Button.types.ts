@@ -5,6 +5,7 @@ export interface ButtonProps {
   mode?:
     | "primary"
     | "secondary"
+    | "secondary_disabled"
     | "secondary_with_accent_text"
     | "transparent"
     | "transparent_with_accent_text";
