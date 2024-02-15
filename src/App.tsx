@@ -37,8 +37,7 @@ export function App() {
     if (
       window.location.pathname.includes("/receive?tonAddress=") ||
       window.location.pathname.includes("/history?apiKey=") ||
-      (window.location.pathname.includes("/nft/") &&
-        window.location.pathname.includes("?tonAddress="))
+      (window.location.pathname.includes("/nft/") && window.location.pathname.includes("?tonAddress="))
     ) {
       return;
     }
@@ -48,7 +47,8 @@ export function App() {
       window.location.pathname.includes("/nft") ||
       window.location.pathname.includes("/swap") ||
       window.location.pathname.includes("/market") ||
-	  window.location.pathname.includes("/history")
+	    window.location.pathname.includes("/history") ||
+      window.location.pathname.includes("/send")
     ) {
       const requestTokenData = async () => {
         const response = await apiInit({
