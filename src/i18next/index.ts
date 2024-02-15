@@ -82,7 +82,9 @@ const resources = {
       "Balance": "Balance",
       "You don't have any jettons yet":"You don't have any jettons yet",
       "You can deposit any jetton to your wallet!":"You can deposit any jetton to your wallet!",
-      "UNVERIFIED":"UNVERIFIED"
+      "UNVERIFIED":"UNVERIFIED",
+      "All": "All",
+      "Verified": "Verified",
     },
   },
   ru: {
@@ -163,7 +165,9 @@ const resources = {
       "Market":"Маркет",
       "Balance": "Баланс",
       "You don't have any jettons yet":"У вас пока нет жетоновы",
-      "You can deposit any jetton to your wallet!":"Вы можете пополнить ваш кошелек любым жетоном!"
+      "You can deposit any jetton to your wallet!":"Вы можете пополнить ваш кошелек любым жетоном!",
+      "All": "Все",
+      "Verified": "Верифицированные",
     },
   },
 };

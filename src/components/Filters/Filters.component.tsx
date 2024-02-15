@@ -3,6 +3,7 @@ import { FiltersProps } from "./Filters.types";
 import cx from "classnames";
 import styles from "./Filters.module.css";
 import { Button } from "../Button";
+import { useTranslation } from "react-i18next";
 
 export const Filters: FC<FiltersProps> = ({ 
   setItem, 
@@ -10,6 +11,8 @@ export const Filters: FC<FiltersProps> = ({
   menuItems,
   className = "",
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <div 
@@ -24,7 +27,7 @@ export const Filters: FC<FiltersProps> = ({
               color={selectedItem == value ? "var(--tg-theme-text-color)" : "var(--accent)" }
               mode={selectedItem == value ? "primary" : "secondary_disabled"}
             >
-              {value}
+              {t(value)}
             </Button>
           );
         })}

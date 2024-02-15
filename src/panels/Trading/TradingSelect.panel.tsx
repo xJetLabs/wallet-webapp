@@ -1,12 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Block, Cell, Group, Panel, Text, Filters } from "../../components";
+import { Cell, Group, Panel, Text, Filters, Separator } from "../../components";
 import { useSelector } from "react-redux";
 import { exhangesPair, allCurrenciesSelector } from "../../store/reducers/user/user.selectors";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
 import { ROUTE_NAMES } from "../../router/constants";
 import { useEffect, useState } from "react";
+import cx from "classnames";
+import styles from "./Trading.module.css";
 
 import * as amplitude from "@amplitude/analytics-browser";
 
@@ -100,59 +102,66 @@ export function TradingSelectPanel() {
         {showPairs().map((item: any, index: number) => {
           if (item.active) {
             return (
-              <Block
-                key={index}
-                style={{ cursor: "pointer" }}
-                padding={12}
-                onClick={() => {
-                  changeExchagePair(item);
-                }}
-              >
-                <Cell
-                  before={
-                    <Text
-                      weight="600"
-                      size={16}
-                      lineHeight={"17px"}
-                      style={{ textTransform: "uppercase" }}
-                    >
-                      <span style={{ color: "var(--tg-theme-text-color)" }}>
-                        {t(item.assets[0])}
-                      </span>
-                      <span style={{ color: "var(--tg-theme-button-color)" }}>
-                        /{t(item.assets[1])}
-                      </span>
-                    </Text>
-                  }
-                  after={
-                    <div
-                      style={{
-                        display: "flex",
-                        flexFlow: "column",
-                        gap: "2px",
-                      }}
-                    >
+              // <Block
+              //   key={index}
+              //   style={{ cursor: "pointer" }}
+              //   padding={12}
+              //   onClick={() => {
+              //     changeExchagePair(item);
+              //   }}
+              // >
+                <div style={{
+                  cursor: "pointer",
+                  padding: "8px 0px 0px",
+                }}>
+                  <Cell
+                    before={
                       <Text
-                        weight="500"
-                        size={14}
+                        weight="600"
+                        size={16}
                         lineHeight={"17px"}
-                        color="var(--color_primary_color)"
+                        style={{ textTransform: "uppercase" }}
                       >
-                        {item.trading_data.avg_price.toFixed(5) }
+                        <span style={{ color: "var(--tg-theme-text-color)" }}>
+                          {t(item.assets[0])}
+                        </span>
+                        <span style={{ color: "var(--tg-theme-button-color)" }}>
+                          /{t(item.assets[1])}
+                        </span>
                       </Text>
-                      {/* <Text
-                        weight="400"
-                        size={12}
-                        lineHeight={"17px"}
-                        color="#29B77F"
+                    }
+                    after={
+                      <div
+                        style={{
+                          display: "flex",
+                          flexFlow: "column",
+                          gap: "2px",
+                        }}
                       >
-                        +
-                        {Number(item.trading_data.change_24h).toFixed(2) + " %"}
-                      </Text> */}
-                    </div>
-                  }
-                />
-              </Block>
+                        <Text
+                          weight="500"
+                          size={14}
+                          lineHeight={"17px"}
+                          color="var(--color_primary_color)"
+                        >
+                          {item.trading_data.avg_price.toFixed(5) }
+                        </Text>
+                        {/* <Text
+                          weight="400"
+                          size={12}
+                          lineHeight={"17px"}
+                          color="#29B77F"
+                        >
+                          +
+                          {Number(item.trading_data.change_24h).toFixed(2) + " %"}
+                        </Text> */}
+                      </div>
+                    }
+                  />
+                  <div style={{ height: "10px" }}></div>
+                  <Separator className={cx(styles.__separator)}/>
+                </div>
+              // </Block>
             );
           }
           return <></>;
