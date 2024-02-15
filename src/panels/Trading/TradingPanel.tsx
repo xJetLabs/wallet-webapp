@@ -111,7 +111,7 @@ export function TradingPanel() {
         .MainButton
         .offClick(handleSubmit);
     }
-  }, [])
+  }, [activeSwitch, selectedExchangePair, t, handleSubmit]);
 
   useEffect(() => {
     amplitude.track("SwapPage.Launched");
