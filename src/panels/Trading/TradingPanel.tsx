@@ -87,14 +87,12 @@ export function TradingPanel() {
       }
 
       if (res.status === "wait") {
-        (window as any).Telegram.WebApp.MainButton.offClick(handleSubmit);
         return navigate(ROUTE_NAMES.SWAP_SUCCESS);
       }
     });
   }
 
   useEffect(() => {
-    amplitude.track("SwapPage.Launched");
     if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
       (window as any).Telegram.WebApp.MainButton.show();
     }
@@ -105,6 +103,18 @@ export function TradingPanel() {
       .setText(t(activeSwitch).toUpperCase() + " " + selectedExchangePair?.assets[0].toUpperCase())
       .onClick(handleSubmit)
       .color = activeSwitch === "sell" ? "#de2c2c" : "#29B77F";
+
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(handleSubmit);
+    }
+  }, [])
+
+  useEffect(() => {
+    amplitude.track("SwapPage.Launched");
 
     if (query.get("pair") !== null) {
       localExchangesPair.forEach((item: any) => {

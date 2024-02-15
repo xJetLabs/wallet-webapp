@@ -49,14 +49,6 @@ export const SendPanel: FC = () => {
 
   const errorBlockTimeoutRef = useRef<NodeJS.Timer | undefined>(undefined);
 
-  const isButtonDisabled =
-    !formData.receiverToken ||
-    !formData.amount ||
-    isNaN(Number(formData.amount)) ||
-    Number(formData.amount) <= 0 ||
-    isAwaitResponse;
-
-  const locationn = useLocation();
   const {
     state: locationState,
   }: {
@@ -75,6 +67,27 @@ export const SendPanel: FC = () => {
     currencyData?.currency === "ton" || currencyData?.verified ? 0.07 : 0.12;
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(isAwaitResponse ? `${t("Sending")}...` : t("Send"))
+      .onClick(withdraw)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(withdraw)
+    }
+  });
 
   useEffect(() => {
     amplitude.track("SendPage.Launched");
@@ -154,47 +167,52 @@ export const SendPanel: FC = () => {
   };
 
   const withdraw = async () => {
-    if (myTonBalance.amount < comission) {
-      (window as any).Telegram.WebApp.showAlert(t("You don't have enough TON"));
+    navigate(ROUTE_NAMES.SEND_SUCCESS);
+    // if (myTonBalance.amount < comission) {
+    //   (window as any).Telegram.WebApp.showAlert(t("You don't have enough TON"));
 
-      return;
-    }
+    //   return;
+    // }
 
-    setIsAwaitResponse(true);
+    // (window as any).Telegram.WebApp.MainButton.showProgress(true);
+    // (window as any).Telegram.WebApp.MainButton.disable();
+    // setIsAwaitResponse(true);
 
-    const payload = {
-      ton_address: formData.receiverToken,
-      amount: Number(formData.amount),
-      currency: locationState.currency,
-    };
+    // const payload = {
+    //   ton_address: formData.receiverToken,
+    //   amount: Number(formData.amount),
+    //   currency: locationState.currency,
+    // };
 
-    const response: any = await sendCoins({
-      payload,
-    }).finally(() => {
-      setIsAwaitResponse(false);
-    });
+    // const response: any = await sendCoins({
+    //   payload,
+    // }).finally(() => {
+    //   (window as any).Telegram.WebApp.MainButton.hideProgress();
+    //   (window as any).Telegram.WebApp.MainButton.enable();
+    //   setIsAwaitResponse(false);
+    // });
 
-    if (
-      response?.data &&
-      !response?.response?.data.error &&
-      !response?.data.error
-    ) {
-      await balanceCheckWatcher();
+    // if (
+    //   response?.data &&
+    //   !response?.response?.data.error &&
+    //   !response?.data.error
+    // ) {
+    //   await balanceCheckWatcher();
 
-      amplitude.track("SendPage.SendButton.Pushed");
+    //   amplitude.track("SendPage.SendButton.Pushed");
 
-      navigate(ROUTE_NAMES.SEND_SUCCESS, {
-        state: payload,
-      });
-    } else if (response?.response?.data?.error || response?.data?.error) {
-      try {
-        window.navigator.vibrate(200);
-      } catch (e) {
-        (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
-      }
+    //   navigate(ROUTE_NAMES.SEND_SUCCESS, {
+    //     state: payload,
+    //   });
+    // } else if (response?.response?.data?.error || response?.data?.error) {
+    //   try {
+    //     window.navigator.vibrate(200);
+    //   } catch (e) {
+    //     (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("heavy");
+    //   }
 
-      setError(response?.response?.data?.error || response?.data?.error);
-    }
+    //   setError(response?.response?.data?.error || response?.data?.error);
+    // }
   };
 
   return (
@@ -305,15 +323,6 @@ export const SendPanel: FC = () => {
           color="var(--background_block)"
           backgroundColor="transparent"
         />
-        <Button
-          size="m"
-          mode="primary"
-          onClick={withdraw}
-          disabled={isButtonDisabled}
-          before={isAwaitResponse ? <Date24OutlineIcon /> : null}
-        >
-          {isAwaitResponse ? `${t("Sending")}...` : t("Send")}
-        </Button>
         {error ? <ErrorBlock text={errorMapping(error)} /> : null}
       </Group>
     </Panel>

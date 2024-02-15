@@ -48,6 +48,12 @@ export const SelectTransferPanel: FC = () => {
     amplitude.track('SendPage.ChooseToken.Launched');
   });
 
+  useEffect(() => {
+    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.hide();
+    }
+  }, []);
+
   return (
     <Panel>
       <Group space={12}>

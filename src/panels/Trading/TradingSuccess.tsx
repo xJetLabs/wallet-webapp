@@ -28,10 +28,17 @@ export const TradingSuccessPanel: FC = () => {
       .setText(t("Back"))
       .onClick(buttonAction)
       .color = (window as any).Telegram.WebApp.themeParams.button_color;
+    
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(buttonAction);
+    }
   });
 
   function buttonAction() {
-    (window as any).Telegram.WebApp.MainButton.offClick(buttonAction);
     try {
       window.navigator.vibrate(70);
     } catch (e) {

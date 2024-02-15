@@ -20,6 +20,39 @@ export const SendSuccessPanel: FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t("Back"))
+      .onClick(buttonAction)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+    
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(buttonAction);
+    }
+  });
+
+  function buttonAction() {
+    try {
+      window.navigator.vibrate(70);
+    } catch (e) {
+      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
+        "light"
+      );
+    }
+
+    navigate(-3);
+  }
+
   return (
     <Panel centerVertical>
       <Group space={24}>
@@ -30,23 +63,6 @@ export const SendSuccessPanel: FC = () => {
           )} ${state?.currency?.toUpperCase()}`}
           bottom={formatToken(state?.ton_address || "")}
         />
-        <Button
-          size={"m"}
-          mode={"secondary"}
-          onClick={() => {
-            try {
-              window.navigator.vibrate(70);
-            } catch (e) {
-              (window as any).Telegram.WebApp.HapticFeedback.impactOccurred(
-                "light"
-              );
-            }
-
-            navigate(-3);
-          }}
-        >
-          {t("Back")}
-        </Button>
       </Group>
     </Panel>
   );

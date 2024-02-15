@@ -146,7 +146,8 @@ export const ReceivePanel: FC = () => {
   };
 
   const check = async () => {
-    setIsButtonDisabled(true);
+    (window as any).Telegram.WebApp.MainButton.showProgress(true);
+    (window as any).Telegram.WebApp.MainButton.disable();
 
     amplitude.track("DepositPage.CheckButton.Pushed");
 
@@ -158,7 +159,8 @@ export const ReceivePanel: FC = () => {
 
     await checkDeposit().finally(() => {
       setTimeout(() => {
-        setIsButtonDisabled(false);
+        (window as any).Telegram.WebApp.MainButton.hideProgress();
+        (window as any).Telegram.WebApp.MainButton.enable();
       }, 500);
     });
   };
