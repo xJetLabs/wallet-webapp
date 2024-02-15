@@ -106,14 +106,19 @@ export function TradingSelectPanel() {
               //   key={index}
               //   style={{ cursor: "pointer" }}
               //   padding={12}
-              //   onClick={() => {
-              //     changeExchagePair(item);
-              //   }}
+                // onClick={() => {
+                //   changeExchagePair(item);
+                // }}
               // >
-                <div style={{
-                  cursor: "pointer",
-                  padding: "8px 0px 0px",
-                }}>
+                <div 
+                  style={{
+                    cursor: "pointer",
+                    padding: "8px 0px 0px",
+                  }}
+                  onClick={() => {
+                    changeExchagePair(item);
+                  }
+                }>
                   <Cell
                     before={
                       <Text
