@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 import { Cell, Group, Panel, Text, Filters, Separator } from "../../components";
+import { ReactComponent as Star } from "../../icons/Star24.svg";
+import { ReactComponent as StarDisabled } from "../../icons/Star24Outline.svg";
 import { useSelector } from "react-redux";
 import { exhangesPair, allCurrenciesSelector } from "../../store/reducers/user/user.selectors";
 import { useExchangePairContext } from "../../providers/ExchangePairContextProvider";
@@ -17,10 +19,12 @@ export function TradingSelectPanel() {
   const navigate = useNavigate();
 
   const exchangesPair = useSelector(exhangesPair);
+  const allJetTokens = useSelector(allCurrenciesSelector);
 
   const { updateSelectedExchangePair } = useExchangePairContext();
 
-  const allJetTokens = useSelector(allCurrenciesSelector);
+  const [favoritePairs, setFavorite] = useState<Array<string[]>>();
+  const [item, setItem] = useState<string>("Verified");
 
   function changeExchagePair(exchangePair: any) {
     try {
@@ -49,6 +53,23 @@ export function TradingSelectPanel() {
   }, []);
 
   useEffect(() => {
+    const cloudStorage = (window as any).Telegram.WebApp.CloudStorage;
+    cloudStorage.getItem("favoritePairs", (error: Error, response: string) => {
+      if (response != null) {
+        setFavorite(JSON.parse(response));
+      }
+    })
+  }, []);
+
+  useEffect(() => {
+    const cloudStorage = (window as any).Telegram.WebApp.CloudStorage;
+    cloudStorage.setItem(
+      "favoritePairs", 
+      JSON.stringify(favoritePairs), (error: Error, answer: string) => { }
+    )
+  }, [favoritePairs])
+
+  useEffect(() => {
     amplitude.track("SwapList.Launched");
     if ((window as any).Telegram.WebApp.initDataUnsafe.start_param != null) {
       const args = (window as any).Telegram.WebApp.initDataUnsafe.start_param.split("_");
@@ -61,9 +82,18 @@ export function TradingSelectPanel() {
       );
       (window as any).Telegram.WebApp.initDataUnsafe.start_param = null;
     }
-  }, [navigate]);
+  }, []);
 
-  const [item, setItem] = useState("All");
+  function showVerified() {
+    return exchangesPair
+      .filter((item: any) => {
+        const assets: string[] = item.assets;
+        return (favoritePairs ?? [])
+          .filter((item: string[]) => {
+            return item[0] == assets[0] && item[1] == assets[1]
+          }).length > 0
+      })
+  }
 
   function showPairs() {
     if (item == "All") {
@@ -79,7 +109,25 @@ export function TradingSelectPanel() {
             }) as [string])
           .includes(item.assets[0] as string) 
         });
-    }
+    } else if (item == "NEW") {    
+      return exchangesPair
+        .filter((item: any) => {
+          const assets: string[] = item.assets;
+          return [["web3", "ton"], ["lky", "ton"], ["fish", "ton"]]
+            .filter((item: string[]) => {
+              return item[0] == assets[0] && item[1] == assets[1]
+            }).length > 0
+        })
+      } else if (item == "HOT🔥") {
+        return exchangesPair
+        .filter((item: any) => {
+          const assets: string[] = item.assets;
+          return [["scale", "ton"], ["bolt", "ton"]]
+            .filter((item: string[]) => {
+              return item[0] == assets[0] && item[1] == assets[1]
+            }).length > 0
+        })
+      }
   }
 
   function pushFilter(item: string) {
@@ -87,6 +135,12 @@ export function TradingSelectPanel() {
       amplitude.track("SwapList.FilterAll");
     } else if (item == "Verified") {
       amplitude.track("SwapList.FilterVerified");
+    } else if (item == "⭐️") {
+      amplitude.track("SwapList.FilterFavorites");
+    } else if (item == "NEW") {
+      amplitude.track("SwapList.FilterNew");
+    } else if (item == "HOT🔥") {
+      amplitude.track("SwapList.FilterHot");
     }
     setItem(item);
   }
@@ -97,80 +151,198 @@ export function TradingSelectPanel() {
         <Filters
           setItem={pushFilter}
           selectedItem={item}
-          menuItems={["All", "Verified"]}
+          menuItems={["Verified", "All", "NEW"]}
         />
-        {showPairs().map((item: any, index: number) => {
+        {item == "Verified" ?
+          <Text
+            weight="600"
+            size={18}
+            style={{ 
+              padding: "20px 0 0",
+            }}
+          >
+            {t("Favorites")}
+          </Text> : <></>
+        }
+        {item == "Verified" ? showVerified().map((item: any, index: number) => {
           if (item.active) {
             return (
-              // <Block
-              //   key={index}
-              //   style={{ cursor: "pointer" }}
-              //   padding={12}
-                // onClick={() => {
-                //   changeExchagePair(item);
-                // }}
-              // >
-                <div 
-                  style={{
-                    cursor: "pointer",
-                    padding: "8px 0px 0px",
+              <div>
+                <div style={{
+                  display: "flex",
+                  flexFlow: "row",
+                  gap: "8px",
+                  alignItems: "center",
+                  cursor: "pointer"
                   }}
-                  onClick={() => {
-                    changeExchagePair(item);
-                  }
-                }>
-                  <Cell
-                    before={
-                      <Text
-                        weight="600"
-                        size={16}
-                        lineHeight={"17px"}
-                        style={{ textTransform: "uppercase" }}
-                      >
-                        <span style={{ color: "var(--tg-theme-text-color)" }}>
-                          {t(item.assets[0])}
-                        </span>
-                        <span style={{ color: "var(--tg-theme-button-color)" }}>
-                          /{t(item.assets[1])}
-                        </span>
-                      </Text>
-                    }
-                    after={
-                      <div
-                        style={{
-                          display: "flex",
-                          flexFlow: "column",
-                          gap: "2px",
+                >
+                  {
+                    (favoritePairs ?? [])
+                      .filter((i: string[]) => {
+                        return i[0] == item.assets[0] && i[1] == item.assets[1]
+                      }).length > 0 ? <Star 
+                        onClick={() => {
+                          setFavorite((favoritePairs ?? [])
+                            .filter((i: string[]) => {
+                              return i[0] !== item.assets[0] || i[1] !== item.assets[1]
+                            }
+                          ))
+                        }} /> : <StarDisabled 
+                        onClick={() => {
+                          setFavorite([...(favoritePairs ?? []), item.assets]);
                         }}
-                      >
-                        <Text
-                          weight="500"
-                          size={14}
-                          lineHeight={"17px"}
-                          color="var(--color_primary_color)"
-                        >
-                          {item.trading_data.avg_price.toFixed(5) }
-                        </Text>
-                        {/* <Text
-                          weight="400"
-                          size={12}
-                          lineHeight={"17px"}
-                          color="#29B77F"
-                        >
-                          +
-                          {Number(item.trading_data.change_24h).toFixed(2) + " %"}
-                        </Text> */}
-                      </div>
-                    }
-                  />
-                  <div style={{ height: "10px" }}></div>
-                  <Separator className={cx(styles.__separator)}/>
+                    />
+                  }
+                  <div
+                    style={{
+                      display: "flex",
+                      flexFlow: "row",
+                      width: "100%",
+                      cursor: "pointer"
+                    
+                    }}
+                    onClick={() => {
+                      changeExchagePair(item);
+                    }}
+                  >
+                    <Text
+                      weight="600"
+                      size={16}
+                      lineHeight={"17px"}
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      <span style={{ color: "var(--tg-theme-text-color)" }}>
+                        {t(item.assets[0])}
+                      </span>
+                      <span style={{ color: "var(--tg-theme-button-color)" }}>
+                        /{t(item.assets[1])}
+                      </span>
+                    </Text>
+                    <div style={{ 
+                      maxWidth: "100%",
+                      margin: "auto"
+                    }}></div>
+                    <Text
+                      weight="500"
+                      size={14}
+                      lineHeight={"17px"}
+                      color="var(--color_primary_color)"
+                    >
+                      {item.trading_data.avg_price.toFixed(5) }
+                    </Text>
+                    {/* <Text
+                      weight="400"
+                      size={12}
+                      lineHeight={"17px"}
+                      color="#29B77F"
+                    >
+                      +
+                      {Number(item.trading_data.change_24h).toFixed(2) + " %"}
+                    </Text> */}
+                  </div>
                 </div>
-              // </Block>
+                <div style={{ height: "10px" }}></div>
+                <Separator className={cx(styles.__separator)}/>
+              </div>
+            );
+          }
+        }) : <></>}
+        {item == "Verified" ?
+          <Text
+            weight="600"
+            size={18}
+            color={"var(--accent)"}
+            style={{ 
+              padding: "20px 0 0",
+            }}
+          >
+            {t("Verified")}
+          </Text> : <></>
+        }
+        {showPairs() ? showPairs().map((item: any, index: number) => {
+          if (item.active) {
+            return (
+              <div>
+                <div style={{
+                  display: "flex",
+                  flexFlow: "row",
+                  gap: "8px",
+                  alignItems: "center",
+                  cursor: "pointer"
+                  }}
+                >
+                  {
+                    (favoritePairs ?? [])
+                      .filter((i: string[]) => {
+                        return i[0] == item.assets[0] && i[1] == item.assets[1]
+                      }).length > 0 ? <Star 
+                        onClick={() => {
+                          setFavorite((favoritePairs ?? [])
+                            .filter((i: string[]) => {
+                              return i[0] !== item.assets[0] || i[1] !== item.assets[1]
+                            }
+                          ))
+                        }} /> : <StarDisabled 
+                        onClick={() => {
+                          setFavorite([...(favoritePairs ?? []), item.assets]);
+                        }}
+                    />
+                  }
+                  <div
+                    style={{
+                      display: "flex",
+                      flexFlow: "row",
+                      width: "100%",
+                      cursor: "pointer"
+                    
+                    }}
+                    onClick={() => {
+                      changeExchagePair(item);
+                    }}
+                  >
+                    <Text
+                      weight="600"
+                      size={16}
+                      lineHeight={"17px"}
+                      style={{ textTransform: "uppercase" }}
+                    >
+                      <span style={{ color: "var(--tg-theme-text-color)" }}>
+                        {t(item.assets[0])}
+                      </span>
+                      <span style={{ color: "var(--tg-theme-button-color)" }}>
+                        /{t(item.assets[1])}
+                      </span>
+                    </Text>
+                    <div style={{ 
+                      maxWidth: "100%",
+                      margin: "auto"
+                    }}></div>
+                    <Text
+                      weight="500"
+                      size={14}
+                      lineHeight={"17px"}
+                      color="var(--color_primary_color)"
+                    >
+                      {item.trading_data.avg_price.toFixed(5) }
+                    </Text>
+                    {/* <Text
+                      weight="400"
+                      size={12}
+                      lineHeight={"17px"}
+                      color="#29B77F"
+                    >
+                      +
+                      {Number(item.trading_data.change_24h).toFixed(2) + " %"}
+                    </Text> */}
+                  </div>
+                </div>
+                <div style={{ height: "10px" }}></div>
+                <Separator className={cx(styles.__separator)}/>
+              </div>
             );
           }
           return <></>;
-        })}
+        }) : <></>}
       </Group>
     </Panel>
   );

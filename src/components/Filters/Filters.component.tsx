@@ -24,6 +24,7 @@ export const Filters: FC<FiltersProps> = ({
           return (
             <Button
               onClick={() => setItem(value)}
+              size="content"
               color={selectedItem == value ? "var(--tg-theme-text-color)" : "var(--accent)" }
               mode={selectedItem == value ? "primary" : "secondary_disabled"}
             >
