@@ -103,6 +103,17 @@
   line-height: 17px;
 }
 
+.__size_filter {
+  min-height: fit-content;
+  width: fit-content;
+  min-width: 50px;
+}
+
+.__size_filter .__content_in {
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .__size_l {
 }
 
