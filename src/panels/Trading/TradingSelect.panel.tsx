@@ -145,6 +145,12 @@ export function TradingSelectPanel() {
     setItem(item);
   }
 
+  function removeTrailingZeros(num: any) {
+    const number = parseFloat(num)
+  
+    return number * 1
+  }
+
   return (
     <Panel>
       <Group space={12}>
@@ -228,7 +234,9 @@ export function TradingSelectPanel() {
                       lineHeight={"17px"}
                       color="var(--color_primary_color)"
                     >
-                      {item.trading_data.avg_price.toFixed(5) }
+                      { item.trading_data.avg_price.toLocaleString() == 0 ? 
+                        removeTrailingZeros(item.trading_data.avg_price.toFixed(7)) : 
+                        item.trading_data.avg_price.toLocaleString() }
                     </Text>
                     {/* <Text
                       weight="400"
@@ -323,7 +331,9 @@ export function TradingSelectPanel() {
                       lineHeight={"17px"}
                       color="var(--color_primary_color)"
                     >
-                      {item.trading_data.avg_price.toFixed(5) }
+                      { item.trading_data.avg_price.toLocaleString() == 0 ? 
+                        removeTrailingZeros(item.trading_data.avg_price.toFixed(7)) : 
+                        item.trading_data.avg_price.toLocaleString() }
                     </Text>
                     {/* <Text
                       weight="400"

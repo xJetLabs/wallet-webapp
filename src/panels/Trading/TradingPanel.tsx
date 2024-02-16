@@ -92,6 +92,12 @@ export function TradingPanel() {
     });
   }
 
+  function removeTrailingZeros(num: any) {
+    const number = parseFloat(num)
+  
+    return number * 1
+  }
+
   useEffect(() => {
     if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
       (window as any).Telegram.WebApp.MainButton.show();
@@ -180,7 +186,7 @@ export function TradingPanel() {
                     {selectedExchangePair?.assets[1]}
                   </Text>
                   <Text weight="500" size={14}>
-                    {selectedExchangePair?.trading_data.avg_price.toFixed(5)}
+                    {removeTrailingZeros(selectedExchangePair?.trading_data.avg_price.toFixed(7))}
                   </Text>
                 </div>
               }
