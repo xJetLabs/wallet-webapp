@@ -188,6 +188,9 @@ export function TradingSelectPanel() {
                         return i[0] == item.assets[0] && i[1] == item.assets[1]
                       }).length > 0 ? <Star 
                         onClick={() => {
+                          amplitude.track("SwapList.FavoriteRemoved", {
+                            pair: item.assets[0] + "_" + item.assets[1],
+                          });
                           setFavorite((favoritePairs ?? [])
                             .filter((i: string[]) => {
                               return i[0] !== item.assets[0] || i[1] !== item.assets[1]
@@ -195,6 +198,9 @@ export function TradingSelectPanel() {
                           ))
                         }} /> : <StarDisabled 
                         onClick={() => {
+                          amplitude.track("SwapList.FavoriteAdded", {
+                            pair: item.assets[0] + "_" + item.assets[1],
+                          });
                           setFavorite([...(favoritePairs ?? []), item.assets]);
                         }}
                     />
