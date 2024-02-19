@@ -85,6 +85,7 @@ const resources = {
       "UNVERIFIED":"UNVERIFIED",
       "All": "All",
       "Verified": "Verified",
+      "channelUrl": "https://xJetLabs.t.me",
     },
   },
   ru: {
@@ -168,6 +169,7 @@ const resources = {
       "You can deposit any jetton to your wallet!":"Вы можете пополнить ваш кошелек любым жетоном!",
       "All": "Все",
       "Verified": "Верифицированные",
+      "channelUrl": "https://xJetNews.t.me",
     },
   },
 };

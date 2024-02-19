@@ -106,7 +106,7 @@ export function SettingsPanel() {
               Github
             </Cell>
           </Link>
-          <Link href="https://xJetNews.t.me" target={"_self"}>
+          <Link href={t("channelUrl") ?? "https://xJetLabs.t.me"} target={"_self"}>
             <Cell
               after={<GoArrow24OutlineIcon color={"var(--accent)"} />}
               withCursor
