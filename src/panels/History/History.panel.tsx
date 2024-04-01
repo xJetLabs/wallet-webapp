@@ -13,16 +13,16 @@ import { ReactComponent as Receipt18Outline } from "../../icons/Receipt18Outline
 
 import { useTranslation } from "react-i18next";
 
-import * as amplitude from '@amplitude/analytics-browser';
+import * as amplitude from "@amplitude/analytics-browser";
 
 import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
 import { useQuery } from "../../hooks/useQuery";
 
-
 const historyAmountMap = (amount: number, type: string) => {
-  const isIncomeOrDeposit = type.startsWith("incoming_") || type.startsWith("deposit_");
-  
+  const isIncomeOrDeposit =
+    type.startsWith("incoming_") || type.startsWith("deposit_");
+
   return {
     amount,
     sign: isIncomeOrDeposit ? "+" : "-",
@@ -70,7 +70,11 @@ export const HistoryPanel: React.FC = () => {
   const requestHistory = useCallback(async () => {
     pageScrollRef.current = true;
 
-    const historyResponse = await getHistory(20, history.length || 0, query.get("apiKey"));
+    const historyResponse = await getHistory(
+      20,
+      history.length || 0,
+      query.get("apiKey")
+    );
     const operations = historyResponse?.data?.operations;
 
     if (operations) {
@@ -94,7 +98,7 @@ export const HistoryPanel: React.FC = () => {
   }, [history.length]);
 
   useEffect(() => {
-    amplitude.track("HistoryPage.Launched")
+    amplitude.track("HistoryPage.Launched");
     const onScroll = () => {
       if (document.scrollingElement) {
         const { scrollTop, scrollHeight, clientHeight } =
@@ -124,30 +128,31 @@ export const HistoryPanel: React.FC = () => {
   const historyTypeMap = (type: string) => {
     switch (type) {
       case "outgoing_apiDeposit":
-        return t("Sent to api");
+        return t(type);
       case "deposit_onchain":
-        return t("Received");
+        return t(type);
       case "withdrawal_onchain":
-        return t("Transfer to wallet");
+        return t(type);
       case "outgoing_send":
-        return t("Sent to User");
+        return t(type);
       case "incoming_send":
-        return t("Received from User");
+        return t(type);
       case "incoming_activateCheque":
-        return t("Cheque activation");
+        return t(type);
       case "outgoing_createCheque":
-        return t("Cheque created");
+        return t(type);
       case "incoming_fire":
+        return t(type);
       case "outgoing_fire":
-        return t("Fire jetton in chat");
+        return t(type);
       case "outgoing_invoicePayment":
-        return t("Payment for invoice");
+        return t(type);
       case "incoming_invoicePayment":
-        return t("Invoice payment");
+        return t(type);
       case "outgoing_onchainSwap":
-        return t("Jetton swap");
+        return t(type);
       case "incoming_deleteCheque":
-        return t("Cheque delete");
+        return t(type);
       default:
         return type;
     }
