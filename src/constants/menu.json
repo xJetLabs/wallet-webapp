@@ -19,13 +19,6 @@
           "type": "text"
         },
         {
-          "title": "Stalin Bridge",
-          "subtitle": "Bridge between xJetSwap and TonRocket",
-          "imageUrl": "https://github.com/xJetLabs/assets/blob/main/ivsBridge-logo.jpeg?raw=true",
-          "action": "https://t.me/ton_invaders_bot?start=263737173",
-          "type": "text"
-        },
-        {
           "title": "EXTON",
           "subtitle": "Exchange on xJetSwap API",
           "imageUrl": "https://github.com/xJetLabs/assets/blob/main/exton-logo.jpeg?raw=true",
@@ -33,12 +26,19 @@
           "type": "text"
         }
       ],
-      "showedOnMainScreen": 4
+      "showedOnMainScreen": 3
     },
     {
       "id": "xJetNews",
       "title": "xJetNews",
       "cells": [
+        {
+          "title": "Swaps available in xJetSwap!",
+          "subtitle": "You can swap TON, IVS, EXC and more on dedust!",
+          "imageUrl": "https://raw.githubusercontent.com/xJetLabs/assets/main/xjet-logo.png",
+          "action": "https://t.me/xJetSwapBot/swap",
+          "type": "text"
+        },
         {
           "title": "NFTs in xJet!",
           "subtitle": "Now you can use NFT in our bot, besides the possibility of convenient sale contracts will appear soon.",

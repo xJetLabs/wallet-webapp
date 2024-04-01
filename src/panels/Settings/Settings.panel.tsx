@@ -106,7 +106,7 @@ export function SettingsPanel() {
               Github
             </Cell>
           </Link>
-          <Link href="https://xJetNews.t.me" target={"_self"}>
+          <Link href={t("channelUrl") ?? "https://xJetLabs.t.me"} target={"_self"}>
             <Cell
               after={<GoArrow24OutlineIcon color={"var(--accent)"} />}
               withCursor
@@ -132,14 +132,18 @@ export function SettingsPanel() {
           </Link>
         </Group>
 
-        <Link href="https://astralyx.dev/">
-          <Block className={styles.__astalyx_info}>
-            <Text weight={"600"} size={14} lineHeight={"17px"}>
-              Powered by
-            </Text>
-            <AstralyxLogoIcon />
-          </Block>
-        </Link>
+        <Group space={12}>
+        <Link href="https://beta.redoubt.online/">
+            <Block className={styles.__redoubt_info}>
+              <Text weight={"600"} size={14} lineHeight={"17px"}>
+                Data from
+              </Text>
+              <Text weight={"600"} size={18} lineHeight={"17px"} color={"var(--accent)"}>
+                re:doubt
+              </Text>
+            </Block>
+          </Link>
+        </Group>
       </Group>
     </Panel>
   );

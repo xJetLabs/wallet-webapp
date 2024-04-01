@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import cx from "classnames";
 import { useTranslation } from "react-i18next";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { isMobile } from "../../constants";
 import { formatNumber } from "../../utils";
 import { ROUTE_NAMES } from "../../router/constants";
@@ -28,7 +30,7 @@ import {
 } from "../../components";
 
 import { ReactComponent as History24OutlineIcon } from "../../icons/History24Outline.svg";
-import { ReactComponent as Settings24OutlineIcon } from "../../icons/Settings24Outline.svg";
+import { ReactComponent as Swap24OutlineIcon } from "../../icons/Swap24Outline.svg";
 import { ReactComponent as Send24OutlineIcon } from "../../icons/Send24Outline.svg";
 import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Outline.svg";
 import { ReactComponent as Chains20OutlineIcon } from "../../icons/Chains20Outline.svg";
@@ -55,10 +57,14 @@ export const HomePanel: FC = () => {
   const totalAmounts = useSelector(totalAmountsSelector);
 
   useEffect(() => {
+    amplitude.track("WalletPage.Launched");
     document.body.scrollTo({
       top: 0,
       behavior: "smooth",
     });
+    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.hide();
+    }
   }, []);
 
   useEffect(() => {
@@ -92,6 +98,7 @@ export const HomePanel: FC = () => {
   }, [totalAmounts, cachedTotalAmounts]);
 
   const navigateToSend = () => {
+    amplitude.track("WalletPage.SendButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -102,6 +109,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToReceive = () => {
+    amplitude.track("WalletPage.ReceiveButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -112,6 +120,7 @@ export const HomePanel: FC = () => {
   };
 
   const navigateToHistory = () => {
+    amplitude.track("WalletPage.HistoryButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -121,17 +130,19 @@ export const HomePanel: FC = () => {
     navigate(ROUTE_NAMES.HISTORY);
   };
 
-  const navigateToSettings = () => {
+  const navigateToSwaps = () => {
+    amplitude.track("WalletPage.SwapsButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
       (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
     }
 
-    navigate(ROUTE_NAMES.SETTINGS);
+    navigate(ROUTE_NAMES.SWAP_SELECT);
   };
 
   const navigateToMenu = () => {
+    amplitude.track("WalletPage.MenuButton.Pushed");
     try {
       window.navigator.vibrate(70);
     } catch (e) {
@@ -223,19 +234,19 @@ export const HomePanel: FC = () => {
                 </Button>
                 <Button
                   stretched
+                  before={<Swap24OutlineIcon />}
+                  mode={"secondary_with_accent_text"}
+                  onClick={navigateToSwaps}
+                >
+                  {t("Swap")}
+                </Button>
+                <Button
+                  stretched
                   before={<History24OutlineIcon />}
                   mode={"secondary_with_accent_text"}
                   onClick={navigateToHistory}
                 >
                   {t("History")}
-                </Button>
-                <Button
-                  stretched
-                  before={<Settings24OutlineIcon />}
-                  mode={"secondary_with_accent_text"}
-                  onClick={navigateToSettings}
-                >
-                  {t("Settings")}
                 </Button>
               </div>
             </Group>
@@ -280,19 +291,6 @@ export const HomePanel: FC = () => {
             })}
           </Group>
         ) : null}
-        {verifiedBalances.length > 0 && unverifiedBalances.length > 0 ? (
-          <Text
-            weight={"600"}
-            size={14}
-            lineHeight={"17px"}
-            color={"var(--accent)"}
-            className={styles.__centered_text}
-          >
-            You don't have any jettons yet
-            <br/>
-            You can deposit any jetton to your wallet!
-          </Text>
-        ) : null}
       </Group>
     </Panel>
   );
@@ -311,7 +309,7 @@ const renderJettonItem = (v: any, i: number) => {
     : "_blank";
 
   return (
-    <Link key={i} href={ProjectURL} target={urlTarget} withCursor>
+    <Link key={i} href={ProjectURL} target={urlTarget} onClick={() => {amplitude.track("WalletPage.TokenButton.Pushed", {currency: v.currency})}} withCursor>
       <Cell
         key={`Jetton_${i}`}
         before={

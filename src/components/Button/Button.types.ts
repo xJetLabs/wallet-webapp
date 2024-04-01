@@ -1,10 +1,11 @@
 import { CSSProperties, ReactNode } from "react";
 
 export interface ButtonProps {
-  size?: "s" | "m" | "l" | "content";
+  size?: "s" | "m" | "l" | "content" | "filter";
   mode?:
     | "primary"
     | "secondary"
+    | "secondary_disabled"
     | "secondary_with_accent_text"
     | "transparent"
     | "transparent_with_accent_text";

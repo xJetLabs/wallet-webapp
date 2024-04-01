@@ -6,4 +6,5 @@ export interface LinkProps {
   children?: ReactNode;
   href?: string;
   withCursor?: boolean;
+  onClick?: () => void;
 }

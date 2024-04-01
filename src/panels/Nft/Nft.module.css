@@ -7,9 +7,10 @@
 .__wrapper .__block {
   flex: 1 0 calc(50% - 18px);
   flex-basis: calc(50% - 18px);
-  max-width: calc(50% - 18px);
+  max-width: calc(50% - 23px);
   border: 1px solid var(--tg-theme-secondary-bg-color);
   border-radius: 15px;
+  padding: 5px;
   background-color: var(--tg-theme-secondary-bg-color);
   color: var(--tg-theme-text-color);
   cursor: pointer;

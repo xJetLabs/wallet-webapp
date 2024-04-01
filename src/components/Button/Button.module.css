@@ -103,6 +103,17 @@
   line-height: 17px;
 }
 
+.__size_filter {
+  min-height: fit-content;
+  width: fit-content;
+  min-width: 50px;
+}
+
+.__size_filter .__content_in {
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .__size_l {
 }
 
@@ -119,6 +130,11 @@
 
 .__mode_secondary {
   background-color: var(--background_block);
+}
+
+.__mode_secondary_disabled {
+  color: var(--background_primary_button);
+  background-color: color-mix(in srgb, var(--background_primary_button), transparent 50%);
 }
 
 .__mode_secondary .__wrapper_in {

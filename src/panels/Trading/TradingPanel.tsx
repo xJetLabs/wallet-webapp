@@ -6,13 +6,12 @@ import { NumericFormat } from "react-number-format";
 import cx from "classnames";
 import { Navigate } from "react-router-dom";
 
+import * as amplitude from "@amplitude/analytics-browser";
+
 import {
-  Button,
   Cell,
   ErrorBlock,
-  Input,
   Panel,
-  Select,
   Text,
 } from "../../components";
 import { ReactComponent as SwitcherIcon } from "../../icons/Switcher.svg";
@@ -24,14 +23,7 @@ import { useExchangePairContext } from "../../providers/ExchangePairContextProvi
 import { errorMapping, formatNumber } from "../../utils";
 import {
   exhangesPair,
-  totalBOLTValueSelector,
-  totalEXCValueSelector,
-  totalJUSDCValueSelector,
-  totalJUSDTValueSelector,
-  totalKISSValueSelector,
-  totalLAVEValueSelector,
-  totalTAKEValueSelector,
-  totalTONValueSelector,
+  myBalancesSelector,
 } from "../../store/reducers/user/user.selectors";
 import styles from "./Trading.module.css";
 import { createOrder, getExchangesEstimate } from "../../api";
@@ -46,16 +38,7 @@ export function TradingPanel() {
     useExchangePairContext();
   const localExchangesPair = useSelector(exhangesPair);
 
-  const total: { [key: string]: number } = {
-    ton: useSelector(totalTONValueSelector),
-    exc: useSelector(totalEXCValueSelector),
-    bolt: useSelector(totalBOLTValueSelector),
-    lave: useSelector(totalLAVEValueSelector),
-    take: useSelector(totalTAKEValueSelector),
-    jusdc: useSelector(totalJUSDCValueSelector),
-    jusdt: useSelector(totalJUSDTValueSelector),
-    kiss: useSelector(totalKISSValueSelector),
-  };
+  const balances = useSelector(myBalancesSelector);
 
   const [activeSwitch, setActiveSwitch] = useState<"buy" | "sell">("buy");
   const [select, setSelect] = useState<"Market" | "Limit">("Market");
@@ -68,7 +51,9 @@ export function TradingPanel() {
 
   function navigateToSelectExchangePair() {
     vibrate();
-
+    
+    amplitude.track("SwapPage.SelectPair.Pushed");
+  
     navigate(ROUTE_NAMES.SWAP_SELECT, {
       state: { isPairParam: query.get("pair") !== null },
     });
@@ -84,45 +69,60 @@ export function TradingPanel() {
 
   async function handleSubmit() {
     vibrate();
+  
+    amplitude.track("SwapPage.SwapButton.Pushed");
 
     createOrder({
       type: activeSwitch,
       amount: buy,
-      price: price,
+      // price: price,
       pair:
         activeSwitch === "buy"
           ? [selectedExchangePair?.assets[0], selectedExchangePair?.assets[1]]
           : [selectedExchangePair?.assets[1], selectedExchangePair?.assets[0]],
+      min_expected_amount: 0.001,
     }).then((res) => {
       if (res.error) {
         return setError(res.error);
       }
 
-      if (res.success) {
+      if (res.status === "wait") {
         return navigate(ROUTE_NAMES.SWAP_SUCCESS);
       }
     });
   }
 
-  useEffect(() => {
-    if (query.get("pair") !== null) {
-      document.body.style.setProperty("--tg-color-scheme", "dark");
-      document.body.style.setProperty("--tg-theme-bg-color", "#212121");
-      document.body.style.setProperty("--tg-theme-button-color", "#8774e1");
-      document.body.style.setProperty(
-        "--tg-theme-button-text-color",
-        "#ffffff"
-      );
-      document.body.style.setProperty("--tg-theme-hint-color", "#aaaaaa");
-      document.body.style.setProperty("--tg-theme-link-color", "#8774e1");
-      document.body.style.setProperty(
-        "--tg-theme-secondary-bg-color",
-        "#181818"
-      );
-      document.body.style.setProperty("--tg-theme-text-color", "#fff");
-      document.body.style.setProperty("--tg-viewport-height", "100vh");
-      document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
+  function removeTrailingZeros(num: any) {
+    const number = parseFloat(num)
+  
+    return number * 1
+  }
 
+  useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t(activeSwitch).toUpperCase() + " " + selectedExchangePair?.assets[0].toUpperCase())
+      .onClick(handleSubmit)
+      .color = activeSwitch === "sell" ? "#de2c2c" : "#29B77F";
+
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(handleSubmit);
+    }
+  }, [activeSwitch, selectedExchangePair, t, handleSubmit]);
+
+  useEffect(() => {
+    amplitude.track("SwapPage.Launched");
+
+    if (query.get("pair") !== null) {
       localExchangesPair.forEach((item: any) => {
         if (
           item?.assets[0] === query.get("pair").split("_")[0] &&
@@ -132,7 +132,7 @@ export function TradingPanel() {
         }
       });
     }
-
+  
     if (Number(buy) === Number(0)) return;
 
     getExchangesEstimate({
@@ -157,7 +157,7 @@ export function TradingPanel() {
   return (
     <>
       {/* {!selectedExchangePair.hasOwnProperty("assets") ? ( */}
-      {query.get("pair") === null ? (
+      { (query.get("pair") === null) ? (
         <Navigate to={ROUTE_NAMES.SWAP_SELECT} />
       ) : (
         <Panel>
@@ -186,18 +186,18 @@ export function TradingPanel() {
                     {selectedExchangePair?.assets[1]}
                   </Text>
                   <Text weight="500" size={14}>
-                    {selectedExchangePair?.trading_data.avg_price}
+                    {removeTrailingZeros(selectedExchangePair?.trading_data.avg_price.toFixed(7))}
                   </Text>
                 </div>
               }
-              after={
-                <Text weight="500" size={12} color="#29B77F">
-                  +
-                  {Number(
-                    selectedExchangePair?.trading_data.change_24h
-                  ).toFixed(2) + " %"}
-                </Text>
-              }
+              // after={
+              //   <Text weight="500" size={12} color="#29B77F">
+              //     +
+              //     {Number(
+              //       selectedExchangePair?.trading_data.change_24h
+              //     ).toFixed(2) + " %"}
+              //   </Text>
+              // }
               onClick={navigateToSelectExchangePair}
             />
           </div>
@@ -209,6 +209,7 @@ export function TradingPanel() {
               })}
               onClick={() => {
                 vibrate();
+                amplitude.track("SwapPage.Segment.Changed", {wasType: "buy"});
                 setActiveSwitch("buy");
                 setBuy(0);
                 setEstimate(0);
@@ -237,6 +238,7 @@ export function TradingPanel() {
               }
               onClick={() => {
                 vibrate();
+                amplitude.track("SwapPage.Segment.Changed", {wasType: "sell"});
                 setActiveSwitch("sell");
                 setBuy(0);
                 setEstimate(0);
@@ -273,7 +275,7 @@ export function TradingPanel() {
             <div
               style={{
                 cursor: "default",
-                color: "#fff",
+                color: "var(--color_primary_color)",
                 fontFamily: "var(--text_font)",
               }}
             >
@@ -321,6 +323,7 @@ export function TradingPanel() {
                     fontFamily: "var(--text_font)",
                     fontSize: "16px",
                     userSelect: "none",
+                    color: "var(--color_primary_color)",
                   }}
                   onClick={() => {
                     setSelect("Market");
@@ -329,7 +332,7 @@ export function TradingPanel() {
                 >
                   Market
                 </div>
-                <div
+                {/* <div
                   style={{
                     cursor: "pointer",
                     padding: "8px 14px",
@@ -343,7 +346,7 @@ export function TradingPanel() {
                   }}
                 >
                   Limit
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -417,6 +420,7 @@ export function TradingPanel() {
                   strokeWidth="2"
                   style={{
                     cursor: "pointer",
+                    color: "var(--color_primary_color)"
                   }}
                   onClick={() => {
                     vibrate();
@@ -469,6 +473,7 @@ export function TradingPanel() {
                   strokeWidth="2"
                   style={{
                     cursor: "pointer",
+                    color: "var(--color_primary_color)",
                   }}
                   onClick={() => {
                     vibrate();
@@ -500,12 +505,13 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "25"});
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.25
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.25
                       );
                     }}
                   >
@@ -539,12 +545,13 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "50"});
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.5
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.5
                       );
                     }}
                   >
@@ -578,12 +585,13 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "75"});
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ] * 0.75
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount * 0.75
                       );
                     }}
                   >
@@ -617,12 +625,13 @@ export function TradingPanel() {
                       cursor: "pointer",
                     }}
                     onClick={() => {
+                      amplitude.track("SwapPage.PercantageButton.Pushed", {amount: "100"});
                       setBuy(
-                        total[
-                          activeSwitch === "sell"
+                        balances.find( (i: any) => 
+                          i.currency === (activeSwitch === "sell"
                             ? selectedExchangePair?.assets[0] || "ton"
-                            : selectedExchangePair?.assets[1] || "exc"
-                        ]
+                            : selectedExchangePair?.assets[1] || "exc")
+                        )?.amount
                       );
                     }}
                   >
@@ -695,7 +704,7 @@ export function TradingPanel() {
             <span
               style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
             >
-              Balance
+              {t("Balance")}
             </span>
             <span
               style={{ color: "var(--color_primary_color)", fontSize: "14px" }}
@@ -703,14 +712,18 @@ export function TradingPanel() {
               {`${
                 activeSwitch === "sell"
                   ? formatNumber(
-                      (total[
-                        selectedExchangePair.assets[0] || "ton"
-                      ] as number) || 0
+                      (
+                        balances.find(
+                          (i: any) => i.currency === selectedExchangePair.assets[0]
+                        )?.amount || 0
+                      )
                     )
                   : formatNumber(
-                      (total[
-                        selectedExchangePair.assets[1] || "exc"
-                      ] as number) || 0
+                      (
+                        balances.find(
+                          (i: any) => i.currency === selectedExchangePair.assets[1]
+                        )?.amount || 0
+                      )
                     )
               } ${
                 activeSwitch === "sell"
@@ -723,19 +736,6 @@ export function TradingPanel() {
               }`}
             </span>
           </div>
-
-          <Button
-            size="m"
-            style={{
-              marginTop: "12px",
-              background: activeSwitch === "sell" ? "red" : "#29B77F",
-              width: "100%",
-              textTransform: "uppercase",
-            }}
-            onClick={handleSubmit}
-          >
-            {activeSwitch} {selectedExchangePair?.assets[0] || "ton"}
-          </Button>
 
           <div style={{ margin: "16px 0", width: "100%" }}></div>
 

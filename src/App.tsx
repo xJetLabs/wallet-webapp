@@ -10,6 +10,10 @@ import { SwapDataContextProvider } from "./providers/SwapDataContextProvider";
 import { JetTokensContextProvider } from "./providers/JetTokensContextProvider";
 import { ExchangePairContextProvider } from "./providers/ExchangePairContextProvider";
 
+import * as amplitude from '@amplitude/analytics-browser';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
+
 import {
   apiInit,
   getAllCurrencies,
@@ -22,6 +26,7 @@ import {
 } from "./api";
 
 import { userActions } from "./store/reducers";
+import { ROUTE_NAMES } from "./router/constants";
 
 export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
@@ -32,8 +37,7 @@ export function App() {
     if (
       window.location.pathname.includes("/receive?tonAddress=") ||
       window.location.pathname.includes("/history?apiKey=") ||
-      (window.location.pathname.includes("/nft/") &&
-        window.location.pathname.includes("?tonAddress="))
+      (window.location.pathname.includes("/nft/") && window.location.pathname.includes("?tonAddress="))
     ) {
       return;
     }
@@ -43,7 +47,8 @@ export function App() {
       window.location.pathname.includes("/nft") ||
       window.location.pathname.includes("/swap") ||
       window.location.pathname.includes("/market") ||
-	  window.location.pathname.includes("/history")
+	    window.location.pathname.includes("/history") ||
+      window.location.pathname.includes("/send")
     ) {
       const requestTokenData = async () => {
         const response = await apiInit({
@@ -142,11 +147,44 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    try {
+      amplitude.init(process.env.REACT_APP_AMPLITUDE_API_KEY as string);
+      amplitude.track('App Opened');
+    } catch (e) {
+      console.error('Amplitude initialization error:', e);
+    }
+    try {
+      if ((window as any).Telegram) {
+        const identifyEvent = new amplitude.Identify();
+        identifyEvent.set('telegram_id', (window as any).Telegram.WebApp.initDataUnsafe.user.id);
+        amplitude.identify(identifyEvent);
+      }
+    } catch (e) {
+      console.error('Telegram user identification error:', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    (window as any)
+      .Telegram
+      .WebApp
+      .SettingsButton
+      .show()
+      .onClick(openSettings);
+  }, []);
+
+  function openSettings() {
+    router.navigate(ROUTE_NAMES.SETTINGS);
+  }
+
   return (
     <ExchangePairContextProvider>
       <JetTokensContextProvider>
         <SwapDataContextProvider>
           <RouterProvider router={router} />
+          <Analytics />
+          <SpeedInsights />
         </SwapDataContextProvider>
       </JetTokensContextProvider>
     </ExchangePairContextProvider>
