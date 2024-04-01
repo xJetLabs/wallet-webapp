@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Cell, Group, Panel, Text } from "../../components";
 
@@ -19,66 +19,46 @@ import { formatDate } from "../../utils";
 import { getHistory } from "../../api";
 import { useQuery } from "../../hooks/useQuery";
 
-const historyAmountMap = (serverAmount: number, serverType: string) => {
-  if (serverType.startsWith("incoming_")) {
-    return {
-      amount: serverAmount,
-      sign: "+",
-      color: "--color_positive",
-    };
-  } else {
-    return {
-      amount: serverAmount,
-      sign: "-",
-      color: "--color_negative",
-    };
+
+const historyAmountMap = (amount: number, type: string) => {
+  const isIncomeOrDeposit = type.startsWith("incoming_") || type.startsWith("deposit_");
+  
+  return {
+    amount,
+    sign: isIncomeOrDeposit ? "+" : "-",
+    color: isIncomeOrDeposit ? "--color_positive" : "--color_negative",
+  };
+};
+
+const historyIconMap = (type: string) => {
+  switch (type) {
+    case "incoming_activateCheque":
+    case "outgoing_createCheque":
+      return <Fire18OutlineIcon />;
+    case "outgoing_invoicePayment":
+    case "incoming_invoicePayment":
+      return <Receipt18Outline />;
+    case "incoming_send":
+    case "deposit_onchain":
+      return <Get18OutlineIcon />;
+    case "outgoing_send":
+      return <Send18OutlineIcon />;
+    case "incoming_fire":
+    case "outgoing_fire":
+      return <Receive18OutlineIcon />;
+    case "outgoing_onchainSwap":
+      return <Cart18Outline />;
+    case "withdrawal_onchain":
+    case "outgoing_apiDeposit":
+      return <BoxSend18OutlineIcon />;
+    case "incoming_deleteCheque":
+      return <Bin18Outline />;
+    default:
+      return null;
   }
 };
 
-const historyIconMap = (serverType: string) => {
-  if (
-    serverType === "incoming_activateCheque" ||
-    serverType === "outgoing_createCheque"
-  ) {
-    return <Fire18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_invoicePayment" || 
-  serverType === "incoming_invoicePayment") {
-    return <Receipt18Outline />;
-  }
-
-  if (serverType === "incoming_send" || serverType === "deposit_onchain") {
-    return <Get18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_send") {
-    return <Send18OutlineIcon />;
-  }
-
-  if (serverType === "incoming_fire" || serverType === "outgoing_fire") {
-    return <Receive18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_onchainSwap"){
-    return <Cart18Outline />;
-  }
-
-  if (
-    serverType === "withdrawal_onchain" ||
-    serverType === "outgoing_apiDeposit"
-  ) {
-    return <BoxSend18OutlineIcon />;
-  }
-
-  if (serverType === "incoming_deleteCheque"){
-    return <Bin18Outline />;
-  }
-
-  return null;
-};
-
-export const HistoryPanel: FC = () => {
+export const HistoryPanel: React.FC = () => {
   const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
   const query: any = useQuery();
@@ -141,8 +121,8 @@ export const HistoryPanel: FC = () => {
     };
   }, [requestHistory, history.length]);
 
-  const historyTypeMap = (serverType: string) => {
-    switch (serverType) {
+  const historyTypeMap = (type: string) => {
+    switch (type) {
       case "outgoing_apiDeposit":
         return t("Sent to api");
       case "deposit_onchain":
@@ -169,7 +149,7 @@ export const HistoryPanel: FC = () => {
       case "incoming_deleteCheque":
         return t("Cheque delete");
       default:
-        return serverType;
+        return type;
     }
   };
 
@@ -233,3 +213,5 @@ export const HistoryPanel: FC = () => {
     </Panel>
   );
 };
+
+export default HistoryPanel;
