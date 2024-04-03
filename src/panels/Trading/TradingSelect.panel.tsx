@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-import { Cell, Group, Panel, Text, Filters, Separator } from "../../components";
+import { Group, Panel, Text, Filters, Separator } from "../../components";
 import { ReactComponent as Star } from "../../icons/Star24.svg";
 import { ReactComponent as StarDisabled } from "../../icons/Star24Outline.svg";
 import { useSelector } from "react-redux";
@@ -90,61 +90,72 @@ export function TradingSelectPanel() {
         const assets: string[] = item.assets;
         return (favoritePairs ?? [])
           .filter((item: string[]) => {
-            return item[0] == assets[0] && item[1] == assets[1]
+            return item[0] === assets[0] && item[1] === assets[1]
           }).length > 0
       })
   }
 
   function showPairs() {
-    if (item == "All") {
+    if (item === "All") {
       return exchangesPair;
-    } else if (item == "Verified") {
-      return exchangesPair
-        .filter((item: any) => { 
-          return (allJetTokens
-            .filter((item: any) => { 
-              return item.verified 
-            }).map((item: any) => { 
-              return item.name.toLowerCase() 
-            }) as [string])
-          .includes(item.assets[0] as string) 
-        });
-    } else if (item == "NEW") {    
-      return exchangesPair
-        .filter((item: any) => {
-          const assets: string[] = item.assets;
-          return [["web3", "ton"], ["lky", "ton"], ["fish", "ton"]]
-            .filter((item: string[]) => {
-              return item[0] == assets[0] && item[1] == assets[1]
-            }).length > 0
-        })
-      } else if (item == "HOT🔥") {
-        return exchangesPair
-        .filter((item: any) => {
-          const assets: string[] = item.assets;
-          return [["scale", "ton"], ["bolt", "ton"]]
-            .filter((item: string[]) => {
-              return item[0] == assets[0] && item[1] == assets[1]
-            }).length > 0
-        })
-      }
+    } else if (item === "Verified") {
+      return exchangesPair.filter((item: any) => {
+        return (
+          allJetTokens
+            .filter((item: any) => {
+              return item.verified;
+            })
+            .map((item: any) => {
+              return item.name.toLowerCase();
+            }) as [string]
+        ).includes(item.assets[0] as string);
+      });
+    } else if (item === "NEW") {
+      return exchangesPair.filter((item: any) => {
+        const assets: string[] = item.assets;
+        return (
+          [
+            ["web3", "ton"],
+            ["lky", "ton"],
+            ["fish", "ton"],
+          ].filter((item: string[]) => {
+            return item[0] === assets[0] && item[1] === assets[1];
+          }).length > 0
+        );
+      });
+    } else if (item === "HOT🔥") {
+      return exchangesPair.filter((item: any) => {
+        const assets: string[] = item.assets;
+        return (
+          [
+            ["scale", "ton"],
+            ["bolt", "ton"],
+          ].filter((item: string[]) => {
+            return item[0] === assets[0] && item[1] === assets[1];
+          }).length > 0
+        );
+      });
+    }
   }
 
-  function pushFilter(item: string) {
-    if (item == "All") {
-      amplitude.track("SwapList.FilterAll");
-    } else if (item == "Verified") {
-      amplitude.track("SwapList.FilterVerified");
-    } else if (item == "⭐️") {
-      amplitude.track("SwapList.FilterFavorites");
-    } else if (item == "NEW") {
-      amplitude.track("SwapList.FilterNew");
-    } else if (item == "HOT🔥") {
-      amplitude.track("SwapList.FilterHot");
+  function pushFilter(item: string): void {
+    const filterMappings: { [key: string]: string } = {
+      "All": "SwapList.FilterAll",
+      "Verified": "SwapList.FilterVerified",
+      "⭐️": "SwapList.FilterFavorites",
+      "NEW": "SwapList.FilterNew",
+      "HOT🔥": "SwapList.FilterHot"
+    };
+  
+    const trackingEvent: string | undefined = filterMappings[item];
+    if (trackingEvent) {
+      amplitude.track(trackingEvent);
     }
+  
     setItem(item);
   }
-
+  
+  
   function removeTrailingZeros(num: any) {
     const number = parseFloat(num)
   
@@ -159,7 +170,7 @@ export function TradingSelectPanel() {
           selectedItem={item}
           menuItems={["Verified", "All", "NEW"]}
         />
-        {item == "Verified" ?
+        {item === "Verified" ?
           <Text
             weight="600"
             size={18}
@@ -170,7 +181,7 @@ export function TradingSelectPanel() {
             {t("Favorites")}
           </Text> : <></>
         }
-        {item == "Verified" ? showVerified().map((item: any, index: number) => {
+        {item === "Verified" ? showVerified().map((item: any, index: number) => {
           if (item.active) {
             return (
               <div>
@@ -185,7 +196,7 @@ export function TradingSelectPanel() {
                   {
                     (favoritePairs ?? [])
                       .filter((i: string[]) => {
-                        return i[0] == item.assets[0] && i[1] == item.assets[1]
+                        return i[0] === item.assets[0] && i[1] === item.assets[1]
                       }).length > 0 ? <Star 
                         onClick={() => {
                           amplitude.track("SwapList.FavoriteRemoved", {
@@ -240,7 +251,7 @@ export function TradingSelectPanel() {
                       lineHeight={"17px"}
                       color="var(--color_primary_color)"
                     >
-                      { item.trading_data.avg_price.toLocaleString() == 0 ? 
+                      { item.trading_data.avg_price.toLocaleString() === 0 ? 
                         removeTrailingZeros(item.trading_data.avg_price.toFixed(7)) : 
                         item.trading_data.avg_price.toLocaleString() }
                     </Text>
@@ -261,7 +272,7 @@ export function TradingSelectPanel() {
             );
           }
         }) : <></>}
-        {item == "Verified" ?
+        {item === "Verified" ?
           <Text
             weight="600"
             size={18}
@@ -288,7 +299,7 @@ export function TradingSelectPanel() {
                   {
                     (favoritePairs ?? [])
                       .filter((i: string[]) => {
-                        return i[0] == item.assets[0] && i[1] == item.assets[1]
+                        return i[0] === item.assets[0] && i[1] === item.assets[1]
                       }).length > 0 ? <Star 
                         onClick={() => {
                           setFavorite((favoritePairs ?? [])
@@ -337,7 +348,7 @@ export function TradingSelectPanel() {
                       lineHeight={"17px"}
                       color="var(--color_primary_color)"
                     >
-                      { item.trading_data.avg_price.toLocaleString() == 0 ? 
+                      { item.trading_data.avg_price.toLocaleString() === 0 ? 
                         removeTrailingZeros(item.trading_data.avg_price.toFixed(7)) : 
                         item.trading_data.avg_price.toLocaleString() }
                     </Text>

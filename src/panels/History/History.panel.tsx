@@ -16,8 +16,7 @@ import { useTranslation } from "react-i18next";
 import * as amplitude from "@amplitude/analytics-browser";
 
 import { formatDate } from "../../utils";
-import { getHistory } from "../../api";
-import { useQuery } from "../../hooks/useQuery";
+import { getHistory, apiInited } from "../../api";
 
 const historyAmountMap = (amount: number, type: string) => {
   const isIncomeOrDeposit =
@@ -61,7 +60,6 @@ const historyIconMap = (type: string) => {
 export const HistoryPanel: React.FC = () => {
   const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
-  const query: any = useQuery();
   const [history, setHistory] = useState<any>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
 
@@ -69,12 +67,7 @@ export const HistoryPanel: React.FC = () => {
 
   const requestHistory = useCallback(async () => {
     pageScrollRef.current = true;
-
-    const historyResponse = await getHistory(
-      20,
-      history.length || 0,
-      query.get("apiKey")
-    );
+    const historyResponse = await getHistory(20, history.length || 0);
     const operations = historyResponse?.data?.operations;
 
     if (operations) {
@@ -95,10 +88,12 @@ export const HistoryPanel: React.FC = () => {
     }
 
     pageScrollRef.current = false;
-  }, [history.length]);
+  }, [apiInited]);
 
   useEffect(() => {
     amplitude.track("HistoryPage.Launched");
+    requestHistory();
+
     const onScroll = () => {
       if (document.scrollingElement) {
         const { scrollTop, scrollHeight, clientHeight } =
@@ -107,8 +102,6 @@ export const HistoryPanel: React.FC = () => {
           if (pageScrollRef.current) {
             return;
           }
-
-          requestHistory();
         }
       }
     };
