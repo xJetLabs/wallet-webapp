@@ -1,12 +1,10 @@
-import { FC, useEffect, useRef, useState, useContext } from "react";
+import { FC, useEffect, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ContentLoader from "react-content-loader";
-import { App } from "../../App";
 import { ROUTE_NAMES } from "../../router/constants";
 import { getFiatRates } from "../../api";
 import { SwapDataContext } from "../../providers/SwapDataContextProvider";
-import { ReactComponent as Switch15OutlineIcon } from "../../icons/Switch15Outline.svg";
 import { availableFiatsSelector } from "../../store/reducers/user/user.selectors";
 import { useTranslation } from "react-i18next";
 
@@ -23,8 +21,6 @@ import {
   Select,
   Text,
 } from "../../components";
-import styles from "./PurchaseTonPage.module.css";
-import { userInfo } from "os";
 
 export const PurchaseTonPage: FC = () => {
   const { t } = useTranslation();

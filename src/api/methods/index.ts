@@ -86,7 +86,7 @@ export const getMyServerData = async () => {
     .finally(() => {
       RequestInProgress.delete("me");
     });
-
+    
   return response;
 };
 
@@ -270,7 +270,8 @@ export const getAllCurrencies = async () => {
   return response;
 };
 
-export const getHistory = async (limit = 20, offset = 0, api_key = config.api_key) => {
+export const getHistory = async (limit?: number, offset?: number) => {
+  
   if (RequestInProgress.has("operations")) {
     throw new Error("busy");
   }
@@ -286,7 +287,7 @@ export const getHistory = async (limit = 20, offset = 0, api_key = config.api_ke
       },
       {
         headers: {
-          "X-API-Key": (api_key || config.api_key),
+          "X-API-Key": config.api_key,
         },
       }
     )
@@ -437,23 +438,38 @@ export async function createOrder(data: {
   pair: string[];
   type: "buy" | "sell";
   amount: number;
-  price?: number;
+  min_expected_amount: number;
 }) {
   if (RequestInProgress.has("exchanges.createOrder")) {
     throw new Error("busy");
   }
 
-  const response = await axios
-    .post(API_URL + "exchanges.createOrder", data, {
-      headers: {
-        "X-API-Key": config.api_key,
-      },
-    })
-    .finally(() => {
-      RequestInProgress.delete("exchanges.createOrder");
-    });
+  RequestInProgress.add("exchanges.createOrder");
 
-  return response.data;
+  try {
+    const signedMessage = await sign_message(data, config.private_key)
+
+    const response = await axios
+      .post(
+        API_URL + "exchanges.createOrder", 
+        { 
+          ...signedMessage,
+        }, 
+        {
+          headers: {
+            "X-API-Key": config.api_key,
+          },
+        }
+      )
+      .finally(() => {
+        RequestInProgress.delete("exchanges.createOrder");
+      });
+
+    return response.data;
+  } catch (e) {
+    RequestInProgress.delete("exchanges.createOrder");
+    throw e;
+  }
 }
 
 export async function purchaseShortName() {

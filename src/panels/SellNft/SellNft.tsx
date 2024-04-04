@@ -81,8 +81,6 @@ export function SellNftPanel() {
       setIsAwaitResponse(false);
     });
 
-    console.log(response);
-
     if (response.data?.success) {
       // Редиректим юзера в старницу "Success" с данными текущего NFT
       navigate(ROUTE_NAMES.SELL_NFT_SUCCESS, {

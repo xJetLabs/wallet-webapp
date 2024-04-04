@@ -11,6 +11,7 @@ export const Link: FC<LinkProps> = ({
   withCursor = false,
   target = "_blank",
   className = "",
+  onClick = () => {},
 }) => {
   if (!href) {
     return <>{children}</>;
@@ -24,6 +25,7 @@ export const Link: FC<LinkProps> = ({
       })}
       href={href}
       target={target}
+      onClick={onClick}
     >
       {children}
     </a>

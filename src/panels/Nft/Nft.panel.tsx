@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import ContentLoader from "react-content-loader";
 import { useTranslation } from "react-i18next";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { Avatar, Group, Panel, Text, Button } from "../../components";
 import { getUserNFT } from "../../api";
 import { myTonAddressSelector } from "../../store/reducers/user/user.selectors";
@@ -15,7 +17,6 @@ import { ReactComponent as Receive24OutlineIcon } from "../../icons/Receive24Out
 
 import Lottie from 'lottie-react';
 import animationData from '../../lotties/loading-plane.json';
-
 
 function NftPanelLoader() {
   return (
@@ -74,11 +75,8 @@ export function NftPanel() {
     navigate(to);
   }
 
-  function handleImageError(e: any) {
-    console.log("error", e);
-  }
-
   useEffect(() => {
+    amplitude.track("NFTListPage.Launched");
     getUserNFT(myTonAddress).then((data) => {
       setNfts(data);
       setIsLoaded(true);
@@ -108,7 +106,7 @@ export function NftPanel() {
           <NftPanelLoader />
         ) : (
           <div className={styles.__wrapper}>
-            {nfts.length === 0 || true ?  (
+            {nfts.length === 0 ?  (
               <div className={styles.__content}>
                 <Lottie
                   animationData={animationData} 

@@ -31,6 +31,8 @@ import { useTranslation } from "react-i18next";
 
 import ton from "../../images/ton.jpeg";
 
+import * as amplitude from "@amplitude/analytics-browser";
+
 export const SendPanel: FC = () => {
   const { t } = useTranslation();
 
@@ -47,14 +49,6 @@ export const SendPanel: FC = () => {
 
   const errorBlockTimeoutRef = useRef<NodeJS.Timer | undefined>(undefined);
 
-  const isButtonDisabled =
-    !formData.receiverToken ||
-    !formData.amount ||
-    isNaN(Number(formData.amount)) ||
-    Number(formData.amount) <= 0 ||
-    isAwaitResponse;
-
-  const locationn = useLocation();
   const {
     state: locationState,
   }: {
@@ -62,8 +56,6 @@ export const SendPanel: FC = () => {
       currency: string;
     };
   } = useLocation();
-
-  console.log(locationState, locationn);
 
   const currencyData = useSelector((state) =>
     currencyDataSelector(state, locationState.currency)
@@ -77,6 +69,28 @@ export const SendPanel: FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(isAwaitResponse ? `${t("Sending")}...` : t("Send"))
+      .onClick(withdraw)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+
+    return () => {
+      (window as any)
+        .Telegram
+        .WebApp
+        .MainButton
+        .offClick(withdraw)
+    }
+  });
+
+  useEffect(() => {
+    amplitude.track("SendPage.Launched");
     const handlerQRText = ({ data }: { data: string }) => {
       try {
         window.navigator.vibrate(70);
@@ -119,20 +133,22 @@ export const SendPanel: FC = () => {
   }, [error]);
 
   const openQRScanner = () => {
+    amplitude.track("SendPage.QRButton.Pushed");
     (window as any).Telegram.WebApp.showScanQrPopup({
       text: t("Scan token"),
     });
   };
 
   const selectMaxAmount = () => {
+    amplitude.track("SendPage.MaxButton.Pushed");
     let newAmount = "";
 
     if (currencyData?.currency === "ton") {
-      if (currencyData?.amount <= 0.06) {
+      if (currencyData?.amount <= 0.07) {
         newAmount = "0";
       } else {
         newAmount =
-          String(+(Number(currencyData?.amount) - 0.06).toFixed(3)) || "";
+          String(+(Number(currencyData?.amount) - 0.07).toFixed(3)) || "";
       }
     } else {
       newAmount = String(+Number(currencyData?.amount).toFixed(3)) || "";
@@ -157,6 +173,8 @@ export const SendPanel: FC = () => {
       return;
     }
 
+    (window as any).Telegram.WebApp.MainButton.showProgress(true);
+    (window as any).Telegram.WebApp.MainButton.disable();
     setIsAwaitResponse(true);
 
     const payload = {
@@ -168,6 +186,8 @@ export const SendPanel: FC = () => {
     const response: any = await sendCoins({
       payload,
     }).finally(() => {
+      (window as any).Telegram.WebApp.MainButton.hideProgress();
+      (window as any).Telegram.WebApp.MainButton.enable();
       setIsAwaitResponse(false);
     });
 
@@ -177,6 +197,8 @@ export const SendPanel: FC = () => {
       !response?.data.error
     ) {
       await balanceCheckWatcher();
+
+      amplitude.track("SendPage.SendButton.Pushed");
 
       navigate(ROUTE_NAMES.SEND_SUCCESS, {
         state: payload,
@@ -300,15 +322,6 @@ export const SendPanel: FC = () => {
           color="var(--background_block)"
           backgroundColor="transparent"
         />
-        <Button
-          size="m"
-          mode="primary"
-          onClick={withdraw}
-          disabled={isButtonDisabled}
-          before={isAwaitResponse ? <Date24OutlineIcon /> : null}
-        >
-          {isAwaitResponse ? `${t("Sending")}...` : t("Send")}
-        </Button>
         {error ? <ErrorBlock text={errorMapping(error)} /> : null}
       </Group>
     </Panel>

@@ -1,6 +1,7 @@
-import { ChangeEvent, FC, useMemo, useState } from "react";
+import { ChangeEvent, FC, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 import { formatNumber } from "../../utils";
 
@@ -20,7 +21,11 @@ import { ReactComponent as Search17Outline } from "../../icons/Search17Outline.s
 
 import ton from "../../images/ton.jpeg";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 export const SelectTransferPanel: FC = () => {
+  const { t } = useTranslation();
+  
   const [filterValue, setFilterValue] = useState<string>("");
 
   const navigate = useNavigate();
@@ -39,11 +44,21 @@ export const SelectTransferPanel: FC = () => {
     setFilterValue(newValue);
   };
 
+  useEffect(() => {
+    amplitude.track('SendPage.ChooseToken.Launched');
+  });
+
+  useEffect(() => {
+    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
+      (window as any).Telegram.WebApp.MainButton.hide();
+    }
+  }, []);
+
   return (
     <Panel>
       <Group space={12}>
         <Input
-          placeholder="Search"
+          placeholder={`${t("Search")}...`}
           after={<Search17Outline color="var(--accent)" />}
           onChange={onInputChange}
         />
@@ -67,6 +82,9 @@ export const SelectTransferPanel: FC = () => {
                   );
                 }
 
+                amplitude.track("SendPage.ChooseToken.Selected", {
+                  token: v.currency,
+                });
                 navigate("/send", {
                   state: {
                     currency: v.currency,

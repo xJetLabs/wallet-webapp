@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { QRCodeSVG } from "qrcode.react";
 
+import * as amplitude from '@amplitude/analytics-browser';
+
 import { Button, Group, Input, Panel, Text } from "../../components";
 import { ReactComponent as Copy20OutlineIcon } from "../../icons/Copy20Outline.svg";
 import { ReactComponent as CopySuccess24OutlineIcon } from "../../icons/CopySuccess24Outline.svg";
@@ -49,6 +51,7 @@ export const ReceivePanel: FC = () => {
   }
 
   useEffect(() => {
+    amplitude.track("DepositPage.Launched");
     if (query.get("tonAddress") !== null) {
       document.body.style.setProperty("--tg-color-scheme", "dark");
       document.body.style.setProperty("--tg-theme-bg-color", "#212121");
@@ -68,6 +71,19 @@ export const ReceivePanel: FC = () => {
       document.body.style.setProperty("--tg-viewport-stable-height", "100vh");
     }
   }, [query]);
+
+  useEffect(() => {
+    if (!(window as any).Telegram.WebApp.MainButton.isVisible && query.get("tonAddress") === null) {
+      (window as any).Telegram.WebApp.MainButton.show();
+    }
+    (window as any)
+      .Telegram
+      .WebApp
+      .MainButton
+      .setText(t("Check deposit"))
+      .onClick(check)
+      .color = (window as any).Telegram.WebApp.themeParams.button_color;
+  }, [])
 
   useEffect(() => {
     if (copySuccess) {
@@ -97,6 +113,7 @@ export const ReceivePanel: FC = () => {
   }, [copySuccess, shortWalletCopySuccess]);
 
   const copyAddress = () => {
+    amplitude.track("DepositPage.CopyAddressButton.Pushed");
     setCopySuccess(true);
 
     try {
@@ -129,7 +146,10 @@ export const ReceivePanel: FC = () => {
   };
 
   const check = async () => {
-    setIsButtonDisabled(true);
+    (window as any).Telegram.WebApp.MainButton.showProgress(true);
+    (window as any).Telegram.WebApp.MainButton.disable();
+
+    amplitude.track("DepositPage.CheckButton.Pushed");
 
     try {
       window.navigator.vibrate(70);
@@ -139,7 +159,8 @@ export const ReceivePanel: FC = () => {
 
     await checkDeposit().finally(() => {
       setTimeout(() => {
-        setIsButtonDisabled(false);
+        (window as any).Telegram.WebApp.MainButton.hideProgress();
+        (window as any).Telegram.WebApp.MainButton.enable();
       }, 500);
     });
   };
@@ -222,17 +243,6 @@ export const ReceivePanel: FC = () => {
               )
             }
           />
-        )}
-
-        {query.get("tonAddress") === null && (
-          <Button
-            size="m"
-            mode="secondary"
-            onClick={check}
-            disabled={buttonDisabled}
-          >
-            {t("Check deposit")}
-          </Button>
         )}
       </Group>
     </Panel>

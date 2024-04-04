@@ -61,3 +61,7 @@
 .__select::before {
   content: "Arrow";
 }
+
+.__separator {
+  background-color: var(--tg-theme-secondary-bg-color);
+}
