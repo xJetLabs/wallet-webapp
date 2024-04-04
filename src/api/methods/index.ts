@@ -86,7 +86,7 @@ export const getMyServerData = async () => {
     .finally(() => {
       RequestInProgress.delete("me");
     });
-
+    
   return response;
 };
 
@@ -270,7 +270,8 @@ export const getAllCurrencies = async () => {
   return response;
 };
 
-export const getHistory = async (limit = 20, offset = 0, api_key = config.api_key) => {
+export const getHistory = async (limit?: number, offset?: number) => {
+  
   if (RequestInProgress.has("operations")) {
     throw new Error("busy");
   }
@@ -286,7 +287,7 @@ export const getHistory = async (limit = 20, offset = 0, api_key = config.api_ke
       },
       {
         headers: {
-          "X-API-Key": (api_key || config.api_key),
+          "X-API-Key": config.api_key,
         },
       }
     )

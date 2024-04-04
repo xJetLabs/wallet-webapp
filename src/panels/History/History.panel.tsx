@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Cell, Group, Panel, Text } from "../../components";
 
@@ -13,75 +13,53 @@ import { ReactComponent as Receipt18Outline } from "../../icons/Receipt18Outline
 
 import { useTranslation } from "react-i18next";
 
-import * as amplitude from '@amplitude/analytics-browser';
+import * as amplitude from "@amplitude/analytics-browser";
 
 import { formatDate } from "../../utils";
-import { getHistory } from "../../api";
-import { useQuery } from "../../hooks/useQuery";
+import { getHistory, apiInited } from "../../api";
 
-const historyAmountMap = (serverAmount: number, serverType: string) => {
-  if (serverType.startsWith("incoming_")) {
-    return {
-      amount: serverAmount,
-      sign: "+",
-      color: "--color_positive",
-    };
-  } else {
-    return {
-      amount: serverAmount,
-      sign: "-",
-      color: "--color_negative",
-    };
+const historyAmountMap = (amount: number, type: string) => {
+  const isIncomeOrDeposit =
+    type.startsWith("incoming_") || type.startsWith("deposit_");
+
+  return {
+    amount,
+    sign: isIncomeOrDeposit ? "+" : "-",
+    color: isIncomeOrDeposit ? "--color_positive" : "--color_negative",
+  };
+};
+
+const historyIconMap = (type: string) => {
+  switch (type) {
+    case "incoming_activateCheque":
+    case "outgoing_createCheque":
+      return <Fire18OutlineIcon />;
+    case "outgoing_invoicePayment":
+    case "incoming_invoicePayment":
+      return <Receipt18Outline />;
+    case "incoming_send":
+    case "deposit_onchain":
+      return <Get18OutlineIcon />;
+    case "outgoing_send":
+      return <Send18OutlineIcon />;
+    case "incoming_fire":
+    case "outgoing_fire":
+      return <Receive18OutlineIcon />;
+    case "outgoing_onchainSwap":
+      return <Cart18Outline />;
+    case "withdrawal_onchain":
+    case "outgoing_apiDeposit":
+      return <BoxSend18OutlineIcon />;
+    case "incoming_deleteCheque":
+      return <Bin18Outline />;
+    default:
+      return null;
   }
 };
 
-const historyIconMap = (serverType: string) => {
-  if (
-    serverType === "incoming_activateCheque" ||
-    serverType === "outgoing_createCheque"
-  ) {
-    return <Fire18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_invoicePayment" || 
-  serverType === "incoming_invoicePayment") {
-    return <Receipt18Outline />;
-  }
-
-  if (serverType === "incoming_send" || serverType === "deposit_onchain") {
-    return <Get18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_send") {
-    return <Send18OutlineIcon />;
-  }
-
-  if (serverType === "incoming_fire" || serverType === "outgoing_fire") {
-    return <Receive18OutlineIcon />;
-  }
-
-  if (serverType === "outgoing_onchainSwap"){
-    return <Cart18Outline />;
-  }
-
-  if (
-    serverType === "withdrawal_onchain" ||
-    serverType === "outgoing_apiDeposit"
-  ) {
-    return <BoxSend18OutlineIcon />;
-  }
-
-  if (serverType === "incoming_deleteCheque"){
-    return <Bin18Outline />;
-  }
-
-  return null;
-};
-
-export const HistoryPanel: FC = () => {
+export const HistoryPanel: React.FC = () => {
   const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
-  const query: any = useQuery();
   const [history, setHistory] = useState<any>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
 
@@ -89,8 +67,7 @@ export const HistoryPanel: FC = () => {
 
   const requestHistory = useCallback(async () => {
     pageScrollRef.current = true;
-
-    const historyResponse = await getHistory(20, history.length || 0, query.get("apiKey"));
+    const historyResponse = await getHistory(20, history.length || 0);
     const operations = historyResponse?.data?.operations;
 
     if (operations) {
@@ -111,10 +88,12 @@ export const HistoryPanel: FC = () => {
     }
 
     pageScrollRef.current = false;
-  }, [history.length]);
+  }, [apiInited]);
 
   useEffect(() => {
-    amplitude.track("HistoryPage.Launched")
+    amplitude.track("HistoryPage.Launched");
+    requestHistory();
+
     const onScroll = () => {
       if (document.scrollingElement) {
         const { scrollTop, scrollHeight, clientHeight } =
@@ -123,8 +102,6 @@ export const HistoryPanel: FC = () => {
           if (pageScrollRef.current) {
             return;
           }
-
-          requestHistory();
         }
       }
     };
@@ -141,36 +118,8 @@ export const HistoryPanel: FC = () => {
     };
   }, [requestHistory, history.length]);
 
-  const historyTypeMap = (serverType: string) => {
-    switch (serverType) {
-      case "outgoing_apiDeposit":
-        return t("Sent to api");
-      case "deposit_onchain":
-        return t("Received");
-      case "withdrawal_onchain":
-        return t("Transfer to wallet");
-      case "outgoing_send":
-        return t("Sent to User");
-      case "incoming_send":
-        return t("Received from User");
-      case "incoming_activateCheque":
-        return t("Cheque activation");
-      case "outgoing_createCheque":
-        return t("Cheque created");
-      case "incoming_fire":
-      case "outgoing_fire":
-        return t("Fire jetton in chat");
-      case "outgoing_invoicePayment":
-        return t("Payment for invoice");
-      case "incoming_invoicePayment":
-        return t("Invoice payment");
-      case "outgoing_onchainSwap":
-        return t("Jetton swap");
-      case "incoming_deleteCheque":
-        return t("Cheque delete");
-      default:
-        return serverType;
-    }
+  const historyTypeMap = (type: string) => {
+    return t(type);
   };
 
   return (
@@ -233,3 +182,5 @@ export const HistoryPanel: FC = () => {
     </Panel>
   );
 };
+
+export default HistoryPanel;

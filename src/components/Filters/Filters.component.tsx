@@ -5,8 +5,8 @@ import styles from "./Filters.module.css";
 import { Button } from "../Button";
 import { useTranslation } from "react-i18next";
 
-export const Filters: FC<FiltersProps> = ({ 
-  setItem, 
+export const Filters: FC<FiltersProps> = ({
+  setItem,
   selectedItem,
   menuItems,
   className = "",
@@ -15,23 +15,30 @@ export const Filters: FC<FiltersProps> = ({
 
   return (
     <>
-      <div 
+      <div
         className={cx(styles.__wrapper, {
           [className]: className,
         })}
       >
-        {menuItems.map((value, id) => {
-          return (
-            <Button
-              onClick={() => setItem(value)}
-              size="filter"
-              color={selectedItem == value ? "var(--tg-theme-text-color)" : "var(--accent)" }
-              mode={selectedItem == value ? "primary" : "secondary_disabled"}
-            >
-              {t(value)}
-            </Button>
-          );
-        })}
+          {menuItems.map((value, id) => {
+            return (
+                <Button
+                  key={id}
+                  onClick={() => setItem(value)}
+                  size="filter"
+                  color={
+                    selectedItem === value
+                      ? "var(--tg-theme-text-color)"
+                      : "var(--accent)"
+                  }
+                  mode={
+                    selectedItem === value ? "primary" : "secondary_disabled"
+                  }
+                >
+                  {t(value)}
+                </Button>
+            );
+          })}
       </div>
     </>
   );
