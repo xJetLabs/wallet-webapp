@@ -119,36 +119,7 @@ export const HistoryPanel: React.FC = () => {
   }, [requestHistory, history.length]);
 
   const historyTypeMap = (type: string) => {
-    switch (type) {
-      case "outgoing_apiDeposit":
-        return t(type);
-      case "deposit_onchain":
-        return t(type);
-      case "withdrawal_onchain":
-        return t(type);
-      case "outgoing_send":
-        return t(type);
-      case "incoming_send":
-        return t(type);
-      case "incoming_activateCheque":
-        return t(type);
-      case "outgoing_createCheque":
-        return t(type);
-      case "incoming_fire":
-        return t(type);
-      case "outgoing_fire":
-        return t(type);
-      case "outgoing_invoicePayment":
-        return t(type);
-      case "incoming_invoicePayment":
-        return t(type);
-      case "outgoing_onchainSwap":
-        return t(type);
-      case "incoming_deleteCheque":
-        return t(type);
-      default:
-        return type;
-    }
+    return t(type);
   };
 
   return (
