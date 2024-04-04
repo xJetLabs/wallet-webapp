@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import WebApp from '@twa-dev/sdk'
 
 import { Group, Panel, Text, Filters, Separator } from "../../components";
 import { ReactComponent as Star } from "../../icons/Star24.svg";
@@ -33,7 +34,7 @@ export function TradingSelectPanel() {
     try {
       window.navigator.vibrate(70); // Вибрация
     } catch (e) {
-      (window as any).Telegram.WebApp.HapticFeedback.impactOccurred("light");
+      WebApp.HapticFeedback.impactOccurred("light");
     } finally {
       amplitude.track("SwapList.PairSelected", {
         pair: exchangePair.assets[0] + "_" + exchangePair.assets[1],
@@ -50,37 +51,35 @@ export function TradingSelectPanel() {
   }
 
   useEffect(() => {
-    if ((window as any).Telegram.WebApp.MainButton.isVisible) {
-      (window as any).Telegram.WebApp.MainButton.hide();
+    if (WebApp.MainButton.isVisible) {
+      WebApp.MainButton.hide();
     }
   }, []);
 
   useEffect(() => {
-    const cloudStorage = (window as any).Telegram.WebApp.CloudStorage;
-    cloudStorage.getItem("favoritePairs", (error: Error, response: string) => {
-      if (response != null) {
-        setFavorite(JSON.parse(response));
+    const cloudStorage = WebApp.CloudStorage;
+    cloudStorage.getItem("favoritePairs", (error: string | null, result?: string) => {
+      if (result != null) {
+        setFavorite(JSON.parse(result));
       }
     });
   }, []);
 
   useEffect(() => {
-    const cloudStorage = (window as any).Telegram.WebApp.CloudStorage;
+    const cloudStorage = WebApp.CloudStorage;
     cloudStorage.setItem(
       "favoritePairs",
       JSON.stringify(favoritePairs),
-      (error: Error, answer: string) => {}
+      (error: string | null, result?: boolean) => {}
     );
   }, [favoritePairs]);
 
   useEffect(() => {
     amplitude.track("SwapList.Launched");
-    if ((window as any).Telegram.WebApp.initDataUnsafe.start_param != null) {
-      const args = (
-        window as any
-      ).Telegram.WebApp.initDataUnsafe.start_param.split("_");
+    if (WebApp.initDataUnsafe.start_param != null) {
+      const args = WebApp.initDataUnsafe.start_param.split("_");
       navigate(ROUTE_NAMES.SWAP + "?pair=" + args[0] + "_" + args[1]);
-      (window as any).Telegram.WebApp.initDataUnsafe.start_param = null;
+      WebApp.initDataUnsafe.start_param = '';
     }
   }, []);
 
