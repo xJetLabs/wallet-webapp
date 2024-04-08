@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Cell, Group, Panel, Text } from "../../components";
+import { Cell, Filters, Group, Panel, Text } from "../../components";
 
 import { ReactComponent as Fire18OutlineIcon } from "../../icons/Fire18Outline.svg";
 import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg";
@@ -62,6 +62,7 @@ export const HistoryPanel: React.FC = () => {
   const pageScrollRef = useRef<boolean>(false);
   const [history, setHistory] = useState<any>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
+  const [item, setItem] = useState<string>("Verified");
 
   const isPanelCenter = history.length === 0 && isLoadingFirstBatch;
 
@@ -122,8 +123,30 @@ export const HistoryPanel: React.FC = () => {
     return t(type);
   };
 
+  function pushFilter(item: string): void {
+    const filterMappings: { [key: string]: string } = {
+      All: "SwapList.FilterAll",
+      Verified: "SwapList.FilterVerified",
+      "⭐️": "SwapList.FilterFavorites",
+      NEW: "SwapList.FilterNew",
+      "HOT🔥": "SwapList.FilterHot",
+    };
+
+    const trackingEvent: string | undefined = filterMappings[item];
+    if (trackingEvent) {
+      amplitude.track(trackingEvent);
+    }
+
+    setItem(item);
+  }
+
   return (
     <Panel centerVertical={isPanelCenter} centerHorizontal={isPanelCenter}>
+      <Filters
+        setItem={pushFilter}
+        selectedItem={item}
+        menuItems={["Verified", "All", "NEW", "Verified", "All", "NEW"]}
+      />
       {history.length > 0 ? (
         <Group space={24}>
           {history.map((value: any, index: number) => {
