@@ -18,12 +18,12 @@ export const Filters: FC<FiltersProps> = ({
   return (
     <>
       <div
-        className={cx(styles.__wrapper, {
+        className={cx(styles.wrapper, {
           [className]: className,
         })}
       >
         <Swiper spaceBetween={10} slidesPerView={"auto"}>
-          {menuItems.map((value, id) => {
+          {menuItems.map((value, id: number) => {
             return (
               <SwiperSlide>
                 <Button
