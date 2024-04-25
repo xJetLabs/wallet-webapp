@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Cell, Group, Panel, Text } from "../../components";
+import { Cell, Filters, Group, Panel, Text } from "../../components";
 
 import { ReactComponent as Fire18OutlineIcon } from "../../icons/Fire18Outline.svg";
 import { ReactComponent as Get18OutlineIcon } from "../../icons/Get18Outline.svg";
@@ -10,13 +10,14 @@ import { ReactComponent as BoxSend18OutlineIcon } from "../../icons/BoxSend18Out
 import { ReactComponent as Cart18Outline } from "../../icons/Cart18Outline.svg";
 import { ReactComponent as Bin18Outline } from "../../icons/Bin18Outline.svg";
 import { ReactComponent as Receipt18Outline } from "../../icons/Receipt18Outline.svg";
-
+import style from './History.module.css'
 import { useTranslation } from "react-i18next";
 
 import * as amplitude from "@amplitude/analytics-browser";
 
 import { formatDate } from "../../utils";
 import { getHistory, apiInited } from "../../api";
+import type { IHistory } from "../../types/history"
 
 const historyAmountMap = (amount: number, type: string) => {
   const isIncomeOrDeposit =
@@ -57,11 +58,14 @@ const historyIconMap = (type: string) => {
   }
 };
 
+
 export const HistoryPanel: React.FC = () => {
   const { t } = useTranslation();
   const pageScrollRef = useRef<boolean>(false);
-  const [history, setHistory] = useState<any>([]);
+  const [history, setHistory] = useState<IHistory[]>([]);
+  const [filteredHistory, setFilteredHistory] = useState<IHistory[]>([]);
   const [isLoadingFirstBatch, setIsLoadingFirstBatch] = useState<boolean>(true);
+  const [item, setItem] = useState<string>("All");
 
   const isPanelCenter = history.length === 0 && isLoadingFirstBatch;
 
@@ -71,13 +75,13 @@ export const HistoryPanel: React.FC = () => {
     const operations = historyResponse?.data?.operations;
 
     if (operations) {
-      setHistory((prev: any) => {
-        return [...prev, ...operations].reduce((prev, curr) => {
+      setHistory((prev: IHistory[]) => {
+        return [...prev, ...operations].reduce((prev:IHistory[], curr:IHistory) => {
           if (!curr.id) {
             return prev;
           }
 
-          const transferExist = prev.find((v: any) => v.id === curr.id);
+          const transferExist = prev.find((v: IHistory) => v.id === curr.id);
 
           if (!transferExist) {
             prev.push(curr);
@@ -107,6 +111,7 @@ export const HistoryPanel: React.FC = () => {
     };
 
     document.body.addEventListener("scroll", onScroll);
+    
     if (history.length === 0) {
       requestHistory().then(() => {
         setIsLoadingFirstBatch(false);
@@ -122,18 +127,86 @@ export const HistoryPanel: React.FC = () => {
     return t(type);
   };
 
+  function pushFilter(item: string): void {
+    const filterMappings: { [key: string]: string } = {
+      All: "HistoryPage.FilterAll",
+      Incoming: "HistoryPage.FilterIncoming",
+      Outgoing: "HistoryPage.FilterOutgoing",
+      Cheque: "HistoryPage.FilterCheque"
+    };
+
+    const trackingEvent: string | undefined = filterMappings[item];
+    if (trackingEvent) {
+      amplitude.track(trackingEvent);
+    }
+
+    setItem(item);
+  }
+
+  useEffect(() => {
+    const filterHandler = () => {
+      const incoming = [
+        "incoming_invoicePayment",
+        "incoming_send",
+        "incoming_fire",
+        "deposit_onchain",
+      ];
+      const outgoing = [
+        "outgoing_createCheque",
+        "outgoing_invoicePayment",
+        "outgoing_send",
+        "outgoing_fire",
+        "outgoing_onchainSwap",
+        "outgoing_apiDeposit",
+      ];
+
+      const cheque = [
+        "incoming_activateCheque",
+        "outgoing_createCheque",
+        "incoming_deleteCheque",
+      ];
+
+      const All = [...incoming, ...outgoing, ...cheque];
+
+      switch (item) {
+        case "All":
+          return All;
+        case "Incoming":
+          return incoming;
+        case "Outgoing":
+          return outgoing;
+        case "Cheque":
+          return cheque;
+        default:
+          return All;
+      }
+    };
+
+    const typeFilter = filterHandler();
+    const filtered = history.filter((value) => typeFilter.includes(value.type));
+
+    setFilteredHistory(filtered);
+  }, [item, history]);
+
   return (
     <Panel centerVertical={isPanelCenter} centerHorizontal={isPanelCenter}>
+      <Filters
+        className={style.filter}
+        setItem={pushFilter}
+        selectedItem={item}
+        menuItems={["All", "Incoming", "Outgoing", "Cheque"]}
+      />
       {history.length > 0 ? (
         <Group space={24}>
-          {history.map((value: any, index: number) => {
-            const title = historyTypeMap(value?.type);
+          {filteredHistory.map((value: IHistory, index: number) => {
+            const title = historyTypeMap(value.type);
             const { amount, sign, color } = historyAmountMap(
-              value?.amount,
-              value?.type
+              value.amount,
+              value.type
             );
-            const Icon = historyIconMap(value?.type);
-            const date = new Date(value?.timestamp);
+            const Icon = historyIconMap(value.type);
+            const date = new Date(value.timestamp);
+            
 
             return (
               <Cell
@@ -147,7 +220,7 @@ export const HistoryPanel: React.FC = () => {
                     lineHeight={"17px"}
                     color={`var(${color})`}
                   >
-                    {sign} {amount} {value?.currency?.toUpperCase()}
+                    {sign} {amount} {value.currency.toUpperCase()}
                   </Text>
                 }
               >
@@ -176,8 +249,6 @@ export const HistoryPanel: React.FC = () => {
         >
           {t("Your history is empty. Send or receive tokens to see it here.")}
         </Text>
-
-        // <LogoIcon className={styles.logo_animation} color={"var(--accent)"} />
       )}
     </Panel>
   );

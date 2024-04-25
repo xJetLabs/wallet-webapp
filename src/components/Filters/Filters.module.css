@@ -1,10 +1,10 @@
-.__wrapper {
+.wrapper {
   display: flex;
   justify-content: left;
   gap: 10px;
 }
 
-.__button {
+.button {
   background-color: var(--tg-theme-button-color);
   opacity: 0.2;
   border-radius: 18px;
