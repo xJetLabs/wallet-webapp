@@ -17,7 +17,7 @@ import * as amplitude from "@amplitude/analytics-browser";
 
 import { formatDate } from "../../utils";
 import { getHistory, apiInited } from "../../api";
-import type { IHistory } from "../../../interfaces/history/history"
+import type { IHistory } from "../../types/history"
 
 const historyAmountMap = (amount: number, type: string) => {
   const isIncomeOrDeposit =
