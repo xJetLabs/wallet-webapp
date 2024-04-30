@@ -14,10 +14,19 @@ import { useExchangePairContext } from "../../providers/ExchangePairContextProvi
 import { ROUTE_NAMES } from "../../router/constants";
 import { useEffect, useState } from "react";
 import { IPair, IToken } from "./trading";
+import { removeTrailingZeros } from "../../utils/index";
+
 import cx from "classnames";
 import styles from "./Trading.module.css";
 
 import * as amplitude from "@amplitude/analytics-browser";
+import { useNavigateOnStartParam } from "../../hooks/useNavigateOnStartParam";
+
+export enum ItemType {
+  All = 'All',
+  Verified = 'Verified',
+  NEW = 'NEW',
+}
 
 export function TradingSelectPanel() {
   const { t } = useTranslation();
@@ -28,7 +37,8 @@ export function TradingSelectPanel() {
   const { updateSelectedExchangePair } = useExchangePairContext();
 
   const [favoritePairs, setFavorite] = useState<Array<string[]>>();
-  const [item, setItem] = useState<string>("Verified");
+  const [item, setItem] = useState<string | ItemType>(ItemType.Verified);
+  const pairs = showPairs(item);
 
   function changeExchagePair(exchangePair: IPair) {
     try {
@@ -76,12 +86,9 @@ export function TradingSelectPanel() {
 
   useEffect(() => {
     amplitude.track("SwapList.Launched");
-    if (WebApp.initDataUnsafe.start_param != null) {
-      const args = WebApp.initDataUnsafe.start_param.split("_");
-      navigate(ROUTE_NAMES.SWAP + "?pair=" + args[0] + "_" + args[1]);
-      WebApp.initDataUnsafe.start_param = '';
-    }
   }, []);
+
+  useNavigateOnStartParam()
 
   function showVerified() {
     return exchangesPair.filter((pair: IPair) => {
@@ -94,7 +101,7 @@ export function TradingSelectPanel() {
     });
   }
 
-  function showPairs(item: string) {
+  function showPairs(item: string | ItemType) {
     switch (item) {
       case "All":
         return exchangesPair;
@@ -111,11 +118,11 @@ export function TradingSelectPanel() {
           ["lky", "ton"],
           ["fish", "ton"],
         ]);
-      case "HOT🔥":
-        return filterPairsByAssets([
-          ["scale", "ton"],
-          ["bolt", "ton"],
-        ]);
+      // case "HOT🔥":
+      //   return filterPairsByAssets([
+      //     ["scale", "ton"],
+      //     ["bolt", "ton"],
+      //   ]);
       default:
         return [];
     }
@@ -130,13 +137,13 @@ export function TradingSelectPanel() {
     });
   }
 
-  function pushFilter(item: string): void {
+  function pushFilter(item: string | ItemType): void {
     const filterMappings: { [key: string]: string } = {
       All: "SwapList.FilterAll",
       Verified: "SwapList.FilterVerified",
       "⭐️": "SwapList.FilterFavorites",
       NEW: "SwapList.FilterNew",
-      "HOT🔥": "SwapList.FilterHot",
+      // "HOT🔥": "SwapList.FilterHot",
     };
 
     const trackingEvent: string | undefined = filterMappings[item];
@@ -152,12 +159,6 @@ export function TradingSelectPanel() {
     return avgPrice === 0
       ? removeTrailingZeros(avgPrice.toFixed(7))
       : formattedPrice;
-  }
-
-  function removeTrailingZeros(num: string) {
-    const number = parseFloat(num);
-
-    return number * 1;
   }
 
   return (
@@ -286,7 +287,7 @@ export function TradingSelectPanel() {
         ) : (
           <></>
         )}
-        {showPairs(item) ? (
+        {pairs ? (
           showPairs(item).map((pair: IPair, index: number) => {
             if (pair.active) {
               return (
