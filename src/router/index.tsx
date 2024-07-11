@@ -29,6 +29,7 @@ import { SellNftCurrencies } from "../panels/SellNft/SellNftCurrencies";
 import { TradingPanel } from "../panels/Trading";
 import { TradingSelectPanel } from "../panels/Trading/TradingSelect.panel";
 import { TradingSuccessPanel } from "../panels/Trading/TradingSuccess";
+import { ErrorDeposit } from "../panels/ErrorDeposit";
 
 export const router = createBrowserRouter([
   {
@@ -57,7 +58,7 @@ export const router = createBrowserRouter([
   },
   {
     path: ROUTE_NAMES.RECEIVE,
-    element: <ReceivePanel />,
+    element: <ErrorDeposit />,
   },
   {
     path: ROUTE_NAMES.SEND,

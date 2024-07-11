@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
   en: {
     translation: {
+      "Deposits are no longer available": "Deposits are no longer available",
       "Total balance": "Total balance",
       "Error": "Error",
       Send: "Send",
@@ -91,6 +92,7 @@ const resources = {
   },
   ru: {
     translation: {
+      "Deposits are no longer available": "Пополнения больше недоступны",
       "Total balance": "Общая стоимость",
       Send: "Отправить",
       Receive: "Получить",
