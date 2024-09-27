@@ -4,6 +4,8 @@ import cx from "classnames";
 import styles from "./Filters.module.css";
 import { Button } from "../Button";
 import { useTranslation } from "react-i18next";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
 export const Filters: FC<FiltersProps> = ({
   setItem,
@@ -16,12 +18,14 @@ export const Filters: FC<FiltersProps> = ({
   return (
     <>
       <div
-        className={cx(styles.__wrapper, {
+        className={cx(styles.wrapper, {
           [className]: className,
         })}
       >
-          {menuItems.map((value, id) => {
+        <Swiper spaceBetween={10} slidesPerView={"auto"}>
+          {menuItems.map((value, id: number) => {
             return (
+              <SwiperSlide>
                 <Button
                   key={id}
                   onClick={() => setItem(value)}
@@ -37,8 +41,10 @@ export const Filters: FC<FiltersProps> = ({
                 >
                   {t(value)}
                 </Button>
+              </SwiperSlide>
             );
           })}
+        </Swiper>
       </div>
     </>
   );

@@ -2,7 +2,7 @@
   display: inline-block;
   outline: none;
   border: none;
-  padding: 12px;
+  padding: 10px 14px 10px 14px;
 
   position: relative;
 
@@ -10,7 +10,7 @@
 
   overflow: hidden;
 
-  height: fit-content;
+  
   margin: 0;
 }
 

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import WebApp from '@twa-dev/sdk';
 
 import "./i18next";
 import { router } from "./router";
@@ -32,6 +33,18 @@ export function App() {
   const intervalIdRef = useRef<NodeJS.Timer | undefined>(undefined);
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
+
+  useEffect(() => {
+    if (WebApp) {
+    WebApp.expand();
+
+      const goBack = () => {
+        window.history.back();
+      };
+
+      WebApp.BackButton.onClick(goBack);
+    }
+  }, [WebApp])
 
   useEffect(() => {
     if (
