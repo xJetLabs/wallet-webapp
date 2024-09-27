@@ -133,8 +133,9 @@ export function TradingPanel() {
       });
     }
   
-    if (Number(buy) === Number(0)) return;
-
+    if (buy === 0) {
+      setEstimate(0); 
+    } else
     getExchangesEstimate({
       type: activeSwitch,
       amount: buy,
@@ -425,7 +426,7 @@ export function TradingPanel() {
                   onClick={() => {
                     vibrate();
 
-                    setBuy((prev) => prev - 1);
+                    setBuy((prev) => prev <= 0 ? 0 : prev - 1);
                   }}
                 />
                 <NumericFormat

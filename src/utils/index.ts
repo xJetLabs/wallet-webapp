@@ -62,3 +62,9 @@ export const formatDate = (date: Date) => {
 
   return dateStr;
 };
+
+export function removeTrailingZeros(num: string) {
+  const number = parseFloat(num);
+
+  return number * 1;
+}

@@ -4,8 +4,9 @@ import cx from "classnames";
 import styles from "./Filters.module.css";
 import { Button } from "../Button";
 import { useTranslation } from "react-i18next";
+import { ItemType } from "../../panels/Trading/TradingSelect.panel";
 
-export const Filters: FC<FiltersProps> = ({
+export const Filters: FC<FiltersProps<ItemType> > = ({
   setItem,
   selectedItem,
   menuItems,
